@@ -107,8 +107,6 @@ for (p, t) in pre_atribuidas:
 
 prof_ord = sorted(professores, key=lambda x: x.nome())
 
-ch_efetivos = 0
-ch_temporarios = 0
 ch_1 = 0
 ch_2 = 0
 
@@ -135,7 +133,7 @@ if args.f:
 logger.info("\nCarga horaria total graduacao (sem fantasmas): " + str(chtotal))
 logger.info("\t1Sem: " + str(ch_1))
 logger.info("\t2Sem: " + str(ch_2))
-logger.info("\tDeficit: " + str(chtotal - ch_efetivos - ch_temporarios))
+logger.info("\tDeficit: " + str(chtotal - ch_1 - ch_2))
 
 # Gera o arquivo de preferencias, caso tal opcao tenha sido solicitada
 
