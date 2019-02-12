@@ -25,6 +25,13 @@ Criacao de todo o arquivo alforria.dat (chamara alforria.aut.dat para evitar abo
 import funcoes_leitura
 import funcoes_escrita
 import check
+import logging
+
+logger = logging.getLogger('alforria')
+
+logger.addHandler(logging.StreamHandler())
+
+logger.setLevel(logging.ERROR)
 
 # Caminho para o arquivo de configuracao dos caminhos de dados
 PATHS_PATH = '../config/paths.cnf'
