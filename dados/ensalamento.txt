@@ -1,0 +1,168 @@
+FUNDAÇÃO UNIVERSIDADE ESTADUAL DE MARINGÁ                                                              DATA 08-03-2018
+SAR023A - TURMAS POR DEPARTAMENTO                                                                    ANO LETIVO - 2018
+DEPARTAMENTO -   10 MATEMATICA                        SIGLA - DMA
+-----------------------------------------------------------------------------------------------------------------------
+DISC TURMA NOME DA DISCIPLINA               DIA AULA CAMPUS             BL SALA CH SEM CH TOTAL OFERTA
+-----------------------------------------------------------------------------------------------------------------------
+  199   1 CALCULO DIFERENCIAL E INTEGRAL I    2   3   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   4   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   3   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   4   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   3   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   4   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+  199   2 CALCULO DIFERENCIAL E INTEGRAL I    2   8   1 MARINGA         D67 103   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   9   1 MARINGA         D67 103   6,00   204,00 A 12/03/18 a 07/12/18
+                                              3   6   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              3   7   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   6   1 MARINGA         D67 102   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   7   1 MARINGA         D67 102   6,00   204,00 A 12/03/18 a 07/12/18
+  199   3 CALCULO DIFERENCIAL E INTEGRAL I    2   1   1 MARINGA         D67 106   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   2   1 MARINGA         D67 106   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   1   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   2   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   1   1 MARINGA         D67 103   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   2   1 MARINGA         D67 103   6,00   204,00 A 12/03/18 a 07/12/18
+ 1422 31 CALCULO DIFERENCIAL E INTEGRAL I     2   6   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   7   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   6   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   7   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   8   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   9   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+ 1422 32 CALCULO DIFERENCIAL E INTEGRAL I     2   6   1 MARINGA         D67 210   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   7   1 MARINGA         D67 210   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   6   1 MARINGA         D67 210   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   7   1 MARINGA         D67 210   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   8   1 MARINGA         D67 210   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   9   1 MARINGA         D67 210   6,00   204,00 A 12/03/18 a 07/12/18
+ 1422 33 CALCULO DIFERENCIAL E INTEGRAL I     2   8   1 MARINGA         D67 112   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   9   1 MARINGA         D67 112   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   8   1 MARINGA         D67 112   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   9   1 MARINGA         D67 112   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   6   1 MARINGA         D67 112   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   7   1 MARINGA         D67 112   6,00   204,00 A 12/03/18 a 07/12/18
+ 1422 34 CALCULO DIFERENCIAL E INTEGRAL I     2   8   1 MARINGA         E34   2   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   9   1 MARINGA         E34   2   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   8   1 MARINGA         E34   5   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   9   1 MARINGA         E34   5   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   6   1 MARINGA         E34   2   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   7   1 MARINGA         E34   2   6,00   204,00 A 12/03/18 a 07/12/18
+ 1422 35 CALCULO DIFERENCIAL E INTEGRAL I     2 11    1 MARINGA         D67 202   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2 12    1 MARINGA         D67 202   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4 11    1 MARINGA         D67 209   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4 12    1 MARINGA         D67 209   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5 11    1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5 12    1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
+ 1583   1 CALCULO DIFERENCIAL E INTEGRAL I    2   8   1 MARINGA         33    2   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   9   1 MARINGA         33    2   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   3   1 MARINGA         D67   8   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4   4   1 MARINGA         D67   8   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   1   1 MARINGA         D67   6   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   2   1 MARINGA         D67   6   6,00   204,00 A 12/03/18 a 07/12/18
+ 2882   1 TEORIA E PRATICA PEDAGOGICA II      2   3   1 MARINGA         E90   5   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              2   4   1 MARINGA         E90   5   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   3   1 MARINGA         E90   5   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   4   1 MARINGA         E90   5   4,00    68,00 S2 30/07/18 a 07/12/18
+ 2882 31 TEORIA E PRATICA PEDAGOGICA II       2 13    1 MARINGA         G56 211   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              2 14    1 MARINGA         G56 211   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6 13    1 MARINGA         G56 211   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6 14    1 MARINGA         G56 211   4,00    68,00 S2 30/07/18 a 07/12/18
+ 4997   1 TEORIA E PRATICA PEDAGOGICA III     2   1   1 MARINGA         E90   7   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              2   2   1 MARINGA         E90   7   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              5   3   1 MARINGA         E90   7   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              5   4   1 MARINGA         E90   7   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6   1   1 MARINGA         E90   7   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6   2   1 MARINGA         E90   7   6,00   102,00 S1 12/03/18 a 14/07/18
+ 4997 31 TEORIA E PRATICA PEDAGOGICA III      3 13    1 MARINGA         F67 103   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              3 14    1 MARINGA         F67 103   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              5 13    1 MARINGA         F67 103   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              5 14    1 MARINGA         F67 103   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6 11    1 MARINGA         F67 103   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6 12    1 MARINGA         F67 103   6,00   102,00 S1 12/03/18 a 14/07/18
+ 4998   1 CALCULO NUMERICO                    4   1   1 MARINGA         E90   7   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              4   2   1 MARINGA         E90   7   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              6   3   1 MARINGA         E90   7   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              6   4   1 MARINGA         E90   7   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              6   5   1 MARINGA         E90   7   5,00    85,00 S1 12/03/18 a 14/07/18
+ 4998 31 CALCULO NUMERICO                     3 11    1 MARINGA         F67 103   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              3 12    1 MARINGA         F67 103   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              4 13    1 MARINGA         F67 103   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              4 14    1 MARINGA         F67 103   5,00    85,00 S1 12/03/18 a 14/07/18
+                                              7   6   1 MARINGA         F67 103   5,00    85,00 S1 12/03/18 a 14/07/18
+ 4988   1 FUNDAMENTOS DA MATEMATICA           2   3   1 MARINGA         E90   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2   4   1 MARINGA         E90   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   1   1 MARINGA         E90   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              5   2   1 MARINGA         E90   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   1   1 MARINGA         E90   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6   2   1 MARINGA         E90   1   6,00   204,00 A 12/03/18 a 07/12/18
+ 4988 31 FUNDAMENTOS DA MATEMATICA            2 11    1 MARINGA         G56 116   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2 12    1 MARINGA         G56 116   6,00   204,00 A 12/03/18 a 07/12/18
+                                              3 11    1 MARINGA         G56 116   6,00   204,00 A 12/03/18 a 07/12/18
+                                              3 12    1 MARINGA         G56 116   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6 13    1 MARINGA         G56 116   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6 14    1 MARINGA         G56 116   6,00   204,00 A 12/03/18 a 07/12/18
+ 4988 32 FUNDAMENTOS DA MATEMATICA            2 13    1 MARINGA         G56 114   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2 14    1 MARINGA         G56 114   6,00   204,00 A 12/03/18 a 07/12/18
+                                              3 13    1 MARINGA         G56 114   6,00   204,00 A 12/03/18 a 07/12/18
+                                              3 14    1 MARINGA         G56 114   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6 11    1 MARINGA         G56 114   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6 12    1 MARINGA         G56 114   6,00   204,00 A 12/03/18 a 07/12/18
+FUNDAÇÃO UNIVERSIDADE ESTADUAL DE MARINGÁ                                                              DATA 08-03-2018
+SAR023A - TURMAS POR DEPARTAMENTO                                                                    ANO LETIVO - 2018
+DEPARTAMENTO -   10 MATEMATICA                        SIGLA - DMA
+-----------------------------------------------------------------------------------------------------------------------
+DISC TURMA NOME DA DISCIPLINA               DIA AULA CAMPUS             BL SALA CH SEM CH TOTAL OFERTA
+-----------------------------------------------------------------------------------------------------------------------
+ 1665   1 ESTRUTURAS ALGEBRICAS               2   1   1 MARINGA         E90   3   4,00   136,00 A 12/03/18 a 07/12/18
+                                              2   2   1 MARINGA         E90   3   4,00   136,00 A 12/03/18 a 07/12/18
+                                              5   3   1 MARINGA         E90   3   4,00   136,00 A 12/03/18 a 07/12/18
+                                              5   4   1 MARINGA         E90   3   4,00   136,00 A 12/03/18 a 07/12/18
+ 1665 31 ESTRUTURAS ALGEBRICAS                2 11    1 MARINGA         G56 210   4,00   136,00 A 12/03/18 a 07/12/18
+                                              2 12    1 MARINGA         G56 210   4,00   136,00 A 12/03/18 a 07/12/18
+                                              5 13    1 MARINGA         G56 210   4,00   136,00 A 12/03/18 a 07/12/18
+                                              5 14    1 MARINGA         G56 210   4,00   136,00 A 12/03/18 a 07/12/18
+ 2526   1 CALCULO DIFERENCIAL E INTEGRAL I    2   3   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              2   4   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              4   1   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              4   2   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6   1   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6   2   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+ 2526   2 CALCULO DIFERENCIAL E INTEGRAL I    2   6   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              2   7   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              4   6   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              4   7   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6   6   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+                                              6   7   1 MARINGA         33    2   6,00   102,00 S1 12/03/18 a 14/07/18
+ 2534   1 CALCULO DIFERENCIAL E INTEGRAL II   3   3   1 MARINGA         33    6   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              3   4   1 MARINGA         33    6   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              3   5   1 MARINGA         33    6   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              5   3   1 MARINGA         33    6   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              5   4   1 MARINGA         33    6   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              5   5   1 MARINGA         33    6   6,00   102,00 S2 30/07/18 a 07/12/18
+ 2534   2 CALCULO DIFERENCIAL E INTEGRAL II   3   8   1 MARINGA         33    3   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              3   9   1 MARINGA         33    3   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              3 10    1 MARINGA         33    3   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              5   8   1 MARINGA         33    3   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              5   9   1 MARINGA         33    3   6,00   102,00 S2 30/07/18 a 07/12/18
+                                              5 10    1 MARINGA         33    3   6,00   102,00 S2 30/07/18 a 07/12/18
+ 2543   1 CALCULO DIFERENCIAL E INTEGRAL III 4    8   1 MARINGA         C67 103   3,00    51,00 S1 12/03/18 a 14/07/18
+                                              4   9   1 MARINGA         C67 103   3,00    51,00 S1 12/03/18 a 14/07/18
+                                              4 10    1 MARINGA         C67 103   3,00    51,00 S1 12/03/18 a 14/07/18
+ 2543   2 CALCULO DIFERENCIAL E INTEGRAL III 4    3   1 MARINGA         C67 103   3,00    51,00 S1 12/03/18 a 14/07/18
+                                              4   4   1 MARINGA         C67 103   3,00    51,00 S1 12/03/18 a 14/07/18
+                                              4   5   1 MARINGA         C67 103   3,00    51,00 S1 12/03/18 a 14/07/18
+ 2551   1 CALCULO DIFERENCIAL E INTEGRAL IV   4   8   1 MARINGA         33    3   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              4   9   1 MARINGA         33    3   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   8   1 MARINGA         33    3   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   9   1 MARINGA         33    3   4,00    68,00 S2 30/07/18 a 07/12/18
+ 2551   2 CALCULO DIFERENCIAL E INTEGRAL IV   2   3   1 MARINGA         33    2   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              2   4   1 MARINGA         33    2   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              4   3   1 MARINGA         33    2   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              4   4   1 MARINGA         33    2   4,00    68,00 S2 30/07/18 a 07/12/18
+ 2553   1 CALCULO NUMERICO                    5   8   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              5   9   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   6   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   7   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+ 2553   2 CALCULO NUMERICO                    5   3   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              5   4   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   1   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
+                                              6   2   1 MARINGA         C67 103   4,00    68,00 S2 30/07/18 a 07/12/18
