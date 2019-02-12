@@ -1,0 +1,5 @@
+# Diretorio para a criacao do(s) relatorio(s)
+RELDIR relatorios/
+
+# Numero maximo de impedimentos no formulario
+MAXIMPEDIMENTOS 5
