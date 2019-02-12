@@ -7,13 +7,14 @@
 \usepackage{tabularx}
 
 \newcommand{\alforria}{\texttt{ALFORRIA}}
+\newcommand{\ttt}[1]{\texttt{#1}}
 
 \title{\alforria\ -- distribuição de encargos didáticos via
   modelos de programação linear inteira}
 
 \author{Francisco Sobral, Depto. de Matemática, UEM\footnote{Autor
     correspondente, \url{fncsobral@uem.br}} \and João
-  Costalonga, ???, UFES}
+  Costalonga, UFES}
 
 \date{Última atualização -- \today}
 
@@ -29,24 +30,34 @@
 
 \alforria\ necessita de alguns arquivos de dados para funcionar. Os
 caminhos para cada arquivo são configurados no arquivo
-\texttt{config/paths.cfg}:
+\texttt{config/paths.cfg} e são divididos em entrada e saída.
 
+Entrada:
 \begin{itemize}
-\item GRUPOSPATH -- Arquivo contendo os grupos de disciplinhas
-\item PREFPATH -- Arquivo CSV contendo as preferências de cada professor
-\item SARPATH -- Arquivo de texto contendo os dados de cada disciplina
-  (horário, turmas, carga horária, etc.)
-\item ATRIBPATH -- Arquivo CSV com as disciplinas pré-atribuídas a
-  cada professor
-\item FANTPATH -- Arquivo CSV com as disciplinas que existem, mas são
-  ministradas em conjunto com outras
-\item DATPATH -- Arquivo .DAT com todos os dados analizados, que será
-  utilizado pelo algoritmo de otimização
-\item DAT2PATH -- Arquivo (temporário) que é gerado pelo programa,
-  para que o processo de otimização possa ocorrer iterativamente
-\item SOLPATH -- Arquivo de solução que será gerado pelo algoritmo de
-  otimização
+\item \ttt{GRUPOSPATH} -- Arquivo contendo os grupos de disciplinhas;
+\item \ttt{PREFPATH} -- Arquivo CSV contendo as preferências de cada
+  professor;
+\item \ttt{SARPATH} -- Arquivo de texto contendo os dados de cada
+  disciplina (horário, turmas, carga horária, etc.);
+\item \ttt{ATRIBPATH} -- Arquivo CSV com as disciplinas pré-atribuídas
+  a cada professor;
+\item \ttt{FANTPATH} -- Arquivo CSV com as disciplinas que existem,
+  mas são ministradas em conjunto com outras (sobreposição total de
+  dias e horários);
 \end{itemize}
+
+Saída:
+\begin{itemize}
+\item \ttt{DATPATH} -- Arquivo .DAT com todos os dados analizados, que
+  será utilizado pelo algoritmo de otimização;
+\item \ttt{DAT2PATH} -- Arquivo (temporário) que é gerado pelo
+  programa, para que o processo de otimização possa ocorrer
+  iterativamente;
+\item \ttt{SOLPATH} -- Arquivo de solução que será gerado pelo
+  algoritmo de otimização
+\end{itemize}
+Um usuário não necessita modificar os parâmetros de saída, apenas os
+de entrada.
 
 \subsection{Grupos} \label{conf:grupos}
 
