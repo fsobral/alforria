@@ -1,6 +1,7 @@
 # Ignoring emacs temporary files
 *~
 \#*\#
+*.log
 
 # Ignoring generated files in directory 'relatorios'
 relatorios
