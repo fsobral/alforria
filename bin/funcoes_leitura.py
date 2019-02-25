@@ -164,150 +164,180 @@ def ler_solucao_cbc(professores,turmas,arquivo):
                                                 if p.nome()==professor:
                                                         p.turmas_a_lecionar.append(t)
                                                         break
-			elif variavel=="insat":
-				for p in professores :
-					if p.nome() == professor:
-						p.insatisfacao=float(linha.split()[-2])
-			elif variavel=="insat_disciplinas":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_disciplinas=float(linha.split()[-2])
-			elif variavel=="insat_cargahor":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_cargahor=float(linha.split()[-2])
-			elif variavel=="insat_numdisc":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_numdisc=float(linha.split()[-2])
-			elif variavel=="insat_horario":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_horario=float(linha.split()[-2])
-			elif variavel=="insat_distintas":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_distintas=float(linha.split()[-2])
-			elif variavel=="insat_manha_noite":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_manha_noite=float(linha.split()[-2])
-			elif variavel=="insat_janelas":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_janelas=float(linha.split()[-2])
+                        elif variavel=="insat":
+                                for p in professores :
+                                        if p.nome() == professor:
+                                                p.insatisfacao=float(linha.split()[-2])
+                        elif variavel=="insat_disciplinas":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_disciplinas=float(linha.split()[-2])
+                        elif variavel=="insat_cargahor":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_cargahor=float(linha.split()[-2])
+                        elif variavel=="insat_numdisc":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_numdisc=float(linha.split()[-2])
+                        elif variavel=="insat_horario":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_horario=float(linha.split()[-2])
+                        elif variavel=="insat_distintas":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_distintas=float(linha.split()[-2])
+                        elif variavel=="insat_manha_noite":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_manha_noite=float(linha.split()[-2])
+                        elif variavel=="insat_janelas":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_janelas=float(linha.split()[-2])
 
 ####################################################################################################################
 ####################    Funcao                 ler_grupos                e auxiliares      #########################
 ####################################################################################################################
 def ler_grupos(arquivo): #Le os grupos do arquivo de grupos
-	grupos = []
-	with open(arquivo,"r") as fonte:
-		for linha in fonte:
-			if not linha.isspace():
-				tok=linha.split()
-				g=classes.Grupo()
-				g.id = funcoes_gerais.uniformize(tok[1])
-				if tok[0]=="C":
-					g.canonico=True
-				for i in tok[2:]:
-					g.disciplinas.append(i)
-				grupos.append(g)
-	return grupos
+        grupos = []
+        with open(arquivo,"r") as fonte:
+                for linha in fonte:
+                        if not linha.isspace():
+                                tok=linha.split()
+                                g=classes.Grupo()
+                                g.id = funcoes_gerais.uniformize(tok[1])
+                                if tok[0]=="C":
+                                        g.canonico=True
+                                for i in tok[2:]:
+                                        g.disciplinas.append(i)
+                                grupos.append(g)
+        return grupos
 ####################################################################################################################
 ####################    Funcao                 ler_sar                   e auxiliares      #########################
 ####################################################################################################################
 def sar_vale(linha): #Define se a linha lida do SAR possui informacoes relevantes
-	if len(linha) < 10:
-		 return False
-	tok=linha.split()
-	if len(tok)<10:
-		return False
-	if tok[0]=='DISC':
-		 return False
-	if tok[len(tok)-9] == 'MARINGA':
-		 return True
+        if len(linha) < 10:
+                return False
+        tok=linha.split()
+        if len(tok)<10:
+                return False
+        if tok[0]=='DISC':
+                return False
+        if tok[-9] == 'MARINGA':
+                return True
+        # Caso com horario indisponivel
+        if tok[- 7] == 'MARINGA':
+                return True
 #----------------------------------------------------------------------------------------------------------------------
 def sar_primaria(linha): #Uma linha primaria e aquela que comeca uma nova turma, essa funcao as identifica
-	if not sar_vale(linha):
-		return False
-	tok=linha.split()
-	if len(tok[0])>2:
-		return True
-	return False
+        if not sar_vale(linha):
+                return False
+        tok=linha.split()
+
+        # Compatibilidade entre duas versões de SAR
+        if len(tok[0]) > 2 and \
+           tok[0] not in ['T', 'T-P', 'P']:
+                return True
+
+        return False
 #----------------------------------------------------------------------------------------------------------------------      
 def copia_turmas(origem):
-	destino = classes.Turma()
-	destino.codigo = origem.codigo
-	destino.turma = origem.turma
-	destino.nome = origem.nome
-	destino.semestralidade = origem.semestralidade
-	destino.horarios = list(origem.horarios) # Cria uma copia por valor
-	destino.grupo = origem.grupo
-	destino.professor = origem.professor
-	destino.vinculada = origem.vinculada
+        destino = classes.Turma()
+        destino.codigo = origem.codigo
+        destino.turma = origem.turma
+        destino.nome = origem.nome
+        destino.semestralidade = origem.semestralidade
+        destino.horarios = list(origem.horarios) # Cria uma copia por valor
+        destino.grupo = origem.grupo
+        destino.professor = origem.professor
+        destino.vinculada = origem.vinculada
         destino.ch = origem.ch
-	return destino
+        return destino
 #----------------------------------------------------------------------------------------------------------------------
 def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos grupos
-	turmas = []
-	anual=False
-	with open(arquivo, "r") as fonte:
-		for linha in fonte:
-			tok=linha.split()
-			if sar_primaria(linha):
-				if anual: #se a ultima disciplina lida foi anual, sua correspondente no segundo semestre sera criada
-					t = copia_turmas(turmas[-1])
-					t.semestralidade = 2
-					temp = str(t.codigo) + "_S2"
-					for g in grupos:
-						if temp in g.disciplinas:
-							t.grupo=g
-							break
-					turmas.append(t)
-				anual=False
-				semestres=[]
-				t=classes.Turma()
-				turmas.append(t)
-				t.codigo=tok[0]
-				t.turma=tok[1]
-				if tok[-4]=="A":
-					t.semestralidade=1
-					anual=True
-					t.vinculada=True
-				else:
-					anual=False
-					if tok[-4]=="S1":
-						t.semestralidade=1
-					else:
-						t.semestralidade=2
-				t.horarios.append((int(tok[-12]),int(tok[-11])))		
-				t.nome=""
-				for i in tok[2:-12]:
-					t.nome=t.nome+" "+i
-				temp=str(t.codigo)
-				if anual:
-					temp += "_S"+str(t.semestralidade)
-				for g in grupos:
-					if temp in g.disciplinas:
-						t.grupo=g
-						break
-                                # Para a carga horaria, precisamos remover a virgula
-                                t.ch = int(tok[-6].split(',')[0])
-			else:
-				if sar_vale(linha):
-					turmas[-1].horarios.append((int(tok[0]),int(tok[1])))
-		#fim do loop grande
-		if anual: #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
-			t=classes.Turma()
-			copia_turmas(turmas[len(turmas)],t)
-			t.semestralidade=2
-			temp=str(t.codigo)+"_S2"
-			for g in grupos:
-				if temp in g.disciplinas:
-					t.grupo=g
-					break
-		return turmas
+        turmas = []
+        anual=False
+        with open(arquivo, "r") as fonte:
+                for linha in fonte:
+                        tok=linha.split()
+                        if sar_primaria(linha):
+                                if anual: #se a ultima disciplina lida foi anual, sua correspondente no segundo semestre sera criada
+                                        t = copia_turmas(turmas[-1])
+                                        t.semestralidade = 2
+                                        temp = str(t.codigo) + "_S2"
+                                        for g in grupos:
+                                                if temp in g.disciplinas:
+                                                        t.grupo=g
+                                                        break
+                                        turmas.append(t)
+                                anual=False
+                                semestres=[]
+                                t=classes.Turma()
+                                turmas.append(t)
+                                t.codigo=tok[0]
+                                t.turma=tok[1]
+                                if tok[-4]=="A":
+                                        t.semestralidade=1
+                                        anual=True
+                                        t.vinculada=True
+                                else:
+                                        anual=False
+                                        if tok[-4]=="S1":
+                                                t.semestralidade=1
+                                        else:
+                                                t.semestralidade=2
+
+                                # Cuida do caso em que nao veio a
+                                # carga horaria da disciplina
+                                ntok = -10
+                                if '.' in tok[-6] or ',' in tok[-6]:
+                                        ntok = -12
+
+                                t.horarios.append((int(tok[ntok]),int(tok[ntok + 1])))		
+                                t.nome=""
+                                for i in tok[2:ntok]:
+                                        t.nome=t.nome+" "+i
+
+                                temp=str(t.codigo)
+                                if anual:
+                                        temp += "_S"+str(t.semestralidade)
+                                for g in grupos:
+                                        if temp in g.disciplinas:
+                                                t.grupo=g
+                                                break
+
+                                # Para a carga horaria, precisamos
+                                # remover a virgula                                
+                                # O novo SAR vem com
+                                # '.' ao invés de ',', entao esse
+                                # codigo é para compatibilidade
+                                t.ch = 0
+                                if ',' in tok[-6]:
+                                        t.ch = int(tok[-6].split(",")[0])
+
+                                if '.' in tok[-6]:
+                                        t.ch = int(tok[-6].split(".")[0])
+
+                        else:
+                                if sar_vale(linha):
+                                        # Novo SAR, agora tem um T ou T-P ou P em cada linha.
+                                        if tok[0].isdigit():
+                                                turmas[-1].horarios.append((int(tok[0]),int(tok[1])))
+                                        else:
+                                                turmas[-1].horarios.append((int(tok[1]),int(tok[2])))
+                #fim do loop grande
+                if anual: #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
+                        t=classes.Turma()
+                        copia_turmas(turmas[len(turmas)],t)
+                        t.semestralidade=2
+                        temp=str(t.codigo)+"_S2"
+                        for g in grupos:
+                                if temp in g.disciplinas:
+                                        t.grupo=g
+                                        break
+                return turmas
 ############################################################################################################################
 #########################################                LER PREFERENCIAS                   ################################
 ############################################################################################################################
