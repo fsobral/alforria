@@ -123,7 +123,7 @@ class Professor:################################################################
         self.licenca2 = False
         self.discriminacao_chprevia = None
         self.temporario = False
-        self.impedimentos = numpy.zeros((15,8))
+        self.impedimentos = numpy.zeros((17,8))
         self.peso_disciplinas = 0.0
         self.peso_disciplinas_bruto = 0.0
         self.peso_horario = 0.0
@@ -138,9 +138,9 @@ class Professor:################################################################
         self.pref_grupos_bruto = {}         # Mapa id de grupo para preferencia
         self.pref_reuniao = False
         self.pref_janelas = False
-        self.pref_horarios_bruto = numpy.zeros((15,8))
+        self.pref_horarios_bruto = numpy.zeros((17,8))
         self.pref_grupos = {}
-        self.pref_horarios = numpy.zeros((15,8))
+        self.pref_horarios = numpy.zeros((17,8))
         self.lista_impedimentos = []
         self.chmax = None
         self.chmax1 = None
@@ -205,11 +205,11 @@ class Professor:################################################################
             ' jb=' + str(self.peso_janelas_bruto) + ' j=' + str(self.peso_janelas) + \
             ' n=' + str(self.peso_numdisc) + ' mn=' + str(self.peso_manha_noite) + '\n'
         s += 'Inapto=' + str(self.inapto) + '\n'
-        s += 'Impedimentos=\n' + str(self.impedimentos[1:15,2:8]) + '\n'
+        s += 'Impedimentos=\n' + str(self.impedimentos[1:17,2:8]) + '\n'
         s += 'Pref. Grupos Bruto=\n' + str(self.pref_grupos_bruto) + '\n'
         s += 'Pref. Grupos=\n' + str(self.pref_grupos) + '\n'
-        s += 'Pref. Horarios Bruto\n' + str(self.pref_horarios_bruto[1:15,2:8]) + '\n'
-        s += 'Pref. Horarios\n' + str(self.pref_horarios[1:15,2:8])
+        s += 'Pref. Horarios Bruto\n' + str(self.pref_horarios_bruto[1:17,2:8]) + '\n'
+        s += 'Pref. Horarios\n' + str(self.pref_horarios[1:17,2:8])
         return s
     #----------------------------------------------------------------------------------------------------
     def ajustar(self):
@@ -221,7 +221,7 @@ class Professor:################################################################
         # Ajuste da preferencia por horarios
         maximo = 0
         for j in range(2,8):
-            fim = 15
+            fim = 17
             if j == 7:
                 fim = 11
             for i in range(1,fim):
@@ -230,7 +230,7 @@ class Professor:################################################################
                     maximo = self.pref_horarios_bruto[i,j]
         minimo = 10
         for j in range(2,8):
-            fim = 15
+            fim = 17
             if j == 7:
                 fim = 11
             for i in range(1,fim):
@@ -242,7 +242,7 @@ class Professor:################################################################
         else:
             self.peso_horario = self.peso_horario_bruto
             for j in range(2,8):
-                for i in range(1,15):
+                for i in range(1,17):
                     self.pref_horarios[i,j] = - 10 * (self.pref_horarios_bruto[i,j] - maximo) / (maximo - minimo)
             # Se o temporario deseja participar da reuniao, entao coloca insatisfacao maxima no horario
             if self.pref_reuniao and self.temporario:
@@ -327,7 +327,7 @@ class Professor:################################################################
                 f.write('\\begin{center} \\begin{tabular}{|c|c|c|c|c|c|c|}\\toprule\n')
                 f.write('\\multicolumn{7}{|c|}{' + str(s) + '$^\\circ$ semestre} \\\\ \\midrule\n')
                 f.write('& S & T & Q & Q & S & S \\\\ \\midrule\n')
-                for i in range(1,15):
+                for i in range(1,17):
                     f.write(str(i) );
                     for j in range(2,8):
                         if self.impedimentos[i,j] or (self.licenca1 and s == 1) or \
