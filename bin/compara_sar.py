@@ -57,10 +57,14 @@ for t1 in turmas1:
         if t1.id() == t2.id():
             existe = True
             if len( [(d,h) for (d,h) in t1.horarios \
-                     if (d,h) not in t2.horarios] ) > 0 or \
-                        t1.carga_horaria() != t2.carga_horaria():
+                     if (d,h) not in t2.horarios] ) > 0:
                 print(t1.id() + " " + t1.nome + \
                       " com horarios diferentes nos SARs.")
+                print("\t" + str(t1))
+                print("\t" + str(t2))
+            elif t1.carga_horaria() != t2.carga_horaria():
+                print(t1.id() + " " + t1.nome + \
+                      " com cargas horárias diferentes nos SARs.")
                 print("\t" + str(t1))
                 print("\t" + str(t2))
 
