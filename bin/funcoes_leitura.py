@@ -48,52 +48,52 @@ import re
 ####################################################################################################################
 #Remove os fantasmas da lista turmas
 def caca_fantasmas(arquivo,turmas):
-	with open(arquivo,"r") as fonte:
+        with open(arquivo,"r") as fonte:
 
                 print("\nRemovendo disciplinas fantasmas")
                 print("-------------------------------\n")
 
-		for (num_linha, linha) in enumerate(fonte, 1):
-			fantasma=linha.split('\t')
-			fantasma_inexistente=True
-			i=0
+                for (num_linha, linha) in enumerate(fonte, 1):
+                        fantasma=linha.split('\t')
+                        fantasma_inexistente=True
+                        i=0
 
-			while(i<len(turmas)):
-				if int(turmas[i].codigo) == int(fantasma[0]) and \
+                        while(i<len(turmas)):
+                                if int(turmas[i].codigo) == int(fantasma[0]) and \
                                    int(turmas[i].turma)  == int(fantasma[1]) :
                                         print("Turma " + turmas[i].id() + " removida")
-					del turmas[i]
-					fantasma_inexistente = False
-				else:
-					i += 1
-			if fantasma_inexistente:
-				print("\nAVISO: Linha " + str(num_linha) + \
+                                        del turmas[i]
+                                        fantasma_inexistente = False
+                                else:
+                                        i += 1
+                        if fantasma_inexistente:
+                                print("\nAVISO: Linha " + str(num_linha) + \
                                       " - Este fantasma nao existe:" + \
                                       fantasma[0] + "_" + fantasma[1] + ".\n")
-	return turmas
+        return turmas
 ####################################################################################################################
 ####################    Funcao                 ler_solucao              e auxiliares      #########################
 ####################################################################################################################
 def ler_solucao(professores,turmas,arquivo):
-	with open(arquivo,"r") as fonte:
-		for linha in fonte:
+        with open(arquivo,"r") as fonte:
+                for linha in fonte:
 
                         # Pula as linhas que nao setam variaveis
                         if not '(' in linha: continue
 
-			a=re.split("[()]", linha)
+                        a=re.split("[()]", linha)
 
-			b=a[1].split(',')
-			professor=b[0]
-			variavel=a[0]
+                        b=a[1].split(',')
+                        professor=b[0]
+                        variavel=a[0]
 
                         if variavel == 'carga_horaria':
-				for p in professores :
-					if p.nome() == professor:
-						p.carga_horaria=float(linha.split()[-1])
-			elif variavel=="x":
+                                for p in professores :
+                                        if p.nome() == professor:
+                                                p.carga_horaria=float(linha.split()[-1])
+                        elif variavel=="x":
                                 turmaid = b[1].strip('\'')
-				if float(a[-1].strip()) > 0.9:
+                                if float(a[-1].strip()) > 0.9:
                                         for t in turmas:
                                                 if t.id() == turmaid:
                                                         break
@@ -101,62 +101,62 @@ def ler_solucao(professores,turmas,arquivo):
                                                 if p.nome()==professor:
                                                         p.turmas_a_lecionar.append(t)
                                                         break
-			elif variavel=="insat":
-				for p in professores :
-					if p.nome() == professor:
-						p.insatisfacao=float(linha.split()[-1])
-			elif variavel=="insat_disciplinas":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_disciplinas=float(linha.split()[-1])
-			elif variavel=="insat_cargahor":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_cargahor=float(linha.split()[-1])
-			elif variavel=="insat_numdisc":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_numdisc=float(linha.split()[-1])
-			elif variavel=="insat_horario":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_horario=float(linha.split()[-1])
-			elif variavel=="insat_distintas":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_distintas=float(linha.split()[-1])
-			elif variavel=="insat_manha_noite":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_manha_noite=float(linha.split()[-1])
-			elif variavel=="insat_janelas":
-				for p in professores:
-					if p.nome() == professor :
-						p.insat_janelas=float(linha.split()[-1])
+                        elif variavel=="insat":
+                                for p in professores :
+                                        if p.nome() == professor:
+                                                p.insatisfacao=float(linha.split()[-1])
+                        elif variavel=="insat_disciplinas":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_disciplinas=float(linha.split()[-1])
+                        elif variavel=="insat_cargahor":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_cargahor=float(linha.split()[-1])
+                        elif variavel=="insat_numdisc":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_numdisc=float(linha.split()[-1])
+                        elif variavel=="insat_horario":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_horario=float(linha.split()[-1])
+                        elif variavel=="insat_distintas":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_distintas=float(linha.split()[-1])
+                        elif variavel=="insat_manha_noite":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_manha_noite=float(linha.split()[-1])
+                        elif variavel=="insat_janelas":
+                                for p in professores:
+                                        if p.nome() == professor :
+                                                p.insat_janelas=float(linha.split()[-1])
 
 ####################################################################################################################
 ####################    Funcao                 ler_solucao_cbc          e auxiliares      #########################
 ####################################################################################################################
 def ler_solucao_cbc(professores,turmas,arquivo):
-	with open(arquivo,"r") as fonte:
-		for linha in fonte:
+        with open(arquivo,"r") as fonte:
+                for linha in fonte:
 
                         # Pula as linhas que nao setam variaveis
                         if not '(' in linha: continue
 
-			a=re.split("[()]", linha.split()[1])
-			b=a[1].split(',')
+                        a=re.split("[()]", linha.split()[1])
+                        b=a[1].split(',')
 
-			professor=b[0]
-			variavel=a[0]
+                        professor=b[0]
+                        variavel=a[0]
 
                         if variavel == 'carga_horaria':
-				for p in professores :
-					if p.nome() == professor:
-						p.carga_horaria=float(linha.split()[-2])
-			elif variavel=="x":
+                                for p in professores :
+                                        if p.nome() == professor:
+                                                p.carga_horaria=float(linha.split()[-2])
+                        elif variavel=="x":
                                 turmaid = b[1].strip('\'')
-				if linha.split()[-2] == "1":
+                                if linha.split()[-2] == "1":
                                         for t in turmas:
                                                 if t.id() == turmaid:
                                                         break
@@ -351,11 +351,11 @@ converter_horario = {'07:45 - 09:15':(1,2),   \
 converter_dia={'SEG':2, 'TER':3, 'QUA':4, 'QUI':5, 'SEX':6, 'SAB':7}
 #----------------------------------------------------------------------------------------------------------------------
 converter_codigo_de_horario= 	{1:(1,2),   \
-				2:(3,4,5),  \
-				3:(6,7),    \
-				4:(8,9,10), \
-				5:(11,12),  \
-				6:(13,14)}
+                                2:(3,4,5),  \
+                                3:(6,7),    \
+                                4:(8,9,10), \
+                                5:(11,12),  \
+                                6:(13,14)}
 #----------------------------------------------------------------------------------------------------------------------
 converter_periodo = {'MANHA' : (1,2,3,4,5),  \
                      'TARDE' : (6,7,8,9,10), \
@@ -368,123 +368,123 @@ converter_preferencia = { 'NAO GOSTARIA'          : 0,   \
                           'GOSTARIA'              : 10   }
 #----------------------------------------------------------------------------------------------------------------------
 def ler_pref(form,grupos,max_impedimentos):
-	professores = []
-	with open(form, "r") as f:
-		for l in f:
-			p = classes.Professor()
-			tokens = iter(l.split('\t'))
-			tokens.next()# Pula timestamp
-			p.nome_completo = funcoes_gerais.uniformize(tokens.next()) # Identificacao
-			p.matricula = int(tokens.next()) # Identificacao Unica
+        professores = []
+        with open(form, "r") as f:
+                for l in f:
+                        p = classes.Professor()
+                        tokens = iter(l.split('\t'))
+                        tokens.next()# Pula timestamp
+                        p.nome_completo = funcoes_gerais.uniformize(tokens.next()) # Identificacao
+                        p.matricula = int(tokens.next()) # Identificacao Unica
                         # Jeito tosco de remover duplicatas
                         # TODO: melhorar isso
                         for i in professores:
                                 if i.matricula == p.matricula:
-                                        print 'AVISO: Professores ' + i.nome() + ' e ' + p.nome() + \
-                                                ' com mesma matrícula. Eliminando entrada antiga.\n'
+                                        print('AVISO: Professores ' + i.nome() + ' e ' + p.nome() + \
+                                                ' com mesma matrícula. Eliminando entrada antiga.\n')
                                         professores.remove(i)
-			p.email = tokens.next()
+                        p.email = tokens.next()
                         p.tel = tokens.next()
-			chp1 = tokens.next()
-			chp2 = tokens.next()
-			if chp1=='':
-				chp1='0'
-			if chp2=='':
-				chp2="0"
-			p.chprevia1 = int(chp1)
-			p.chprevia2 = int(chp2)                        
-			p.discriminacao_chprevia = tokens.next()
-			w = funcoes_gerais.uniformize(tokens.next())# Licença
-			if "PRIMEIRO" in w:
-				p.licenca1 = True
-			if "SEGUNDO" in w:
-				p.licenca2 = True
-			if "ANUAL" in w:
-				continue
-			w = funcoes_gerais.uniformize(tokens.next())# Temporario
-			if w == 'TEMPORARIO':
-				p.temporario = True
-			p.peso_disciplinas_bruto = float(tokens.next())
-			p.peso_horario_bruto = float(tokens.next())
-			p.peso_cargahor = float(tokens.next())
-			p.peso_distintas = float(tokens.next())
-			p.peso_numdisc = float(tokens.next())
-			p.peso_manha_noite = float(tokens.next())
-			p.peso_janelas_bruto = float(tokens.next())
-			# Inaptidao em grupos
-			w = funcoes_gerais.uniformize(tokens.next())
-			if len(w) > 0:
-				p.inapto = w.split(', ')
-			# Preferencia por grupos
-			for g in grupos:
-				if g.canonico:
-					s = tokens.next()
-					if len(s) > 0:	#se a preferencia foi preenchida
-						p.pref_grupos_bruto[g.id] = int(s)
-					else: #se não, atribuir default 5
-						p.pref_grupos_bruto[g.id] = 5
-			# Reuniao departamento
-			w = funcoes_gerais.uniformize(tokens.next())
-			if 'SIM' in w:
-						p.pref_reuniao = True
-			# Preferencia compacto/esparso (define o respectivo peso como zero se nao especificado)
-			w = funcoes_gerais.uniformize(tokens.next())
-			p.peso_janelas=p.peso_janelas_bruto
-			if 'ESPARSOS' in w:
-				p.pref_janelas = True
-			elif 'COMPACTOS' not in w:
-				p.peso_janelas = 0 #Zera peso_janelas se a Preferencia nao for informada
-			for i in range(0,max_impedimentos):
-				dia = funcoes_gerais.uniformize(tokens.next())
-				periodo = funcoes_gerais.uniformize(tokens.next())
-				justificativa = funcoes_gerais.uniformize(tokens.next())
-				#guarda os dados do impedimento como string para conferencia posterior
-				p.lista_impedimentos.append(dia+", "+periodo+", "+justificativa)
-				#se o dia e periodo foram corretamente preenchidos, marca a respectiva posicao na matriz como 1
-				if len(dia) > 0 and not dia.isspace() and dia != "SEM IMPEDIMENTO" and \
-					len(periodo) > 0 and not periodo.isspace() and periodo != "SEM IMPEDIMENTO": 
-					for h in converter_periodo[periodo]:
-						p.impedimentos[h,converter_dia[dia]]=1
-			#Comeca o prechimento das tabelas de horario	
-			w = funcoes_gerais.uniformize(tokens.next())
-			m = numpy.zeros((15, 8))
-			if 'DETALHADO' in w:
-				for d in range(2,8):
-					periodos = ['MANHA', 'TARDE', 'NOITE']
-					if d == 7:
-						periodos = ['MANHA', 'TARDE']
-					for i in periodos:
-						pref = funcoes_gerais.uniformize(tokens.next())
-						for h in converter_periodo[i]:
-							if len(pref) == 0:
-								pref = 'INDIFERENTE'
-							p.pref_horarios_bruto[h,d] = converter_preferencia[pref]
+                        chp1 = tokens.next()
+                        chp2 = tokens.next()
+                        if chp1=='':
+                                chp1='0'
+                        if chp2=='':
+                                chp2="0"
+                        p.chprevia1 = int(chp1)
+                        p.chprevia2 = int(chp2)                        
+                        p.discriminacao_chprevia = tokens.next()
+                        w = funcoes_gerais.uniformize(tokens.next())# Licença
+                        if "PRIMEIRO" in w:
+                                p.licenca1 = True
+                        if "SEGUNDO" in w:
+                                p.licenca2 = True
+                        if "ANUAL" in w:
+                                continue
+                        w = funcoes_gerais.uniformize(tokens.next())# Temporario
+                        if w == 'TEMPORARIO':
+                                p.temporario = True
+                        p.peso_disciplinas_bruto = float(tokens.next())
+                        p.peso_horario_bruto = float(tokens.next())
+                        p.peso_cargahor = float(tokens.next())
+                        p.peso_distintas = float(tokens.next())
+                        p.peso_numdisc = float(tokens.next())
+                        p.peso_manha_noite = float(tokens.next())
+                        p.peso_janelas_bruto = float(tokens.next())
+                        # Inaptidao em grupos
+                        w = funcoes_gerais.uniformize(tokens.next())
+                        if len(w) > 0:
+                                p.inapto = w.split(', ')
+                        # Preferencia por grupos
+                        for g in grupos:
+                                if g.canonico:
+                                        s = tokens.next()
+                                        if len(s) > 0:	#se a preferencia foi preenchida
+                                                p.pref_grupos_bruto[g.id] = int(s)
+                                        else: #se não, atribuir default 5
+                                                p.pref_grupos_bruto[g.id] = 5
+                        # Reuniao departamento
+                        w = funcoes_gerais.uniformize(tokens.next())
+                        if 'SIM' in w:
+                                                p.pref_reuniao = True
+                        # Preferencia compacto/esparso (define o respectivo peso como zero se nao especificado)
+                        w = funcoes_gerais.uniformize(tokens.next())
+                        p.peso_janelas=p.peso_janelas_bruto
+                        if 'ESPARSOS' in w:
+                                p.pref_janelas = True
+                        elif 'COMPACTOS' not in w:
+                                p.peso_janelas = 0 #Zera peso_janelas se a Preferencia nao for informada
+                        for i in range(0,max_impedimentos):
+                                dia = funcoes_gerais.uniformize(tokens.next())
+                                periodo = funcoes_gerais.uniformize(tokens.next())
+                                justificativa = funcoes_gerais.uniformize(tokens.next())
+                                #guarda os dados do impedimento como string para conferencia posterior
+                                p.lista_impedimentos.append(dia+", "+periodo+", "+justificativa)
+                                #se o dia e periodo foram corretamente preenchidos, marca a respectiva posicao na matriz como 1
+                                if len(dia) > 0 and not dia.isspace() and dia != "SEM IMPEDIMENTO" and \
+                                        len(periodo) > 0 and not periodo.isspace() and periodo != "SEM IMPEDIMENTO": 
+                                        for h in converter_periodo[periodo]:
+                                                p.impedimentos[h,converter_dia[dia]]=1
+                        #Comeca o prechimento das tabelas de horario	
+                        w = funcoes_gerais.uniformize(tokens.next())
+                        m = numpy.zeros((15, 8))
+                        if 'DETALHADO' in w:
+                                for d in range(2,8):
+                                        periodos = ['MANHA', 'TARDE', 'NOITE']
+                                        if d == 7:
+                                                periodos = ['MANHA', 'TARDE']
+                                        for i in periodos:
+                                                pref = funcoes_gerais.uniformize(tokens.next())
+                                                for h in converter_periodo[i]:
+                                                        if len(pref) == 0:
+                                                                pref = 'INDIFERENTE'
+                                                        p.pref_horarios_bruto[h,d] = converter_preferencia[pref]
                                 for i in range(0, 5): # Pula as posicoes em branco do formulario
                                         tokens.next()
-			else:
-				for i in range(0,3 * 5 + 2): #pula as posicoes em branco do formulario
-					tokens.next()
-				for i in ['MANHA', 'TARDE', 'NOITE']: #le as preferencias para os dias da semana
-					pref = funcoes_gerais.uniformize(tokens.next())
-					for h in converter_periodo[i]:
-						for d in range(2,7): #grava uma copia em cada dia da semana
-							if len(pref) == 0:
-								pref = 'INDIFERENTE'
-							p.pref_horarios_bruto[h,d] = converter_preferencia[pref]
-				for i in ['MANHA', 'TARDE']: #lendo as preferencias do sabado
-					pref = funcoes_gerais.uniformize(tokens.next())
-					for h in converter_periodo[i]:
-						if len(pref) == 0:
-							pref = 'INDIFERENTE'
+                        else:
+                                for i in range(0,3 * 5 + 2): #pula as posicoes em branco do formulario
+                                        tokens.next()
+                                for i in ['MANHA', 'TARDE', 'NOITE']: #le as preferencias para os dias da semana
+                                        pref = funcoes_gerais.uniformize(tokens.next())
+                                        for h in converter_periodo[i]:
+                                                for d in range(2,7): #grava uma copia em cada dia da semana
+                                                        if len(pref) == 0:
+                                                                pref = 'INDIFERENTE'
+                                                        p.pref_horarios_bruto[h,d] = converter_preferencia[pref]
+                                for i in ['MANHA', 'TARDE']: #lendo as preferencias do sabado
+                                        pref = funcoes_gerais.uniformize(tokens.next())
+                                        for h in converter_periodo[i]:
+                                                if len(pref) == 0:
+                                                        pref = 'INDIFERENTE'
                                                 p.pref_horarios_bruto[h,d + 1] = converter_preferencia[pref]
                         # Professor tem reducao de carga para a pos?
                         p.pos = tokens.next() == 'S'
                         # Tudo o que vier depois daqui eh considerado comentario.
                         for obs in tokens:
                                 p.observacoes += obs
-                                
-			professores.append(p)
-	return professores
+
+                        professores.append(p)
+        return professores
 
 
 ############################################################################################################################
@@ -584,7 +584,7 @@ def ler_conf(arquivo):
 
         param = {}
         linha = 1
-        
+
         with open(arquivo,'r') as f:
                 for l in f:
                         if l.isspace() or l.startswith("#"):

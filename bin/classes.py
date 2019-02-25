@@ -57,15 +57,15 @@ import numpy
 import re
 
 class Paths:  ##################################################################################################
-	def __init__(self):
-		self.GRUPOSPATH = None
-		self.PREFPATH = None
-		self.SARPATH = None
-		self.ATRIBPATH = None
-		self.FANTPATH = None
-		self.DATPATH = None
-		self.SOLPATH = None
-		self.preenchida = False
+        def __init__(self):
+                self.GRUPOSPATH = None
+                self.PREFPATH = None
+                self.SARPATH = None
+                self.ATRIBPATH = None
+                self.FANTPATH = None
+                self.DATPATH = None
+                self.SOLPATH = None
+                self.preenchida = False
 
 
 
@@ -80,34 +80,34 @@ class Grupo: ###################################################################
 
 
 class Turma: ##################################################################################################
-	def __init__(self):
-		self.codigo = None
-		self.turma = None
-		self.codigo = None
-		self.nome = None
-		self.semestralidade = None # 1 ou 2
-		self.horarios = [] # Lista de pares (dia,horario)
-		self.grupo = None # Objeto Grupo
-		self.professor = None # Objeto Professor ou Nome do Professor ????
-		self.vinculada=False
-		self.eh_cliente = False #Indica se a turma eh uma turma cliente ou "fantasma" e tera suas aulas juntamente com outra
-		self.turmas_clientes = [] #Lista de turmas que sao clientes desta
-		self.pos = False
+        def __init__(self):
+                self.codigo = None
+                self.turma = None
+                self.codigo = None
+                self.nome = None
+                self.semestralidade = None # 1 ou 2
+                self.horarios = [] # Lista de pares (dia,horario)
+                self.grupo = None # Objeto Grupo
+                self.professor = None # Objeto Professor ou Nome do Professor ????
+                self.vinculada=False
+                self.eh_cliente = False #Indica se a turma eh uma turma cliente ou "fantasma" e tera suas aulas juntamente com outra
+                self.turmas_clientes = [] #Lista de turmas que sao clientes desta
+                self.pos = False
                 self.ch = 0
-	#----------------------------------------------------------------------------------------------------
-	def id(self):
-		return str(self.codigo) + '_' + str(self.turma) + '_S' + str(self.semestralidade)
-	#----------------------------------------------------------------------------------------------------
-	def __str__(self):
+        #----------------------------------------------------------------------------------------------------
+        def id(self):
+                return str(self.codigo) + '_' + str(self.turma) + '_S' + str(self.semestralidade)
+        #----------------------------------------------------------------------------------------------------
+        def __str__(self):
                 if self.professor is None:
                         return self.id() + ' Sem professor ' + ' CH: ' + str(self.ch) + ' ' + str(self.horarios)
                 else:
                         return self.id() + ' ' + self.professor.id() + ' CH: ' + str(self.ch) + ' ' + str(self.horarios)
-	#----------------------------------------------------------------------------------------------------
-	def carga_horaria(self):
+        #----------------------------------------------------------------------------------------------------
+        def carga_horaria(self):
                 return self.ch
-		#return len(self.horarios);
-		
+                #return len(self.horarios);
+
 
 
 
@@ -148,8 +148,8 @@ class Professor:################################################################
         self.fantasma = False
         self.pos = False
         self.observacoes = ""
-        
-        
+
+
     #--------------------------------Valores lidos no arquivo de solucao---------------------
         self.turmas_a_lecionar = []
         self.carga_horaria = 0.0;
@@ -161,14 +161,14 @@ class Professor:################################################################
         self.insat_distintas = 0.0;
         self.insat_manha_noite = 0.0;
         self.insat_janelas = 0.0;
-        
+
     #----------------------------------------------------------------------------------------------------
     def carga_horaria_atrib(self):
 
         ch = 0
 
         for t in self.turmas_a_lecionar:
-                   
+
                 ch += t.carga_horaria()
 
         return ch
@@ -182,7 +182,7 @@ class Professor:################################################################
     #----------------------------------------------------------------------------------------------------
     def id(self):
         # O certo sera return self.matricula, mas ainda nao funciona
-	return self.nome()
+        return self.nome()
     #----------------------------------------------------------------------------------------------------
     def nome(self):
         tok = self.nome_completo.split()
@@ -271,7 +271,7 @@ class Professor:################################################################
         Criam um arquivo .tex cujo nome eh a matricula, contendo os comandos tex para analisar os resultados.
         O arquivo precisa ser inserido na estrutura de um documento latex, via include, por exemplo.
         """
-        
+
         if arquivo is None:
             arquivo = str(self.matricula).zfill(6) + '.tex'
 
@@ -294,7 +294,7 @@ class Professor:################################################################
                 f.write(' (' + self.discriminacao_chprevia + ')')
             f.write('\n')                    
             f.write('\\item Carga horária anual (prévia + atribuída): ' + str(int(self.carga_horaria_total())) + '\n')
-        
+
             if self.fantasma:
                     f.write('\\item Satisfação: --\n')
             else:
