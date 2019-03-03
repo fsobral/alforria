@@ -239,10 +239,12 @@ def check_ch(professores, turmas, pre_atribuidas, constantes):
                         chmaxsem = int(constantes['chmax_temporario_semestral'])
                         chmaxanual = int(constantes['chmax_temporario_anual'])
                         chminanualgrad = int(constantes['chmin_graduacao'])
+                        chminanual = int(constantes['chmin_temporario_anual'])
                 else:
                         chmaxsem = int(constantes['chmax_efetivo_semestral'])
                         chmaxanual = int(constantes['chmax_efetivo_anual'])
                         chminanualgrad = int(constantes['chmin_graduacao'])
+                        chminanual = int(constantes['chmin_efetivo_anual'])
 
                 if p.licenca1 or p.licenca2:
                         chminanualgrad /= 2
@@ -314,7 +316,7 @@ def check_ch(professores, turmas, pre_atribuidas, constantes):
                         p.chmax = max(chmaxanual, soma + max(4, chminanualgrad - chgrad))
 
                         if p.pos:
-                                p.chmax = soma + max(4, chminanualgrad - chgrad)
+                                p.chmax = max(chminanual, soma + max(4, chminanualgrad - chgrad))
 
                         if not p.licenca1:
                                 p.chmax1 = max(chmaxsem, soma1 + max(4, chminanualgrad - chgrad))

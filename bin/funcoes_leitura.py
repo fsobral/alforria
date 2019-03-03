@@ -295,7 +295,10 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                 if '.' in tok[-6] or ',' in tok[-6]:
                                         ntok = -12
 
-                                t.horarios.append((int(tok[ntok]),int(tok[ntok + 1])))		
+                                t.horarios.append(
+                                        (int(tok[ntok]),
+                                         remove_horario_tosco(int(tok[ntok + 1])))
+                                )
                                 t.nome=""
                                 for i in tok[2:ntok]:
                                         t.nome=t.nome+" "+i
@@ -324,9 +327,15 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                 if sar_vale(linha):
                                         # Novo SAR, agora tem um T ou T-P ou P em cada linha.
                                         if tok[0].isdigit():
-                                                turmas[-1].horarios.append((int(tok[0]),int(tok[1])))
+                                                turmas[-1].horarios.append(
+                                                        (int(tok[0]),
+                                                         remove_horario_tosco(int(tok[1])))
+                                                )
                                         else:
-                                                turmas[-1].horarios.append((int(tok[1]),int(tok[2])))
+                                                turmas[-1].horarios.append(
+                                                        (int(tok[1]),
+                                                         remove_horario_tosco(int(tok[2])))
+                                                )
                 #fim do loop grande
                 if anual: #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
                         t=classes.Turma()
@@ -338,6 +347,16 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                         t.grupo=g
                                         break
                 return turmas
+
+############################################################################################################################
+def remove_horario_tosco(h):
+
+        if h >= 11:
+
+                return h - 2
+
+        return h
+
 ############################################################################################################################
 #########################################                LER PREFERENCIAS                   ################################
 ############################################################################################################################

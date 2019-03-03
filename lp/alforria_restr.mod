@@ -419,6 +419,8 @@ s.t. rest10{p in P, t1 in T, t2 in T: vinculadas[t1,t2]==1}: x[p,t1]=x[p,t2];
 # Maximo de numero de disciplinas para temporarios
 s.t. rest11{p in P: temporario[p] == 1}: sum{t in T} x[p,t] <= numdiscmax_temporario;
 
+# Maximo de numero de grupos para temporarios
+s.t. rest12{p in P, s in S: temporario[p] == 1}: sum{g in G} lec_grp[p,g,s] <= 2;
 
 #################################       RESTRIÇÕES   VARIÁVEIS        ##################################
 

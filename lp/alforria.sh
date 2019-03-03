@@ -4,15 +4,15 @@
 NUM_THREADS=3
 
 # Criterio de parada. Termina quando o GAP ficar abaixo desse valor
-MIPGAP=0.02
+MIPGAP=0.6
 
 # Inicializa o arquivo de excluidos
 echo "set P_OUT := ;" > alforria2.dat
 
 python ../bin/antes.py
 
-if [ $# -gt 0 -a $1 -gt 1 ]
-then
+if [ $# -gt 0 ]; then
+    if [ $1 -gt "1" ]; then
 
     echo "Entrou"
 
@@ -31,6 +31,8 @@ then
 	python ../bin/depois.py;
 
     done;
+
+fi;
 
 fi
 
