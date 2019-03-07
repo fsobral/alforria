@@ -484,15 +484,17 @@ def_insat_janelas{p in P}:insat_janelas[p]=pref_janelas[p]*customarginal_trn_che
 
 #Escala aproximada de zero a 10
 
-s.t. insat_def{p in P}: insat[p] = (1-0.2*temporario[p])*peso_total_inv[p]*(1/prop[p])*(
-peso_disciplinas[p]*insat_disciplinas[p]+
-peso_cargahor[p]*insat_cargahor[p]+
-peso_numdisc[p]*insat_numdisc[p]+
-peso_horario[p]*insat_horario[p]+
-peso_distintas[p]*insat_distintas[p]+
-peso_manha_noite[p]*insat_manha_noite[p]+
-peso_janelas[p]*insat_janelas[p]
-);
+#s.t. insat_def{p in P}: insat[p] = (1-0.2*temporario[p])*peso_total_inv[p]*(1/prop[p])*(
+#peso_disciplinas[p]*insat_disciplinas[p]+
+#peso_cargahor[p]*insat_cargahor[p]+
+#peso_numdisc[p]*insat_numdisc[p]+
+#peso_horario[p]*insat_horario[p]+
+#peso_distintas[p]*insat_distintas[p]+
+#peso_manha_noite[p]*insat_manha_noite[p]+
+#peso_janelas[p]*insat_janelas[p]
+#);
+
+s.t. insat_def{p in P}: insat[p] = insat_disciplinas[p];
 
 s.t. max_das_insat_def{p in P diff P_OUT}: max_das_insat>=insat[p];
 
