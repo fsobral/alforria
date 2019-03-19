@@ -110,7 +110,7 @@ prof_ord = sorted(professores, key=lambda x: x.nome())
 ch_1 = 0
 ch_2 = 0
 
-for p in professores:
+for p in prof_ord:
 
     for t in p.turmas_a_lecionar:
 
@@ -145,13 +145,13 @@ if args.d:
 
     set_t = set(turmas)
 
-    for p in professores:
+    for p in prof_ord:
 
         map(set_t.add, p.turmas_a_lecionar)
 
-    escrita.escreve_disciplinas(professores, set_t, RELDIR + 'disciplinas.csv')
+    escrita.escreve_disciplinas(prof_ord, set_t, RELDIR + 'disciplinas.csv')
 
 if args.a:
 
-    escrita.escreve_atribuicoes(professores, turmas,
+    escrita.escreve_atribuicoes(prof_ord, turmas,
                                 RELDIR + 'atribuicoes.csv')
