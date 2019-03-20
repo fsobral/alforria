@@ -1,9 +1,9 @@
-chmax_efetivo_anual 20
-chmax_efetivo_semestral 12
+chmax_efetivo_anual 24
+chmax_efetivo_semestral 14
 chmax_temporario_anual 36
 chmax_temporario_semestral 22
-chmin_efetivo_anual 16 
-chmin_temporario_anual 32
+chmin_efetivo_anual 20 
+chmin_temporario_anual 10
 chmin_graduacao 8
 
 chesp_efetivo_anual 18

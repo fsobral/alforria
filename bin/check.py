@@ -281,7 +281,7 @@ def check_ch(professores, turmas, pre_atribuidas, constantes):
                 if (soma >= (chmaxanual - 2) and chgrad >= chminanualgrad) or \
                    ((chgrad >= chminanualgrad) and
                     ((p.licenca1 and soma2 >= chmaxsem) or
-                     (p.licenca2 and soma1 >= chmaxsem) or p.pos)):
+                     (p.licenca2 and soma1 >= chmaxsem))):
 
                         logger.info("Pre-atribuição atinge carga horária máxima" +
                                     " anual de %s. Professor e disciplinas " +
