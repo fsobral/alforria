@@ -112,268 +112,283 @@ class Turma: ###################################################################
                         return len(self.horarios)
 
 
-
-
 class Professor:##################################################################################################
-    def __init__(self):
-        self.nome_completo = None
-        self.matricula = None
-        self.email = None
-        self.tel = None
-        self.chprevia1 = 0.0
-        self.chprevia2 = 0.0
-        self.licenca1 = False
-        self.licenca2 = False
-        self.discriminacao_chprevia = None
-        self.temporario = False
-        self.impedimentos = numpy.zeros((15,8))
-        self.peso_disciplinas = 0.0
-        self.peso_disciplinas_bruto = 0.0
-        self.peso_horario = 0.0
-        self.peso_horario_bruto = 0.0
-        self.peso_cargahor = 0.0
-        self.peso_distintas = 0.0
-        self.peso_janelas = 0.0
-        self.peso_janelas_bruto = 0.0
-        self.peso_numdisc = 0.0
-        self.peso_manha_noite = 0.0
-        self.inapto = []	# Lista de ids de grupos
-        self.pref_grupos_bruto = {}         # Mapa id de grupo para preferencia
-        self.pref_reuniao = False
-        self.pref_janelas = False
-        self.pref_horarios_bruto = numpy.zeros((15,8))
-        self.pref_grupos = {}
-        self.pref_horarios = numpy.zeros((15,8))
-        self.lista_impedimentos = []
-        self.chmax = None
-        self.chmax1 = None
-        self.chmax2 = None
-        self.fantasma = False
-        self.pos = False
-        self.observacoes = ""
+        
+        def __init__(self):
+                self.nome_completo = None
+                self.matricula = None
+                self.email = None
+                self.tel = None
+                self.chprevia1 = 0.0
+                self.chprevia2 = 0.0
+                self.licenca1 = False
+                self.licenca2 = False
+                self.discriminacao_chprevia = None
+                self.temporario = False
+                self.impedimentos = numpy.zeros((15,8))
+                self.peso_disciplinas = 0.0
+                self.peso_disciplinas_bruto = 0.0
+                self.peso_horario = 0.0
+                self.peso_horario_bruto = 0.0
+                self.peso_cargahor = 0.0
+                self.peso_distintas = 0.0
+                self.peso_janelas = 0.0
+                self.peso_janelas_bruto = 0.0
+                self.peso_numdisc = 0.0
+                self.peso_manha_noite = 0.0
+                self.inapto = []	# Lista de ids de grupos
+                self.pref_grupos_bruto = {}         # Mapa id de grupo para preferencia
+                self.pref_reuniao = False
+                self.pref_janelas = False
+                self.pref_horarios_bruto = numpy.zeros((15,8))
+                self.pref_grupos = {}
+                self.pref_horarios = numpy.zeros((15,8))
+                self.lista_impedimentos = []
+                self.chmax = None
+                self.chmax1 = None
+                self.chmax2 = None
+                self.fantasma = False
+                self.pos = False
+                self.observacoes = ""
 
 
-    #--------------------------------Valores lidos no arquivo de solucao---------------------
-        self.turmas_a_lecionar = []
-        self.carga_horaria = 0.0;
-        self.insatisfacao = 0.0;
-        self.insat_disciplinas = 0.0;
-        self.insat_cargahor = 0.0;
-        self.insat_numdisc = 0.0;
-        self.insat_horario = 0.0;
-        self.insat_distintas = 0.0;
-        self.insat_manha_noite = 0.0;
-        self.insat_janelas = 0.0;
+            #--------------------------------Valores lidos no arquivo de solucao---------------------
+                self.turmas_a_lecionar = []
+                self.carga_horaria = 0.0;
+                self.insatisfacao = 0.0;
+                self.insat_disciplinas = 0.0;
+                self.insat_cargahor = 0.0;
+                self.insat_numdisc = 0.0;
+                self.insat_horario = 0.0;
+                self.insat_distintas = 0.0;
+                self.insat_manha_noite = 0.0;
+                self.insat_janelas = 0.0;
 
-    #----------------------------------------------------------------------------------------------------
-    def carga_horaria_atrib(self):
+        #----------------------------------------------------------------------------------------------------
+        def __eq__(self, p):
 
-        ch = 0
+                if self.id() == p.id():
 
-        for t in self.turmas_a_lecionar:
+                        return True
 
-                ch += t.carga_horaria()
-
-        return ch
-
-    #----------------------------------------------------------------------------------------------------
-    def carga_horaria_total(self):
-
-        return self.chprevia1 + self.chprevia2 + \
-                self.carga_horaria_atrib()
-
-    #----------------------------------------------------------------------------------------------------
-    def id(self):
-        # O certo sera return self.matricula, mas ainda nao funciona
-        return self.nome()
-    #----------------------------------------------------------------------------------------------------
-    def nome(self):
-        tok = self.nome_completo.split()
-        n = ''
-        for palavra in tok:
-            if len(palavra) != 0:
-                if n != '':
-                    n += '_' + palavra
                 else:
-                    n += palavra
-        return n
-    #----------------------------------------------------------------------------------------------------
-    def __str__(self):
-        s = str(self.nome_completo) + ' ' + str(self.matricula) + ' ' + str(self.email) + '\n'
-        s += 'Temporario: ' + str(self.temporario) + ' Pref. Janelas: ' + str(self.pref_janelas) + '\n'
-        s += 'Carga horaria previa - S1: ' + str(self.chprevia1) + ' S2: ' + str(self.chprevia2) + '\n'
-        s += 'Pesos db=' + str(self.peso_disciplinas_bruto) + ' d=' + str(self.peso_disciplinas) + \
-            ' hb=' + str(self.peso_horario_bruto) + ' h=' + str(self.peso_horario) + \
-            ' c=' + str(self.peso_cargahor) + ' dist=' + str(self.peso_distintas) + \
-            ' jb=' + str(self.peso_janelas_bruto) + ' j=' + str(self.peso_janelas) + \
-            ' n=' + str(self.peso_numdisc) + ' mn=' + str(self.peso_manha_noite) + '\n'
-        s += 'Inapto=' + str(self.inapto) + '\n'
-        s += 'Impedimentos=\n' + str(self.impedimentos[1:15,2:8]) + '\n'
-        s += 'Pref. Grupos Bruto=\n' + str(self.pref_grupos_bruto) + '\n'
-        s += 'Pref. Grupos=\n' + str(self.pref_grupos) + '\n'
-        s += 'Pref. Horarios Bruto\n' + str(self.pref_horarios_bruto[1:15,2:8]) + '\n'
-        s += 'Pref. Horarios\n' + str(self.pref_horarios[1:15,2:8])
-        return s
-    #----------------------------------------------------------------------------------------------------
-    def ajustar(self):
-        # Ajuste do impedimento caso seja um titular que queira participar da reuniao
-        if self.pref_reuniao and not self.temporario:
-            for h in range(1,6):
-                self.impedimentos[h,3] = 1
 
-        # Ajuste da preferencia por horarios
-        maximo = 0
-        for j in range(2,8):
-            fim = 15
-            if j == 7:
-                fim = 11
-            for i in range(1,fim):
-                if self.pref_horarios_bruto[i,j] > maximo and \
-                        not self.impedimentos[i,j]:
-                    maximo = self.pref_horarios_bruto[i,j]
-        minimo = 10
-        for j in range(2,8):
-            fim = 15
-            if j == 7:
-                fim = 11
-            for i in range(1,fim):
-                if self.pref_horarios_bruto[i,j] < minimo and \
-                        not self.impedimentos[i,j]:
-                    minimo = self.pref_horarios_bruto[i,j]
-        if maximo == minimo:
-            self.peso_horario = 0.0
-        else:
-            self.peso_horario = self.peso_horario_bruto
-            for j in range(2,8):
-                for i in range(1,15):
-                    self.pref_horarios[i,j] = - 10 * (self.pref_horarios_bruto[i,j] - maximo) / (maximo - minimo)
-            # Se o temporario deseja participar da reuniao, entao coloca insatisfacao maxima no horario
-            if self.pref_reuniao and self.temporario:
-                for h in range(1,6):
-                    self.pref_horarios[h,3] = 10
-        # Ajuste da preferencia por grupos
-        maximo = 0
-        for g in self.pref_grupos_bruto.keys():
-            if self.pref_grupos_bruto[g] > maximo and \
-                    g not in self.inapto:
-                maximo = self.pref_grupos_bruto[g]
-        minimo = 10
-        for g in self.pref_grupos_bruto.keys():
-            if self.pref_grupos_bruto[g] < minimo and \
-                    g not in self.inapto:
-                minimo = self.pref_grupos_bruto[g]
-        if maximo == minimo:
-            self.peso_disciplinas = 0.0
-        else:
-            self.peso_disciplinas = self.peso_disciplinas_bruto
-            for g in self.pref_grupos_bruto.keys():
-                self.pref_grupos[g] = - 10 * (self.pref_grupos_bruto[g] - maximo) / (maximo - minimo)
-    #----------------------------------------------------------------------------------------------------
-    def totex(self,arquivo=None):
-        """
-        Criam um arquivo .tex cujo nome eh a matricula, contendo os comandos tex para analisar os resultados.
-        O arquivo precisa ser inserido na estrutura de um documento latex, via include, por exemplo.
-        """
+                        return False
 
-        if arquivo is None:
-            arquivo = str(self.matricula).zfill(6) + '.tex'
+        #----------------------------------------------------------------------------------------------------
+        def __hash__(self):
 
-        with open(arquivo, 'w') as f:
-            f.write('\\section*{' + str(self.nome_completo) + '\\hfill ' + str(self.matricula).zfill(6) + '}\n')
-            f.write('\\begin{itemize}\n \\item ' + re.sub("([_])","\\\\\\1",self.email) + '\n')
-            if self.temporario:
-                f.write('\\item Temporário \n')
-            else:
-                f.write('\\item Efetivo \n')
+                return hash(self.id())
 
-            f.write('\\item Aplicar carga horária mínima: ')
-            if self.pos:
-                f.write('Sim\n')
-            else:
-                f.write('Não\n')
+        #----------------------------------------------------------------------------------------------------
+        def carga_horaria_atrib(self):
 
-            f.write('\\item Carga horária prévia: ' + str(self.chprevia1 + self.chprevia2))
-            if len(self.discriminacao_chprevia.strip()) > 0:
-                f.write(' (' + self.discriminacao_chprevia + ')')
-            f.write('\n')                    
-            f.write('\\item Carga horária anual (prévia + atribuída): ' + str(int(self.carga_horaria_total())) + '\n')
+                ch = 0
 
-            if self.fantasma:
-                    f.write('\\item Satisfação: --\n')
-            else:
-                    f.write('\\item Satisfação: {0:5.2f}\n'.format(10.0 - self.insatisfacao))
-            f.write('\\begin{center} \\begin{tabular}{|l||r|r|r|r|r|r|r|} \\hline\n')
-            f.write('& Disc. & Num. disc. & Disc. distintas & Hor. & Carga hor. & ')
-            if self.pref_janelas:
-                f.write('Janelas');
-            else:
-                f.write('Hor. compactos');
-            f.write(' & Manhã e noite \\\\ \midrule\n')
-            f.write('Pesos & {0:5.2f} & {1:5.2f} & {2:5.2f} & {3:5.2f} & {4:5.2f} & {5:5.2f} & {6:5.2f} \\\\\n'.\
-                    format(self.peso_disciplinas, self.peso_numdisc, self.peso_distintas, self.peso_horario, \
-                           self.peso_cargahor, self.peso_janelas, self.peso_manha_noite))
-            if self.fantasma:
-                    f.write('Satisfação & -- & -- & -- & -- & -- & -- & -- \\\\\n')
-            else:
-                    f.write('Satisfação & {0:5.2f} & {1:5.2f} & {2:5.2f} & {3:5.2f} & {4:5.2f} & {5:5.2f} & {6:5.2f} \\\\\n'.\
-                    format(10.0 - self.insat_disciplinas, 10.0 - self.insat_numdisc, 10.0 - self.insat_distintas,\
-                           10.0 - self.insat_horario, 10.0 - self.insat_cargahor, 10.0 - self.insat_janelas,\
-                           10.0 - self.insat_manha_noite))
-            f.write('\\hline \\end{tabular} \\end{center}\n')
-            f.write('\\end{itemize}')
+                for t in self.turmas_a_lecionar:
 
-            ini = (176,176,176)
-            dir = (-11,76,-61)
+                        ch += t.carga_horaria()
 
-            f.write('\\begin{multicols}{2}\n \\scriptsize')
-            for s in range(1,3):
-                f.write('\\begin{center} \\begin{tabular}{|c|c|c|c|c|c|c|}\\toprule\n')
-                f.write('\\multicolumn{7}{|c|}{' + str(s) + '$^\\circ$ semestre} \\\\ \\midrule\n')
-                f.write('& S & T & Q & Q & S & S \\\\ \\midrule\n')
-                for i in range(1,15):
-                    f.write(str(i) );
-                    for j in range(2,8):
-                        if self.impedimentos[i,j] or (self.licenca1 and s == 1) or \
-                           (self.licenca2 and s == 2) or (j == 7 and i >= 11):
-                            f.write('& \\cellcolor[gray]{1} ')
-                        else:
-                            m = (10.0 - self.pref_horarios[i,j]) / 10.0
-                            f.write('& \\cellcolor[RGB]{')
-                            for k in range(0,3):
-                                f.write(str(int(ini[k] + m * dir[k])))
-                                if k < 2:
-                                    f.write(',')
-                            f.write('}')
-                        for t in self.turmas_a_lecionar:
-                            if t.semestralidade == s and (j,i) in t.horarios:
-                                f.write(str(t.codigo) + ' ' + str(t.turma))
+                return ch
 
-                    f.write('\\\\ \\midrule \n')
+        #----------------------------------------------------------------------------------------------------
+        def carga_horaria_total(self):
 
-                f.write('\\end{tabular} \\end{center}\n\n')
+                return self.chprevia1 + self.chprevia2 + \
+                        self.carga_horaria_atrib()
 
-            f.write('\\end{multicols}\n')
-            f.write('\\begin{multicols}{2}\n')
-            f.write('\\begin{center} \\begin{tabular}{|lm{6cm}|}\n')
-            f.write('\\multicolumn{2}{c}{Disciplinas a lecionar} \\\\ \\midrule \\midrule\n')
-            f.write('\\multicolumn{2}{|c|}{1$^\\circ$ Semestre} \\\\ \\midrule \\midrule\n')
-            for t in [i for i in self.turmas_a_lecionar if i.semestralidade == 1]:
-                f.write(str(t.codigo) + ' & ' + t.nome + '\\\\ \\midrule\n')
-            f.write('\\midrule\n')
-            f.write('\\multicolumn{2}{|c|}{2$^\\circ$ Semestre} \\\\ \\midrule \\midrule\n')
-            for t in [i for i in self.turmas_a_lecionar if i.semestralidade == 2]:
-                f.write(str(t.codigo) + ' & ' + t.nome + '\\\\ \\midrule\n')
-            f.write('\\end{tabular} \\end{center} \\vfill\\columnbreak\n')
-            f.write('\\begin{center} \\begin{tabular}{|lr|}\n')
-            f.write('\\multicolumn{2}{c}{Preferência de grupos} \\\\ \\midrule \\midrule\n')
+        #----------------------------------------------------------------------------------------------------
+        def id(self):
+                # O certo sera return self.matricula, mas ainda nao funciona
+                return self.nome()
+        #----------------------------------------------------------------------------------------------------
+        def nome(self):
+                tok = self.nome_completo.split()
+                n = ''
+                for palavra in tok:
+                        if len(palavra) != 0:
+                                if n != '':
+                                        n += '_' + palavra
+                                else:
+                                        n += palavra
+                return n
+        #----------------------------------------------------------------------------------------------------
+        def __str__(self):
+                s = str(self.nome_completo) + ' ' + str(self.matricula) + ' ' + str(self.email) + '\n'
+                s += 'Temporario: ' + str(self.temporario) + ' Pref. Janelas: ' + str(self.pref_janelas) + '\n'
+                s += 'Carga horaria previa - S1: ' + str(self.chprevia1) + ' S2: ' + str(self.chprevia2) + '\n'
+                s += 'Pesos db=' + str(self.peso_disciplinas_bruto) + ' d=' + str(self.peso_disciplinas) + \
+                                 ' hb=' + str(self.peso_horario_bruto) + ' h=' + str(self.peso_horario) + \
+                                 ' c=' + str(self.peso_cargahor) + ' dist=' + str(self.peso_distintas) + \
+                                 ' jb=' + str(self.peso_janelas_bruto) + ' j=' + str(self.peso_janelas) + \
+                                 ' n=' + str(self.peso_numdisc) + ' mn=' + str(self.peso_manha_noite) + '\n'
+                s += 'Inapto=' + str(self.inapto) + '\n'
+                s += 'Impedimentos=\n' + str(self.impedimentos[1:15,2:8]) + '\n'
+                s += 'Pref. Grupos Bruto=\n' + str(self.pref_grupos_bruto) + '\n'
+                s += 'Pref. Grupos=\n' + str(self.pref_grupos) + '\n'
+                s += 'Pref. Horarios Bruto\n' + str(self.pref_horarios_bruto[1:15,2:8]) + '\n'
+                s += 'Pref. Horarios\n' + str(self.pref_horarios[1:15,2:8])
+                return s
+        #----------------------------------------------------------------------------------------------------
+        def ajustar(self):
+                # Ajuste do impedimento caso seja um titular que queira participar da reuniao
+                if self.pref_reuniao and not self.temporario:
+                        for h in range(1,6):
+                                self.impedimentos[h,3] = 1
 
-            for (g,p) in sorted(self.pref_grupos.items(), key=lambda x: x[1]):
-                if g not in self.inapto:
-                    f.write(g + ' & ' + str(10 - p) + '\\\\ \\midrule \n')
-            for g in self.inapto:
-                f.write(g + '& INAPTO \\\\ \\midrule \n')
+                # Ajuste da preferencia por horarios
+                maximo = 0
+                for j in range(2,8):
+                        fim = 15
+                        if j == 7:
+                                fim = 11
+                        for i in range(1,fim):
+                                if self.pref_horarios_bruto[i,j] > maximo and \
+                                   not self.impedimentos[i,j]:
+                                        maximo = self.pref_horarios_bruto[i,j]
+                minimo = 10
+                for j in range(2,8):
+                        fim = 15
+                        if j == 7:
+                                fim = 11
+                        for i in range(1,fim):
+                                if self.pref_horarios_bruto[i,j] < minimo and \
+                                   not self.impedimentos[i,j]:
+                                        minimo = self.pref_horarios_bruto[i,j]
+                if maximo == minimo:
+                        self.peso_horario = 0.0
+                else:
+                        self.peso_horario = self.peso_horario_bruto
+                        for j in range(2,8):
+                                for i in range(1,15):
+                                        self.pref_horarios[i,j] = - 10 * (self.pref_horarios_bruto[i,j] - maximo) / (maximo - minimo)
+                        # Se o temporario deseja participar da reuniao, entao coloca insatisfacao maxima no horario
+                        if self.pref_reuniao and self.temporario:
+                                for h in range(1,6):
+                                        self.pref_horarios[h,3] = 10
+                # Ajuste da preferencia por grupos
+                maximo = 0
+                for g in self.pref_grupos_bruto.keys():
+                        if self.pref_grupos_bruto[g] > maximo and \
+                           g not in self.inapto:
+                                maximo = self.pref_grupos_bruto[g]
+                minimo = 10
+                for g in self.pref_grupos_bruto.keys():
+                        if self.pref_grupos_bruto[g] < minimo and \
+                           g not in self.inapto:
+                                minimo = self.pref_grupos_bruto[g]
+                if maximo == minimo:
+                        self.peso_disciplinas = 0.0
+                else:
+                        self.peso_disciplinas = self.peso_disciplinas_bruto
+                        for g in self.pref_grupos_bruto.keys():
+                                self.pref_grupos[g] = - 10 * (self.pref_grupos_bruto[g] - maximo) / (maximo - minimo)
+#     #----------------------------------------------------------------------------------------------------
+#     def totex(self,arquivo=None):
+#         """
+#         Criam um arquivo .tex cujo nome eh a matricula, contendo os comandos tex para analisar os resultados.
+#         O arquivo precisa ser inserido na estrutura de um documento latex, via include, por exemplo.
+#         """
 
-            f.write('\\end{tabular} \\end{center}\n \\end{multicols}\n')
-            f.write('{\\normalsize \\textbf{OBS}: ' + self.observacoes + '}')
+#         if arquivo is None:
+#             arquivo = str(self.matricula).zfill(6) + '.tex'
 
-##################################################################################################
+#         with open(arquivo, 'w') as f:
+#             f.write('\\section*{' + str(self.nome_completo) + '\\hfill ' + str(self.matricula).zfill(6) + '}\n')
+#             f.write('\\begin{itemize}\n \\item ' + re.sub("([_])","\\\\\\1",self.email) + '\n')
+#             if self.temporario:
+#                 f.write('\\item Temporário \n')
+#             else:
+#                 f.write('\\item Efetivo \n')
+
+#             f.write('\\item Aplicar carga horária mínima: ')
+#             if self.pos:
+#                 f.write('Sim\n')
+#             else:
+#                 f.write('Não\n')
+
+#             f.write('\\item Carga horária prévia: ' + str(self.chprevia1 + self.chprevia2))
+#             if len(self.discriminacao_chprevia.strip()) > 0:
+#                 f.write(' (' + self.discriminacao_chprevia + ')')
+#             f.write('\n')                    
+#             f.write('\\item Carga horária anual (prévia + atribuída): ' + str(int(self.carga_horaria_total())) + '\n')
+
+#             if self.fantasma:
+#                     f.write('\\item Satisfação: --\n')
+#             else:
+#                     f.write('\\item Satisfação: {0:5.2f}\n'.format(10.0 - self.insatisfacao))
+#             f.write('\\begin{center} \\begin{tabular}{|l||r|r|r|r|r|r|r|} \\hline\n')
+#             f.write('& Disc. & Num. disc. & Disc. distintas & Hor. & Carga hor. & ')
+#             if self.pref_janelas:
+#                 f.write('Janelas');
+#             else:
+#                 f.write('Hor. compactos');
+#             f.write(' & Manhã e noite \\\\ \midrule\n')
+#             f.write('Pesos & {0:5.2f} & {1:5.2f} & {2:5.2f} & {3:5.2f} & {4:5.2f} & {5:5.2f} & {6:5.2f} \\\\\n'.\
+#                     format(self.peso_disciplinas, self.peso_numdisc, self.peso_distintas, self.peso_horario, \
+#                            self.peso_cargahor, self.peso_janelas, self.peso_manha_noite))
+#             if self.fantasma:
+#                     f.write('Satisfação & -- & -- & -- & -- & -- & -- & -- \\\\\n')
+#             else:
+#                     f.write('Satisfação & {0:5.2f} & {1:5.2f} & {2:5.2f} & {3:5.2f} & {4:5.2f} & {5:5.2f} & {6:5.2f} \\\\\n'.\
+#                     format(10.0 - self.insat_disciplinas, 10.0 - self.insat_numdisc, 10.0 - self.insat_distintas,\
+#                            10.0 - self.insat_horario, 10.0 - self.insat_cargahor, 10.0 - self.insat_janelas,\
+#                            10.0 - self.insat_manha_noite))
+#             f.write('\\hline \\end{tabular} \\end{center}\n')
+#             f.write('\\end{itemize}')
+
+#             ini = (176,176,176)
+#             dir = (-11,76,-61)
+
+#             f.write('\\begin{multicols}{2}\n \\scriptsize')
+#             for s in range(1,3):
+#                 f.write('\\begin{center} \\begin{tabular}{|c|c|c|c|c|c|c|}\\toprule\n')
+#                 f.write('\\multicolumn{7}{|c|}{' + str(s) + '$^\\circ$ semestre} \\\\ \\midrule\n')
+#                 f.write('& S & T & Q & Q & S & S \\\\ \\midrule\n')
+#                 for i in range(1,15):
+#                     f.write(str(i) );
+#                     for j in range(2,8):
+#                         if self.impedimentos[i,j] or (self.licenca1 and s == 1) or \
+#                            (self.licenca2 and s == 2) or (j == 7 and i >= 11):
+#                             f.write('& \\cellcolor[gray]{1} ')
+#                         else:
+#                             m = (10.0 - self.pref_horarios[i,j]) / 10.0
+#                             f.write('& \\cellcolor[RGB]{')
+#                             for k in range(0,3):
+#                                 f.write(str(int(ini[k] + m * dir[k])))
+#                                 if k < 2:
+#                                     f.write(',')
+#                             f.write('}')
+#                         for t in self.turmas_a_lecionar:
+#                             if t.semestralidade == s and (j,i) in t.horarios:
+#                                 f.write(str(t.codigo) + ' ' + str(t.turma))
+
+#                     f.write('\\\\ \\midrule \n')
+
+#                 f.write('\\end{tabular} \\end{center}\n\n')
+
+#             f.write('\\end{multicols}\n')
+#             f.write('\\begin{multicols}{2}\n')
+#             f.write('\\begin{center} \\begin{tabular}{|lm{6cm}|}\n')
+#             f.write('\\multicolumn{2}{c}{Disciplinas a lecionar} \\\\ \\midrule \\midrule\n')
+#             f.write('\\multicolumn{2}{|c|}{1$^\\circ$ Semestre} \\\\ \\midrule \\midrule\n')
+#             for t in [i for i in self.turmas_a_lecionar if i.semestralidade == 1]:
+#                 f.write(str(t.codigo) + ' & ' + t.nome + '\\\\ \\midrule\n')
+#             f.write('\\midrule\n')
+#             f.write('\\multicolumn{2}{|c|}{2$^\\circ$ Semestre} \\\\ \\midrule \\midrule\n')
+#             for t in [i for i in self.turmas_a_lecionar if i.semestralidade == 2]:
+#                 f.write(str(t.codigo) + ' & ' + t.nome + '\\\\ \\midrule\n')
+#             f.write('\\end{tabular} \\end{center} \\vfill\\columnbreak\n')
+#             f.write('\\begin{center} \\begin{tabular}{|lr|}\n')
+#             f.write('\\multicolumn{2}{c}{Preferência de grupos} \\\\ \\midrule \\midrule\n')
+
+#             for (g,p) in sorted(self.pref_grupos.items(), key=lambda x: x[1]):
+#                 if g not in self.inapto:
+#                     f.write(g + ' & ' + str(10 - p) + '\\\\ \\midrule \n')
+#             for g in self.inapto:
+#                 f.write(g + '& INAPTO \\\\ \\midrule \n')
+
+#             f.write('\\end{tabular} \\end{center}\n \\end{multicols}\n')
+#             f.write('{\\normalsize \\textbf{OBS}: ' + self.observacoes + '}')
+
+# ##################################################################################################
