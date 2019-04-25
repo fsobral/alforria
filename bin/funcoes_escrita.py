@@ -253,11 +253,11 @@ def escreve_atribuicoes(professores, turmas, arquivo):
                     for t in p.turmas_a_lecionar:
                         # TODO: trocar p.matricula por p.id()
                         f.write(str(p.matricula) + '\t' + p.nome() + '\t' + str(t.codigo) + '\t' + \
-                                str(t.turma) + '\t' + t.nome + '\n')
+                                str(t.turma) + '\t' + t.nome + '\t' + str(t.carga_horaria()) + '\n')
                         # TODO: trocar p.matricula por p.id()
                         for fant in t.turmas_clientes:
                             f.write(str(p.matricula) + '\t' + p.nome() + '\t' + str(fant.codigo) + '\t' + \
-                                    str(fant.turma) + '\t' + fant.nome + '\n')
+                                    str(fant.turma) + '\t' + fant.nome + '\t' + str(fant.carga_horaria()) + '\n')
 
 
 ####################################################################################################################
@@ -271,7 +271,7 @@ def escreve_disciplinas(professores, turmas, arquivo):
             for p in professores:
                 if t in p.turmas_a_lecionar:
                     f.write(p.nome())
-            f.write('\t' + 'S' + str(t.semestralidade))
+            f.write('\t' + str(t.carga_horaria()) + '\t' + 'S' + str(t.semestralidade))
             f.write('\n')
 
             for fant in t.turmas_clientes:
@@ -279,7 +279,7 @@ def escreve_disciplinas(professores, turmas, arquivo):
                 for p in professores:
                     if t in p.turmas_a_lecionar:
                         f.write(p.nome())
-                f.write('\t' + 'S' + str(t.semestralidade))
+                f.write('\t' + str(t.carga_horaria()) + '\t' + 'S' + str(t.semestralidade))
                 f.write('\n')
 
 
