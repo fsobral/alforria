@@ -225,10 +225,10 @@ def sar_vale(linha): #Define se a linha lida do SAR possui informacoes relevante
                 return False
         if tok[0]=='DISC':
                 return False
-        if tok[-9] == 'MARINGA':
+        if tok[-9] in ['MARINGA', 'CIANORTE']:
                 return True
         # Caso com horario indisponivel
-        if tok[- 7] == 'MARINGA':
+        if tok[- 7] in ['MARINGA', 'CIANORTE']:
                 return True
 #----------------------------------------------------------------------------------------------------------------------
 def sar_primaria(linha): #Uma linha primaria e aquela que comeca uma nova turma, essa funcao as identifica
