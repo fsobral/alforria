@@ -40,7 +40,7 @@ with open("sar.txt") as fp:
 
             i = 3
 
-            while s[i] != "T" and s[i] != "P" and s[i] != "T-P":
+            while s[i] != "T" and s[i] != "P" and s[i] != "T-P" and s[i] != "TP":
 
                 n += " " + s[i]
 
