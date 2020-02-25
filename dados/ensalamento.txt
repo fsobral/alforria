@@ -22,6 +22,12 @@ DISC TURMA NOME DA DISCIPLINA               DIA AULA CAMPUS             BL SALA 
                                               5   2   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
                                               6   1   1 MARINGA         D67 103   6,00   204,00 A 12/03/18 a 07/12/18
                                               6   2   1 MARINGA         D67 103   6,00   204,00 A 12/03/18 a 07/12/18
+  199   4 CALCULO DIFERENCIAL E INTEGRAL I    2  11   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              2  12   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4  11   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              4  12   1 MARINGA         D67   3   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6  11   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
+                                              6  12   1 MARINGA         D67   1   6,00   204,00 A 12/03/18 a 07/12/18
  1422 31 CALCULO DIFERENCIAL E INTEGRAL I     2   6   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
                                               2   7   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
                                               4   6   1 MARINGA         D67 206   6,00   204,00 A 12/03/18 a 07/12/18
