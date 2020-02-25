@@ -55,4 +55,4 @@ def compara_nomes(nome1,nome2): #Diz se os nomes se referem a mesma pessoa, unif
 # Funcao que uniformiza strings: retira acentos e deixa todas as letras maiusculas.
 ##
 def uniformize(s,encode='utf8'):
-    return re.sub("[.']","",unidecode.unidecode(s.decode(encode)).upper().strip())
+    return re.sub("[.']","",unidecode.unidecode(s).upper().strip())
