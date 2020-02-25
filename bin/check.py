@@ -143,7 +143,7 @@ def checkdata(professores, turmas, pre_atribuidas, FANTPATH):
                                                    and turmas[k].semestralidade == tj.semestralidade:
                                                         tj.eh_cliente = True
                                                         ti.turmas_clientes.append(tj)
-                                                        print ("\t" + str(turmas[k].id())+ " foi deletada e redefinida como fantasma.")
+                                                        print("\t" + str(turmas[k].id())+ " foi deletada e redefinida como fantasma.")
                                                         del turmas[k]
                                                 else:
                                                         k+=1
@@ -166,10 +166,10 @@ def checkdata(professores, turmas, pre_atribuidas, FANTPATH):
                 while(j<len(pre_atribuidas)):
                         if pre_atribuidas[i][1]==pre_atribuidas[j][1]:
                                 del pre_atribuidas[j]
-                                print "Mesma disciplina pre atribuida em duplicata: " + \
+                                print("Mesma disciplina pre atribuida em duplicata: " + \
                                         str(pre_atribuidas[i][1].id()) + " atribuida a "+ \
                                         str(pre_atribuidas[i][0].id())+" e " + \
-                                        str(pre_atribuidas[i][1].id())+". Segunda associaçao removida."
+                                        str(pre_atribuidas[i][1].id())+". Segunda associaçao removida.")
                         else:
                                 j+=1
                 i+=1
@@ -177,33 +177,33 @@ def checkdata(professores, turmas, pre_atribuidas, FANTPATH):
         # Verifica licencas
         # -----------------
 
-        print "\n"
-        print "Checando licencas"
-        print "-----------------\n"
+        print("\n")
+        print("Checando licencas")
+        print("-----------------\n")
 
         check_licencas(pre_atribuidas)
 
         # Verifica inaptidoes
         # -------------------
 
-        print "\n"
-        print "Checando inaptidoes"
-        print "-------------------\n"
+        print("\n")
+        print("Checando inaptidoes")
+        print("-------------------\n")
 
         check_inaptidao(pre_atribuidas)
 
         # Verifica cargas horarias
         # ------------------------
 
-        print "\n"
-        print "Checando cargas horarias"
-        print "------------------------\n"
+        print("\n")
+        print("Checando cargas horarias")
+        print("------------------------\n")
 
         p_fantasma = check_ch(professores,turmas,pre_atribuidas,constantes)
         
         # Devolve a lista de professores fantasmas (para fins de relatorio)
         return p_fantasma
-	
+        
 ############################################################################################################################
 #########################################                AUXILIARES                         ################################
 ############################################################################################################################
@@ -215,9 +215,9 @@ def check_duplicadas(pre_atribuidas):
                 j=i+1
                 while(j<len(pre_atribuidas)):
                         if pre_atribuidas[i][1]==pre_atribuidas[j][1]:
-                                print "AVISO: Disciplina " + str(pre_atribuidas[i][1].id()) + " pre-atribuida em duplicata a:\n" + \
+                                print("AVISO: Disciplina " + str(pre_atribuidas[i][1].id()) + " pre-atribuida em duplicata a:\n" + \
                                         "\t" + str(pre_atribuidas[i][0].id()) + "\n" + \
-                                        "\t" + str(pre_atribuidas[j][0].id()) + ".\nSegunda associaçao removida."
+                                        "\t" + str(pre_atribuidas[j][0].id()) + ".\nSegunda associaçao removida.")
                                 del pre_atribuidas[j]
                         else:
                                 j+=1
@@ -398,52 +398,52 @@ def check_inaptidao(pre_atribuidas):
 ############################################################################################################################
 #########################################                IMPRIME ESTATISTICAS               ################################
 ############################################################################################################################
-	
-	
+        
+        
 def estatisticas(professores,turmas):
 
         # Contabiliza carga horaria da graduacao
 
-	chtotal=[0,0,0] #chtotal[i]: charga horaria total do semestre i
-	for t in turmas:
-		chtotal[t.semestralidade] += t.carga_horaria()
+        chtotal=[0,0,0] #chtotal[i]: charga horaria total do semestre i
+        for t in turmas:
+                chtotal[t.semestralidade] += t.carga_horaria()
 
-	n_efetivos1=0
-	n_efetivos2=0
-	n_temporarios1=0
-	n_temporarios2=0
-	ch_previa_tt1=0
-	ch_previa_tt2=0
+        n_efetivos1=0
+        n_efetivos2=0
+        n_temporarios1=0
+        n_temporarios2=0
+        ch_previa_tt1=0
+        ch_previa_tt2=0
         ch_efetivos = 0
         ch_temporarios = 0
-	for p in professores:
-		if p.temporario:
-			if not p.licenca1:
-				n_temporarios1+=1
-			if not p.licenca2:
-				n_temporarios2+=1
+        for p in professores:
+                if p.temporario:
+                        if not p.licenca1:
+                                n_temporarios1+=1
+                        if not p.licenca2:
+                                n_temporarios2+=1
                         ch_temporarios += p.carga_horaria_atrib()
-		else:
-			if not p.licenca1:
-				n_efetivos1+=1
-			if not p.licenca2:
-				n_efetivos2+=1
+                else:
+                        if not p.licenca1:
+                                n_efetivos1+=1
+                        if not p.licenca2:
+                                n_efetivos2+=1
                         ch_efetivos += p.carga_horaria_atrib()
-		ch_previa_tt1+=p.chprevia1
-		ch_previa_tt2+=p.chprevia2
-        print "\nEstatisticas" + \
-              "\n------------\n"
-	print "Coeficiente de dobro - 1o sem: {0:4d}".format((chtotal[1]+ch_previa_tt1)/(n_efetivos1+2*n_temporarios1))
-	print "Coeficiente de dobro - 2o sem: {0:4d}".format((chtotal[2]+ch_previa_tt2)/(n_efetivos2+2*n_temporarios2))
-	print "Carga horaria:"
-        print "\t1o sem = " + str(chtotal[1]) + ", professores: " + str(n_efetivos1) + \
-                " efetivos e " + str(n_temporarios1) + " temporarios"
-	print "\t2o sem = " + str(chtotal[2]) + ", professores: " + str(n_efetivos2) + \
-                " efetivos e " + str(n_temporarios2) + " temporarios"
-	print "Carga horaria previa total:"
-        print "\t1o sem = " + str(ch_previa_tt1)
-        print "\t2o sem = " + str(ch_previa_tt2)
-        print ""
+                ch_previa_tt1+=p.chprevia1
+                ch_previa_tt2+=p.chprevia2
+        print("\nEstatisticas" + \
+              "\n------------\n")
+        print("Coeficiente de dobro - 1o sem: {0:4d}".format((chtotal[1]+ch_previa_tt1)/(n_efetivos1+2*n_temporarios1)))
+        print("Coeficiente de dobro - 2o sem: {0:4d}".format((chtotal[2]+ch_previa_tt2)/(n_efetivos2+2*n_temporarios2)))
+        print("Carga horaria:")
+        print("\t1o sem = " + str(chtotal[1]) + ", professores: " + str(n_efetivos1) + \
+                " efetivos e " + str(n_temporarios1) + " temporarios")
+        print("\t2o sem = " + str(chtotal[2]) + ", professores: " + str(n_efetivos2) + \
+                " efetivos e " + str(n_temporarios2) + " temporarios")
+        print("Carga horaria previa total:")
+        print("\t1o sem = " + str(ch_previa_tt1))
+        print("\t2o sem = " + str(ch_previa_tt2))
+        print("")
         print("Carga horaria total graduacao: " + str(chtotal[1] + chtotal[2]))
         print("\tEfetivos: " + str(ch_efetivos))
         print("\tTemporarios: " + str(chtotal[1] + chtotal[2] - ch_efetivos) +
