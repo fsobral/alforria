@@ -296,8 +296,7 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                         ntok = -12
 
                                 t.horarios.append(
-                                        (int(tok[ntok]),
-                                         remove_horario_tosco(int(tok[ntok + 1])))
+                                        (int(tok[ntok]),int(tok[ntok + 1]))
                                 )
                                 t.nome=""
                                 for i in tok[2:ntok]:
@@ -328,13 +327,11 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                         # Novo SAR, agora tem um T ou T-P ou P em cada linha.
                                         if tok[0].isdigit():
                                                 turmas[-1].horarios.append(
-                                                        (int(tok[0]),
-                                                         remove_horario_tosco(int(tok[1])))
+                                                        (int(tok[0]),int(tok[1]))
                                                 )
                                         else:
                                                 turmas[-1].horarios.append(
-                                                        (int(tok[1]),
-                                                         remove_horario_tosco(int(tok[2])))
+                                                        (int(tok[1]),int(tok[2]))
                                                 )
                 #fim do loop grande
                 if anual: #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
@@ -349,36 +346,29 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                 return turmas
 
 ############################################################################################################################
-def remove_horario_tosco(h):
-
-        if h >= 11:
-
-                return h - 2
-
-        return h
-
-############################################################################################################################
 #########################################                LER PREFERENCIAS                   ################################
 ############################################################################################################################
-converter_horario = {'07:45 - 09:15':(1,2),   \
-                    '09:30 - 12:10':(3,4,5),  \
-                    '13:30 - 15:10':(6,7),    \
-                    '15:30 - 18:00':(8,9,10), \
-                    '19:30 - 21:10':(11,12),  \
-                    '21:20 - 23:00':(13,14)}
+converter_horario = {'07:45 - 09:25':(1,2),    \
+                     '09:40 - 12:10':(3,4,5),  \
+                     '13:30 - 15:10':(6,7),    \
+                     '15:20 - 17:50':(8,9,10), \
+                     '17:50 - 19:30':(11,12),  \
+                     '19:30 - 21:10':(13,14),  \
+                     '21:20 - 23:00':(15,16)}
 #----------------------------------------------------------------------------------------------------------------------
 converter_dia={'SEG':2, 'TER':3, 'QUA':4, 'QUI':5, 'SEX':6, 'SAB':7}
 #----------------------------------------------------------------------------------------------------------------------
-converter_codigo_de_horario= 	{1:(1,2),   \
+converter_codigo_de_horario = { 1:(1,2),   \
                                 2:(3,4,5),  \
                                 3:(6,7),    \
                                 4:(8,9,10), \
                                 5:(11,12),  \
-                                6:(13,14)}
+                                6:(13,14), \
+                                7:(15,16)}
 #----------------------------------------------------------------------------------------------------------------------
 converter_periodo = {'MANHA' : (1,2,3,4,5),  \
-                     'TARDE' : (6,7,8,9,10), \
-                     'NOITE' : (11,12,13,14) }
+                     'TARDE' : (6,7,8,9,10,11,12), \
+                     'NOITE' : (13,14,15,16) }
 #----------------------------------------------------------------------------------------------------------------------
 converter_preferencia = { 'NAO GOSTARIA'          : 0,   \
                           'DESGOSTARIA LEVEMENTE' : 2.5, \
@@ -392,9 +382,9 @@ def ler_pref(form,grupos,max_impedimentos):
                 for l in f:
                         p = classes.Professor()
                         tokens = iter(l.split('\t'))
-                        tokens.next()# Pula timestamp
-                        p.nome_completo = funcoes_gerais.uniformize(tokens.next()) # Identificacao
-                        p.matricula = int(tokens.next()) # Identificacao Unica
+                        next(tokens)# Pula timestamp
+                        p.nome_completo = funcoes_gerais.uniformize(next(tokens)) # Identificacao
+                        p.matricula = int(next(tokens)) # Identificacao Unica
                         # Jeito tosco de remover duplicatas
                         # TODO: melhorar isso
                         for i in professores:
@@ -402,61 +392,61 @@ def ler_pref(form,grupos,max_impedimentos):
                                         print('AVISO: Professores ' + i.nome() + ' e ' + p.nome() + \
                                                 ' com mesma matrícula. Eliminando entrada antiga.\n')
                                         professores.remove(i)
-                        p.email = tokens.next()
-                        p.tel = tokens.next()
-                        chp1 = tokens.next()
-                        chp2 = tokens.next()
+                        p.email = next(tokens)
+                        p.tel = next(tokens)
+                        chp1 = next(tokens)
+                        chp2 = next(tokens)
                         if chp1=='':
                                 chp1='0'
                         if chp2=='':
                                 chp2="0"
                         p.chprevia1 = int(chp1)
                         p.chprevia2 = int(chp2)                        
-                        p.discriminacao_chprevia = tokens.next()
-                        w = funcoes_gerais.uniformize(tokens.next())# Licença
+                        p.discriminacao_chprevia = next(tokens)
+                        w = funcoes_gerais.uniformize(next(tokens))# Licença
                         if "PRIMEIRO" in w:
                                 p.licenca1 = True
                         if "SEGUNDO" in w:
                                 p.licenca2 = True
                         if "ANUAL" in w:
                                 continue
-                        w = funcoes_gerais.uniformize(tokens.next())# Temporario
+                        w = funcoes_gerais.uniformize(next(tokens))# Temporario
                         if w == 'TEMPORARIO':
                                 p.temporario = True
-                        p.peso_disciplinas_bruto = float(tokens.next())
-                        p.peso_horario_bruto = float(tokens.next())
-                        p.peso_cargahor = float(tokens.next())
-                        p.peso_distintas = float(tokens.next())
-                        p.peso_numdisc = float(tokens.next())
-                        p.peso_manha_noite = float(tokens.next())
-                        p.peso_janelas_bruto = float(tokens.next())
+                        p.peso_disciplinas_bruto = float(next(tokens))
+                        p.peso_horario_bruto = float(next(tokens))
+                        p.peso_cargahor = float(next(tokens))
+                        p.peso_distintas = float(next(tokens))
+                        p.peso_numdisc = float(next(tokens))
+                        p.peso_manha_noite = float(next(tokens))
+                        p.peso_janelas_bruto = float(next(tokens))
                         # Inaptidao em grupos
-                        w = funcoes_gerais.uniformize(tokens.next())
+                        w = funcoes_gerais.uniformize(next(tokens))
                         if len(w) > 0:
                                 p.inapto = w.split(', ')
                         # Preferencia por grupos
                         for g in grupos:
                                 if g.canonico:
-                                        s = tokens.next()
+                                        s = next(tokens)
                                         if len(s) > 0:	#se a preferencia foi preenchida
                                                 p.pref_grupos_bruto[g.id] = int(s)
                                         else: #se não, atribuir default 5
                                                 p.pref_grupos_bruto[g.id] = 5
                         # Reuniao departamento
-                        w = funcoes_gerais.uniformize(tokens.next())
+                        w = funcoes_gerais.uniformize(next(tokens))
                         if 'SIM' in w:
                                                 p.pref_reuniao = True
                         # Preferencia compacto/esparso (define o respectivo peso como zero se nao especificado)
-                        w = funcoes_gerais.uniformize(tokens.next())
+                        w = funcoes_gerais.uniformize(next(tokens))
                         p.peso_janelas=p.peso_janelas_bruto
                         if 'ESPARSOS' in w:
                                 p.pref_janelas = True
                         elif 'COMPACTOS' not in w:
                                 p.peso_janelas = 0 #Zera peso_janelas se a Preferencia nao for informada
                         for i in range(0,max_impedimentos):
-                                dia = funcoes_gerais.uniformize(tokens.next())
-                                periodo = funcoes_gerais.uniformize(tokens.next())
-                                justificativa = funcoes_gerais.uniformize(tokens.next())
+                                dia = funcoes_gerais.uniformize(next(tokens))
+                                periodo = funcoes_gerais.uniformize(next(tokens))
+                                justificativa = funcoes_gerais.uniformize(next(tokens))
                                 #guarda os dados do impedimento como string para conferencia posterior
                                 p.lista_impedimentos.append(dia+", "+periodo+", "+justificativa)
                                 #se o dia e periodo foram corretamente preenchidos, marca a respectiva posicao na matriz como 1
@@ -465,7 +455,7 @@ def ler_pref(form,grupos,max_impedimentos):
                                         for h in converter_periodo[periodo]:
                                                 p.impedimentos[h,converter_dia[dia]]=1
                         #Comeca o prechimento das tabelas de horario	
-                        w = funcoes_gerais.uniformize(tokens.next())
+                        w = funcoes_gerais.uniformize(next(tokens))
                         m = numpy.zeros((15, 8))
                         if 'DETALHADO' in w:
                                 for d in range(2,8):
@@ -473,31 +463,31 @@ def ler_pref(form,grupos,max_impedimentos):
                                         if d == 7:
                                                 periodos = ['MANHA', 'TARDE']
                                         for i in periodos:
-                                                pref = funcoes_gerais.uniformize(tokens.next())
+                                                pref = funcoes_gerais.uniformize(next(tokens))
                                                 for h in converter_periodo[i]:
                                                         if len(pref) == 0:
                                                                 pref = 'INDIFERENTE'
                                                         p.pref_horarios_bruto[h,d] = converter_preferencia[pref]
                                 for i in range(0, 5): # Pula as posicoes em branco do formulario
-                                        tokens.next()
+                                        next(tokens)
                         else:
                                 for i in range(0,3 * 5 + 2): #pula as posicoes em branco do formulario
-                                        tokens.next()
+                                        next(tokens)
                                 for i in ['MANHA', 'TARDE', 'NOITE']: #le as preferencias para os dias da semana
-                                        pref = funcoes_gerais.uniformize(tokens.next())
+                                        pref = funcoes_gerais.uniformize(next(tokens))
                                         for h in converter_periodo[i]:
                                                 for d in range(2,7): #grava uma copia em cada dia da semana
                                                         if len(pref) == 0:
                                                                 pref = 'INDIFERENTE'
                                                         p.pref_horarios_bruto[h,d] = converter_preferencia[pref]
                                 for i in ['MANHA', 'TARDE']: #lendo as preferencias do sabado
-                                        pref = funcoes_gerais.uniformize(tokens.next())
+                                        pref = funcoes_gerais.uniformize(next(tokens))
                                         for h in converter_periodo[i]:
                                                 if len(pref) == 0:
                                                         pref = 'INDIFERENTE'
                                                 p.pref_horarios_bruto[h,d + 1] = converter_preferencia[pref]
                         # Professor tem reducao de carga para a pos?
-                        p.pos = tokens.next() == 'S'
+                        p.pos = next(tokens) == 'S'
                         # Tudo o que vier depois daqui eh considerado comentario.
                         for obs in tokens:
                                 p.observacoes += obs
@@ -543,15 +533,15 @@ def ler_pre_atribuidas(arquivo, arquivo_de_fantasmas, professores, turmas):
 
                         try:
 
-                                matricula = int(tokens.next())
+                                matricula = int(next(tokens))
 
-                                nome_professor = tokens.next()
+                                nome_professor = next(tokens)
 
-                                cod_disciplina = tokens.next()
+                                cod_disciplina = next(tokens)
 
-                                turma = tokens.next()
+                                turma = next(tokens)
 
-                                nome_disciplina = tokens.next().rstrip()
+                                nome_disciplina = next(tokens).rstrip()
 
                         except Exception:
 
