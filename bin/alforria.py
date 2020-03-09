@@ -1,124 +1,221 @@
-#!/usr/bin/python
-#coding=utf8
+from prompt_toolkit import PromptSession
+from prompt_toolkit.completion import WordCompleter
+import logging
 
-"""
-14-08-08 Francisco
-Criacao de todo o arquivo alforria.dat (chamara alforria.aut.dat para evitar aborrecimentos)
-"""
+import funcoes_leitura as leitura
+import funcoes_escrita as escrita
 
-import unidecode
-import funcoes_leitura
+_PATHS_PATH = u'../config/paths.cnf'
+_ALFCFG_PATH = u'../config/alforria.cnf'
 
-TEMPORARIO = 'TEMPORARIO'
-COMPACTO = 'COMPACTO'
-ESPARSO = 'ESPARSO'
-SIM = 'SIM'
+_alforria_completer = WordCompleter([
+    'attribute', 'set_paths', 'set_config', 'load', 'to_pdf', 'check', 'verbosity', 'show', 'professor'
+    ], ignore_case=True)
 
-def uniformize(s,encode='utf8'):
-    return unidecode.unidecode(s.decode(encode)).upper()
+# Configura nivel de saida
 
-CONVERT_DAY = {'SEG':2, 'TER':3, 'QUA':4, 'QUI':5, 'SEX':6, 'SAB':7}
-CONVERT_TIME = {'07:45 - 09:15':(1,2),        \
-                    '09:30 - 12:10':(3,4,5),  \
-                    '13:30 - 15:10':(6,7),    \
-                    '15:30 - 18:00':(8,9,10), \
-                    '19:30 - 21:10':(11,12),  \
-                    '21:20 - 23:00':(13,14)}
-CONVERT_POS = {1:(1,2),        \
-               2:(3,4,5),  \
-               3:(6,7),    \
-               4:(8,9,10), \
-               5:(11,12),  \
-               6:(13,14)}
+logger = logging.getLogger('alforria')
 
-GRUPOSPATH = "../dados/grupos.txt"
-PREFPATH = "../dados/preferencias.tsv"
-SARPATH = "../dados/ensalamento.txt"
+logger.addHandler(logging.StreamHandler())
 
-grupos = funcoes_leitura.ler_grupos(GRUPOSPATH)
-preferencias = funcoes_leitura.ler_pref(PREFPATH,grupos,5)
-turmas = funcoes_leitura.ler_sar(SARPATH,grupos)
+logger.setLevel(logging.ERROR)
 
-for p in preferencias:
-    p.ajustar()
+professores = None
 
-with open("alforria.aut.dat","w") as f:
+grupos = None
 
-    f.write("set G := ")
-    for g in grupos:
-        f.write(g.id + " ")
-    f.write(";\n\n")
+turmas = None
 
-    f.write("set G_CANONICOS := ")
-    for g in grupos:
-        if g.canonico:
-            f.write(g.id + " ")
-    f.write(";\n\n")
+pre_atribuidas = None
 
-    f.write("set T := ")
-    for t in turmas:
-        f.write(t.id() + " ")
-    f.write(";\n\n")
+def _load_() :
+    """
 
-    f.write("set P := ")
-    for p in preferencias:
-        f.write(p.id() + " ")
-    f.write(";\n\n")
+    This function loads all the data.
 
-    f.write("param turma_grupo := \n")
-    for t in turmas:
-        f.write(t.id() + " " + t.grupo + " 1\n")
-    f.write(";\n\n")
+    """
 
-    # Supoe que se uma disciplina eh vinculada, seu vinculo eh a
-    # disciplina seguinte
-    f.write("param vinculadas := \n")
-    vinc = False
-    for t in turmas:
-        if vinc:
-            f.write(t.id() + " 1\n")
-            vinc = False
-        elif t.vinculada:
-            f.write(t.id() + " ")
-            vinc = True
-    f.write(";\n\n")
+    global _PATHS_PATH
+    global _ALFCFG_PATH
+    global professores
+    global grupos
+    global turmas
+    global pre_atribuidas
 
-    f.write("param c := \n")
-    for t in turmas:
-        for (d,h) in t.horarios:
-            f.write(t.id() + " " + str(t.semestralidade) + " " + str(d) + " " + str(h) + " 1\n")
-    f.write(";\n\n")
+    paths = leitura.ler_conf(_PATHS_PATH)
+    configuracoes = leitura.ler_conf(_ALFCFG_PATH)
 
-    f.write("param temporario := \n")
-    for p in preferencias:
-        if p.temporario:
-            f.write(p.id() + " 1\n")
-    f.write(";\n\n")
+    # Carrega os grupos de disciplinas
+    grupos = leitura.ler_grupos(paths["GRUPOSPATH"])
 
-    f.write("param inapto := \n")
-    for p in preferencias:
-        for g in p.inapto:
-            f.write(p.id() + " " + g + " 1\n")
-    f.write(";\n\n")
+    # Carrega os professores e suas preferencias e ajusta os valores dados
+    # às preferências para que fiquem entre 0 e 10.
+    professores = leitura.ler_pref(paths["PREFPATH"], grupos,
+                                   int(configuracoes["MAXIMPEDIMENTOS"]))
+    for p in professores:
+        p.ajustar()
 
-    f.write("param impedimento := \n")
-    for p in preferencias:
-        for d in range(2,8):
-            for h in range(1,15):
-                if p.impedimentos[h][d]:
-                    for s in range (1,3):
-                        f.write(p.id() + " " + str(s) + " " + str(d) + " " + str(h) + " 1\n")
-        if p.pref_reuniao:
-            for h in range(1,6):
-                if not p.impedimentos[h][3]:
-                    for s in range (1,3):
-                        f.write(p.id() + " " + str(s) + " 3 " + str(h) + " 1\n")
-    f.write(";\n\n")
+    # Carrega as turmas de disciplinas do ano e elimina as disciplinas
+    # fantasmas (turmas com números diferentes que são, na verdade, a
+    # mesma turma)
 
-    f.write("param pref_grupo := \n")
-    for p in preferencias:
-        for g in p.pref_grupos.keys():
-            f.write(p.id() + " " + g + " " + str(p.pref_grupos[g]) + "\n")
-    f.write(";\n\n")
+    turmas = leitura.ler_sar(paths["SARPATH"], grupos)
 
-    ## Falta colocar as preferencias!
+    turmas = leitura.caca_fantasmas(paths["FANTPATH"], turmas)
+
+    # Carrega o arquivo de disciplinas pre-atribuidas
+    pre_atribuidas = leitura.ler_pre_atribuidas(paths["ATRIBPATH"], paths["FANTPATH"],
+                                                professores, turmas)
+
+
+def _set_log_level_(level):
+
+    """
+
+    This function changes the log level for Alforria.
+
+    """
+
+    global logger
+    
+    v = int(cmds[1])
+
+    if v < 1:
+
+        logger.setLevel(logging.ERROR)
+
+    elif v == 1:
+
+        logger.setLevel(logging.INFO)
+
+    else:
+
+        logger.setLevel(logging.DEBUG)
+
+    print('Changed logger level')
+    
+    
+def _attribute_():
+
+    """
+
+    This function attributes courses to professors according to the specified files.
+
+    """
+
+    global pre_atribuidas
+    
+    if pre_atribuidas is not None:
+
+        for (p, t) in pre_atribuidas:
+
+            p.turmas_a_lecionar.append(t)
+
+    else:
+
+        print("Necessary to load data first.")
+
+
+def parse_command(command):
+
+    """
+
+    This function parses the commands and calls the correct functions.
+
+    """
+
+    global _PATHS_PATH
+    global _ALFCFG_PATH
+    global professores
+
+    cmds = command.split()
+
+    if len(cmds) > 0:
+
+        if cmds[0] == u'load':
+
+            _load_()
+
+        elif cmds[0] == u'verbosity':
+
+            if len(cmds) == 2:
+                _set_log_level_(cmds[1])
+            else:
+                print("Usage: %s log_level" % cmds[0])
+            
+        elif cmds[0] == u'set_paths':
+
+            _PATHS_PATH = cmds[1]
+
+        elif cmds[0] == u'set_config':
+
+            _ALFCFG_PATH = cmds[1]
+
+        elif cmds[0] == u'attribute':
+
+            _attribute_()
+
+        elif cmds[0] == u'to_pdf':
+
+            if professores is not None:
+            
+                configuracoes = leitura.ler_conf(_ALFCFG_PATH)
+
+                prof_ord = sorted(professores, key=lambda x: x.nome())
+
+                escrita.cria_relatorio_geral(prof_ord, configuracoes["RELDIR"])
+
+                print("Report created in directory %s" % configuracoes["RELDIR"])
+
+            else:
+
+                print("Necessary to load data first.")
+
+        elif cmds[0] == u'show':
+
+            if cmds[1] == u'professor':
+
+                name = cmds[2]
+
+                for p in professores:
+
+                    if name in p.nome():
+
+                        print(p)
+
+        else:
+
+            print("Unknown command %s" % cmds[0])
+
+                                           
+def mainfunc():
+
+    session = PromptSession(completer=_alforria_completer)
+
+    while True:
+
+        try:
+
+            command = session.prompt('> ')
+
+        except KeyboardInterrupt:
+
+            continue
+
+        except EOFError:
+
+            break
+
+        else:
+
+            parse_command(command)
+
+    print("Exiting.")
+
+if __name__ == '__main__':
+
+    mainfunc()
+        
+
+    
+
