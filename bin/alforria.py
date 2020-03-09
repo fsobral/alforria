@@ -116,6 +116,82 @@ def _attribute_():
         print("Necessary to load data first.")
 
 
+def _show_(*args):
+
+    global professores
+    global turmas
+    
+    if len(args) != 2 and len(args) != 3:
+
+        print("Usage: show professor <name>")
+        print("Usage: show turma <codigo> <turma>")
+
+        return
+
+    if professores is None or turmas is None:
+
+        print("Necessary to load data first.")
+
+        return
+
+    if args[0] == u'professor':
+
+        name = args[1]
+
+        for p in professores:
+
+            if name in p.nome():
+
+                print(p)
+
+    elif args[0] == u'turma':
+
+        cod = args[1]
+
+        tur = None
+        
+        if len(args) == 3:
+
+            tur = args[2]
+
+        for t in turmas:
+
+            if t.codigo == cod:
+
+                if tur is None:
+
+                    print(t)
+
+                elif t.turma == tur:
+
+                    print(t)
+
+    else:
+
+        print("Usage: show professor <name>")
+        print("Usage: show turma <codigo> <turma>")
+
+
+def _to_pdf_():
+
+    global _ALFCFG_PATH
+    global professores
+
+    if professores is not None:
+
+        configuracoes = leitura.ler_conf(_ALFCFG_PATH)
+
+        prof_ord = sorted(professores, key=lambda x: x.nome())
+
+        escrita.cria_relatorio_geral(prof_ord, configuracoes["RELDIR"])
+
+        print("Report created in directory %s" % configuracoes["RELDIR"])
+
+    else:
+
+        print("Necessary to load data first.")
+
+        
 def parse_command(command):
 
     """
@@ -157,31 +233,11 @@ def parse_command(command):
 
         elif cmds[0] == u'to_pdf':
 
-            if professores is not None:
+            _to_pdf_()
             
-                configuracoes = leitura.ler_conf(_ALFCFG_PATH)
-
-                prof_ord = sorted(professores, key=lambda x: x.nome())
-
-                escrita.cria_relatorio_geral(prof_ord, configuracoes["RELDIR"])
-
-                print("Report created in directory %s" % configuracoes["RELDIR"])
-
-            else:
-
-                print("Necessary to load data first.")
-
         elif cmds[0] == u'show':
 
-            if cmds[1] == u'professor':
-
-                name = cmds[2]
-
-                for p in professores:
-
-                    if name in p.nome():
-
-                        print(p)
+            _show_(*cmds[1:])
 
         else:
 
