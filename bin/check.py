@@ -17,6 +17,62 @@ import logging
 - Aumentamos a ch. maxima do professor quando ha estouro por pre-atribuicao
 """
 
+def check_p(p):
+
+        """This function checks if professor 'p' has a feasible set of
+        attributed courses. Unlike the original 'check' function, it
+        DOES NOT change any attribute of the professor.
+
+        Returns True if OK or False otherwise.
+
+        """
+
+        logger = logging.getLogger('alforria')
+
+        ok = True
+
+        for t in p.turmas_a_lecionar:
+
+                for (d, h) in t.horarios:
+
+                        if p.impedimentos[d][h] == 1:
+
+                                logger.error(
+                                        "AVISO: Professor " + str(p.nome()) +
+                                        " no dia e horario " + str((d, h)) +
+                                        " com impedimento e disciplina " +
+                                        "pre-atribuida " + str(t.id()) + "."
+                                )
+
+                                ok = False
+                        
+                if p.licenca1 and t.semestralidade == 1:
+                        
+                        logger.error("\tProfessor %s com disciplina %s pre-atribuida e " +
+                                    "com licenca.", p.nome(), t.id())
+                        
+                        ok = False
+
+                if p.licenca2 and t.semestralidade == 2:
+                        
+                        logger.error("\tProfessor %s com disciplina %s pre-atribuida e " +
+                                    "com licenca.", p.nome(), t.id())
+                        
+                        ok = False
+
+                if t.grupo is not None and t.grupo.id in p.inapto:
+
+                        logger.info("\tProfessor %s inapto para grupo %s de" +
+                                    "disciplina pre-atribuida %s.",
+                                    p.nome(), t.grupo.id, t.id())
+
+                        ok = False
+
+        return ok
+
+
+                
+
 ############################################################################################################################
 #########################################                LER AQUIVO DE FANTASMAS            ################################
 ############################################################################################################################
