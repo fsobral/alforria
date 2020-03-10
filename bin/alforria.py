@@ -4,9 +4,11 @@ import logging
 
 import funcoes_leitura as leitura
 import funcoes_escrita as escrita
+import check
 
 _PATHS_PATH = u'../config/paths.cnf'
 _ALFCFG_PATH = u'../config/alforria.cnf'
+_CONST_PATH = u'../config/constantes.cnf'
 
 _alforria_completer = WordCompleter([
     'attribute', 'set_paths', 'set_config', 'load', 'to_pdf', 'check', 'verbosity', 'show', 'professor'
@@ -97,9 +99,8 @@ def _set_log_level_(level):
     
 def _attribute_():
 
-    """
-
-    This function attributes courses to professors according to the specified files.
+    """This function attributes courses to professors and professors to
+    courses, according to the specified files.
 
     """
 
@@ -110,6 +111,8 @@ def _attribute_():
         for (p, t) in pre_atribuidas:
 
             p.turmas_a_lecionar.append(t)
+
+            t.professor = p
 
     else:
 
@@ -191,6 +194,28 @@ def _to_pdf_():
 
         print("Necessary to load data first.")
 
+
+def _check_(*args):
+
+    global _CONST_PATH
+    global professores
+
+    constantes = leitura.ler_conf(_CONST_PATH)
+
+    if len(args) == 0:
+
+        for p in professores:
+
+            check.check_p(p, constantes)
+
+    elif len(args) == 1:
+
+        name = args[0]
+
+        for p in [p1 for p1 in professores if name in p1.nome()]:
+
+            check.check_p(p, constantes)
+
         
 def parse_command(command):
 
@@ -238,6 +263,10 @@ def parse_command(command):
         elif cmds[0] == u'show':
 
             _show_(*cmds[1:])
+
+        elif cmds[0] == u'check':
+
+            _check_(*cmds[1:])
 
         else:
 
