@@ -97,26 +97,54 @@ def _set_log_level_(level):
     print('Changed logger level')
     
     
-def _attribute_():
+def _attribute_(*args):
 
     """This function attributes courses to professors and professors to
-    courses, according to the specified files.
+    courses, according to the specified files or according to the arguments.
 
     """
 
     global pre_atribuidas
-    
-    if pre_atribuidas is not None:
+    global professores
+    global turmas
+
+    if pre_atribuidas is None or professores is None or turmas is None:
+
+        print("Necessary to load data first.")
+
+    nargs = len(args)
+
+    if nargs == 0:
 
         for (p, t) in pre_atribuidas:
 
             p.turmas_a_lecionar.append(t)
 
             t.professor = p
+            
+    elif nargs == 3:
+
+        name = args[0]
+
+        tcod = args[1]
+
+        ttur = args[2]
+        
+        for p in professores:
+
+            if name == p.nome():
+
+                for t in turmas:
+
+                    if tcod == t.codigo and ttur == t.turma:
+
+                        p.add_course(t)
+
+                        t.add_professor(p)
 
     else:
 
-        print("Necessary to load data first.")
+        logger.error("Usage: attribute [professor cod turma].")
 
 
 def _show_(*args):
@@ -202,6 +230,12 @@ def _check_(*args):
 
     constantes = leitura.ler_conf(_CONST_PATH)
 
+    if professores is None:
+
+        print("Necessary to load data first.")
+
+        return
+
     if len(args) == 0:
 
         for p in professores:
@@ -254,7 +288,7 @@ def parse_command(command):
 
         elif cmds[0] == u'attribute':
 
-            _attribute_()
+            _attribute_(*cmds[1:])
 
         elif cmds[0] == u'to_pdf':
 

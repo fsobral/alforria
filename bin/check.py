@@ -40,6 +40,8 @@ def check_p(p, params):
 
     chgrad = 0
 
+    l_horarios = []
+
     for t in p.turmas_a_lecionar:
 
         ch = t.carga_horaria()
@@ -52,6 +54,16 @@ def check_p(p, params):
             soma2 += ch
 
         for (d, h) in t.horarios:
+
+            if (d, h, t.semestralidade) in l_horarios:
+
+                logger.error("Erro professor %s: Disciplina conflitante %s", p.nome(), t.id())
+
+                ok = False
+
+            else:
+
+                l_horarios.append((d, h, t.semestralidade))
 
             if p.impedimentos[h, d] == 1:
                 
