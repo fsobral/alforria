@@ -1,5 +1,5 @@
 from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.completion import WordCompleter, merge_completers
 import logging
 
 import funcoes_leitura as leitura
@@ -13,6 +13,8 @@ _CONST_PATH = u'../config/constantes.cnf'
 _alforria_completer = WordCompleter([
     'attribute', 'set_paths', 'set_config', 'load', 'to_pdf', 'check', 'verbosity', 'show', 'professor'
     ], ignore_case=True)
+
+_session = None
 
 # Configura nivel de saida
 
@@ -54,9 +56,22 @@ def _load_() :
     # às preferências para que fiquem entre 0 e 10.
     professores = leitura.ler_pref(paths["PREFPATH"], grupos,
                                    int(configuracoes["MAXIMPEDIMENTOS"]))
+
+    # Updates the names of professors to the autocompleter
+    names = []
+    
     for p in professores:
+        
         p.ajustar()
 
+        names.append(p.nome())
+
+    global _session
+
+    if _session is not None:
+
+        _session.completer = merge_completers([_session.completer, WordCompleter(names)])
+        
     # Carrega as turmas de disciplinas do ano e elimina as disciplinas
     # fantasmas (turmas com números diferentes que são, na verdade, a
     # mesma turma)
@@ -65,6 +80,14 @@ def _load_() :
 
     turmas = leitura.caca_fantasmas(paths["FANTPATH"], turmas)
 
+    # Updates the names of the courses to the autocompleter
+
+    names = [t.id() for t in turmas]
+
+    if _session is not None:
+
+        _session.completer = merge_completers([_session.completer, WordCompleter(names)])
+        
     # Carrega o arquivo de disciplinas pre-atribuidas
     pre_atribuidas = leitura.ler_pre_atribuidas(paths["ATRIBPATH"], paths["FANTPATH"],
                                                 professores, turmas)
@@ -122,29 +145,51 @@ def _attribute_(*args):
 
             t.professor = p
             
-    elif nargs == 3:
+    elif nargs == 2:
 
         name = args[0]
 
-        tcod = args[1]
+        cour = args[1]
 
-        ttur = args[2]
+        p_found = False
         
         for p in professores:
 
             if name == p.nome():
 
-                for t in turmas:
+                p_found = True
 
-                    if tcod == t.codigo and ttur == t.turma:
+                c_found = False
+
+                for (i, t) in enumerate(turmas):
+
+                    if cour == t.id():
+
+                        c_found = True
 
                         p.add_course(t)
 
                         t.add_professor(p)
 
+                        # Se a disciplina anual, sabemos que a proxima
+                        # sera a sua parte do segundo semestre
+                        if t.vinculada:
+
+                            p.add_course(turmas[i + 1])
+
+                            turmas[i + 1].add_professor(p)
+
+                if not c_found:
+
+                    logger.error("Nao encontrada turma: %s", cour)
+
+        if not p_found:
+
+                logger.error("Nao encontrado docente: %s", name)
+
     else:
 
-        logger.error("Usage: attribute [professor cod turma].")
+        logger.error("Uso: attribute [professor turma].")
 
 
 def _show_(*args):
@@ -309,13 +354,15 @@ def parse_command(command):
                                            
 def mainfunc():
 
-    session = PromptSession(completer=_alforria_completer)
+    global _session
+
+    _session = PromptSession(completer=_alforria_completer)
 
     while True:
 
         try:
 
-            command = session.prompt('> ')
+            command = _session.prompt('> ')
 
         except KeyboardInterrupt:
 
