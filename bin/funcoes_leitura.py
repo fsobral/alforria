@@ -335,8 +335,7 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                                 )
                 #fim do loop grande
                 if anual: #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
-                        t=classes.Turma()
-                        copia_turmas(turmas[len(turmas)],t)
+                        t = copia_turmas(turmas[len(turmas)])
                         t.semestralidade=2
                         temp=str(t.codigo)+"_S2"
                         for g in grupos:
