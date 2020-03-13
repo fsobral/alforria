@@ -6,6 +6,132 @@ import funcoes_escrita
 import logging
 
 
+def check_p_c(p, cs, params):
+    """This function checks if the addition of courses 'cs' creates an
+    infeasible situation for professor 'p'. It does not check if the
+    already assigned courses are feasible. Use 'check_p' for such
+    test.
+
+    Returns True if OK and False otherwise.
+
+    """
+   
+    logger = logging.getLogger('alforria')
+
+    ok = True
+
+    if p.temporario:
+        chmaxsem = int(params['chmax_temporario_semestral'])
+        chmaxanual = int(params['chmax_temporario_anual'])
+        chminanualgrad = int(params['chmin_graduacao'])
+        chminanual = int(params['chmin_temporario_anual'])
+    else:
+        chmaxsem = int(params['chmax_efetivo_semestral'])
+        chmaxanual = int(params['chmax_efetivo_anual'])
+        chminanualgrad = int(params['chmin_graduacao'])
+        chminanual = int(params['chmin_efetivo_anual'])
+
+    if p.licenca1 or p.licenca2:
+        chminanualgrad /= 2
+
+    soma = p.chprevia1 + p.chprevia2
+    soma1 = p.chprevia1
+    soma2 = p.chprevia2
+
+    chgrad = 0
+
+    l_horarios = []
+
+    for c in cs:
+
+        for (d, h) in c.horarios:
+
+            if (d, h, c.semestralidade) in l_horarios:
+
+                logger.error("Professor %s - Disciplinas novas com horarios conflitantes: %s.", p.nome(), c.id())
+
+                ok = False
+
+            else:
+
+                l_horarios.append((d, h, c.semestralidade))
+
+    for c in cs:
+    
+        ch = c.carga_horaria()
+        soma += ch
+        chgrad += ch
+
+        if c.semestralidade == 1:
+            soma1 += ch
+        else:
+            soma2 += ch
+
+        if p.licenca1 and c.semestralidade == 1:
+
+            logger.error("Professor %s - com licenca S1.", p.nome())
+
+            ok = False
+
+        if p.licenca2 and c.semestralidade == 2:
+
+            logger.error("Professor %s - com licenca S2.", p.nome())
+
+            ok = False
+
+        if c.grupo is not None and c.grupo.id in p.inapto:
+
+            logger.error("Professor %s - inapto para grupo %s.",
+                        p.nome(), c.grupo.id)
+
+            ok = False    
+
+        for (d, h) in c.horarios:
+
+            if p.impedimentos[h, d] == 1:
+
+                logger.error("Professor %s - impedimento no dia e horario (%d, %d)",
+                             p.nome(), d, h)
+
+                ok = False
+
+    for t in p.turmas_a_lecionar:
+
+        ch = t.carga_horaria()
+        soma += ch
+        chgrad += ch
+
+        if t.semestralidade == 1:
+            soma1 += ch
+        else:
+            soma2 += ch
+
+        for (d, h) in t.horarios:
+
+            if (d, h, t.semestralidade) in l_horarios:
+
+                logger.error("Professor %s - nova disciplina conflita com ja atribuida %s", p.nome(), t.id())
+
+                ok = False
+
+    logger.debug("%s carga total pre-atribuida com adicao de %s: %d.\n",
+                 p.nome(), c.id(), soma)
+
+    if (soma > (chmaxanual - 2) and chgrad > chminanualgrad) or \
+       ((chgrad > chminanualgrad) and
+        ((p.licenca1 and soma2 > chmaxsem) or
+         (p.licenca2 and soma1 > chmaxsem))) or \
+        (not p.licenca1 and soma1 > chmaxsem) or \
+        (not p.licenca2 and soma2 > chmaxsem):
+
+        logger.error("Professor %s - adicao de %s excede carga horária máxima.",
+                     p.nome(), c.id())
+
+        ok = False
+
+    return ok
+
+
 def check_p(p, params):
 
     """This function checks if professor 'p' has a feasible set of
@@ -109,7 +235,7 @@ def check_p(p, params):
         (not p.licenca1 and soma1 > chmaxsem) or \
         (not p.licenca2 and soma2 > chmaxsem):
 
-        logger.info("Pre-atribuição atinge carga horária máxima" +
+        logger.error("Pre-atribuição excede carga horária máxima" +
                     " de %s.", p.nome())
 
         ok = False

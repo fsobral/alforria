@@ -32,6 +32,10 @@ turmas = None
 
 pre_atribuidas = None
 
+_professor_search_name = dict()
+
+_course_search_id = dict()
+
 def _load_() :
     """
 
@@ -39,12 +43,9 @@ def _load_() :
 
     """
 
-    global _PATHS_PATH
-    global _ALFCFG_PATH
-    global professores
-    global grupos
-    global turmas
-    global pre_atribuidas
+    global _PATHS_PATH, _ALFCFG_PATH
+    global professores, grupos, turmas, pre_atribuidas
+    global _professor_search_name, _course_search_id
 
     paths = leitura.ler_conf(_PATHS_PATH)
     configuracoes = leitura.ler_conf(_ALFCFG_PATH)
@@ -65,6 +66,12 @@ def _load_() :
         p.ajustar()
 
         names.append(p.nome())
+
+    # Cria uma lista de busca dos professores por nome, para agilizar
+    # a busca
+    _professor_search_name = dict(
+        [(p.nome(), p) for p in professores]
+    )
 
     global _session
 
@@ -87,6 +94,13 @@ def _load_() :
     if _session is not None:
 
         _session.completer = merge_completers([_session.completer, WordCompleter(names)])
+
+    # Cria uma lista de busca de turmas por id
+    # (NOME_TURMA_SEMESTRALIDADE) para agilizar as buscas
+
+    _course_search_id = dict(
+        [(t.id(), t) for t in turmas]
+    )
         
     # Carrega o arquivo de disciplinas pre-atribuidas
     pre_atribuidas = leitura.ler_pre_atribuidas(paths["ATRIBPATH"], paths["FANTPATH"],
@@ -121,15 +135,12 @@ def _set_log_level_(level):
     
     
 def _attribute_(*args):
-
     """This function attributes courses to professors and professors to
     courses, according to the specified files or according to the arguments.
 
     """
 
-    global pre_atribuidas
-    global professores
-    global turmas
+    global pre_atribuidas, professores, turmas
 
     if pre_atribuidas is None or professores is None or turmas is None:
 
@@ -145,51 +156,57 @@ def _attribute_(*args):
 
             t.professor = p
             
-    elif nargs == 2:
+    elif nargs >= 2:
 
         name = args[0]
 
-        cour = args[1]
+        cour = args[1:]
 
-        p_found = False
+        if name not in _professor_search_name:
+
+            logger.error("Nao encontrado docente: %s", name)
+
+            return
         
-        for p in professores:
+        p = _professor_search_name[name]
 
-            if name == p.nome():
+        for c in cour:
 
-                p_found = True
+            if c not in _course_search_id:
 
-                c_found = False
+                logger.error("Nao encontrada turma: %s", c)
 
-                for (i, t) in enumerate(turmas):
+                continue
 
-                    if cour == t.id():
+            t = _course_search_id[c]
 
-                        c_found = True
+            p.add_course(t)
 
-                        p.add_course(t)
+            t.add_professor(p)
 
-                        t.add_professor(p)
+            # Se a disciplina anual, sabemos S1 e S2 estao
+            # vinculados. Desta forma, procuramos S2 na lista de
+            # turmas
+            
+            if t.vinculada and t.semestralidade == 1:
 
-                        # Se a disciplina anual, sabemos que a proxima
-                        # sera a sua parte do segundo semestre
-                        if t.vinculada:
+                cvinc = c.replace("S1", "S2")
+                
+                if cvinc not in _course_search_id:
 
-                            p.add_course(turmas[i + 1])
+                    logger.error("Nao encontrada turma vinculada: %s", cvinc)
 
-                            turmas[i + 1].add_professor(p)
+                    continue
 
-                if not c_found:
+                tvinc = _course_search_id[cvinc]
 
-                    logger.error("Nao encontrada turma: %s", cour)
+                p.add_course(tvinc)
 
-        if not p_found:
-
-                logger.error("Nao encontrado docente: %s", name)
+                tvinc.add_professor(p)
 
     else:
 
-        logger.error("Uso: attribute [professor turma].")
+        logger.error("Uso: attribute [professor turma1 turma2 ...].")
 
 
 def _show_(*args):
@@ -214,11 +231,13 @@ def _show_(*args):
 
         name = args[1]
 
-        for p in professores:
+        if name not in _professor_search_name:
+        
+            logger.error("Nao encontrado: %s.", name)
 
-            if name in p.nome():
-
-                print(p)
+        else:
+            
+            print(_professor_search_name[name])
 
     elif args[0] == u'turma':
 
@@ -270,8 +289,7 @@ def _to_pdf_():
 
 def _check_(*args):
 
-    global _CONST_PATH
-    global professores
+    global _CONST_PATH, professores, _professor_search_name, _course_search_id
 
     constantes = leitura.ler_conf(_CONST_PATH)
 
@@ -291,9 +309,46 @@ def _check_(*args):
 
         name = args[0]
 
-        for p in [p1 for p1 in professores if name in p1.nome()]:
+        if name not in _professor_search_name:
 
-            check.check_p(p, constantes)
+            logger.error("Nao encontrado: %s.", name)
+
+        else:
+
+            check.check_p(_professor_search_name[name], constantes)
+
+    elif len(args) >= 2:
+
+        name = args[0]
+
+        cour = args[1:]
+
+        if name not in _professor_search_name:
+
+            logger.error("Nao encontrado: %s.", name)
+
+            return
+
+        clist = [_course_search_id[c] for c in cour if c in _course_search_id]
+
+        clist2 = [_course_search_id[(c.id()).replace("S1", "S2")] \
+                  for c in clist \
+                  if (c.vinculada and c.semestralidade == 1)]
+
+        clist.extend(clist2)
+                  
+        if len(clist) == 0:
+
+            logger.error("Nao encontrada nenhuma disciplina.")
+
+            return
+
+        check.check_p_c(_professor_search_name[name],
+                        clist, constantes)
+
+    else:
+
+        logger.error("Uso: check [professor [turma1 turma2 ...]]")
 
         
 def parse_command(command):
