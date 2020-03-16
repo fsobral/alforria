@@ -11,7 +11,7 @@ _ALFCFG_PATH = u'../config/alforria.cnf'
 _CONST_PATH = u'../config/constantes.cnf'
 
 _alforria_completer = WordCompleter([
-    'attribute', 'set_paths', 'set_config', 'load', 'save', 'to_pdf', 'check', 'verbosity', 'show'
+    'attribute', 'set_paths', 'set_config', 'load', 'save', 'to_pdf', 'check', 'verbosity', 'show', 'remove', 'report'
     ], ignore_case=True)
 
 _session = None
@@ -35,6 +35,41 @@ pre_atribuidas = None
 _professor_search_name = dict()
 
 _course_search_id = dict()
+
+
+def _report_(*args):
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    global professores
+
+    if len(args) == 0:
+
+        logger.error("Uso: report [impedimentos]")
+
+        return
+    
+    rtype = args[0]
+
+    if rtype == u'impedimentos':
+
+        h = np.zeros((17, 8))
+
+        for p in professores:
+
+            np.add(h, p.impedimentos, out=h)
+
+        plt.matshow(h[2:17, 1:7], cmap=plt.cm.Reds)
+        plt.colorbar()
+        plt.xticks([])
+        plt.yticks([])
+        plt.show()
+
+    else:
+
+        logger.error("Uso: report [impedimentos]")
+
 
 def _load_() :
     """
@@ -492,6 +527,10 @@ def parse_command(command):
         elif cmds[0] == u'remove':
 
             _remove_(*cmds[1:])
+
+        elif cmds[0] == u'report':
+
+            _report_(*cmds[1:])
 
         else:
 
