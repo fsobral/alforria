@@ -184,6 +184,64 @@ def _attribute_t_to_p(t, p):
         tvinc.add_professor(p)
     
 
+def _remove_(*args):
+
+    """
+    Remove the given courses from the given professor.
+    """
+
+    global _professor_search_name, _course_search_id
+
+    if len(args) < 2:
+    
+        logger.error("Uso: remove <professor> <turma1> [turma2 ...]")
+
+        return
+    
+    name = args[0]
+
+    cour = args[1:]
+    
+    if name not in _professor_search_name:
+
+        logger.error("Nao encontrado docente: %s", name)
+
+        return
+
+    p = _professor_search_name[name]
+
+    for c in cour:
+
+        if c not in _course_search_id:
+
+            logger.error("Nao encontrada turma: %s", c)
+
+            continue
+
+        tc = _course_search_id[c]
+
+        tc.remove_professor(p)
+
+        p.remove_course(tc)
+
+        if tc.vinculada and tc.semestralidade == 1:
+
+            cvinc = (tc.id()).replace("S1", "S2")
+
+            if cvinc not in _course_search_id:
+
+                logger.error("Nao encontrada turma vinculada: %s", cvinc)
+
+                continue
+
+            tvinc = _course_search_id[cvinc]
+
+        p.remove_course(tvinc)
+
+        tvinc.remove_professor(p)
+
+    
+    
 def _attribute_(*args):
 
     """This function attributes courses to professors and professors to
@@ -430,6 +488,10 @@ def parse_command(command):
         elif cmds[0] == u'save':
 
             _save_csv_(*cmds[1:])
+
+        elif cmds[0] == u'remove':
+
+            _remove_(*cmds[1:])
 
         else:
 

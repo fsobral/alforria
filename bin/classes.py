@@ -111,7 +111,12 @@ class Turma: ###################################################################
             return len(self.horarios)
     #----------------------------------------------------------------------------------------------------
     def add_professor(self, p):
+        """Add a relation with professor 'p'."""
         self.professor = p
+
+    def remove_professor(self, p):
+        """Remove the relation with professor 'p'."""
+        self.professor = None
 
 class Professor:##################################################################################################
     def __init__(self):
@@ -167,7 +172,15 @@ class Professor:################################################################
     def add_course(self, t):
 
         self.turmas_a_lecionar.append(t)
-        
+
+
+    def remove_course(self, t):
+
+        if t in self.turmas_a_lecionar:
+
+            self.turmas_a_lecionar.remove(t)
+
+
     #----------------------------------------------------------------------------------------------------
     def carga_horaria_atrib(self):
 
@@ -304,6 +317,7 @@ class Professor:################################################################
         return s
     #----------------------------------------------------------------------------------------------------
     def totex(self,arquivo=None):
+
         """
         Criam um arquivo .tex cujo nome eh a matricula, contendo os comandos tex para analisar os resultados.
         O arquivo precisa ser inserido na estrutura de um documento latex, via include, por exemplo.
