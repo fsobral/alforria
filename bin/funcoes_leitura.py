@@ -486,7 +486,8 @@ def ler_pref(form,grupos,max_impedimentos):
                                                         pref = 'INDIFERENTE'
                                                 p.pref_horarios_bruto[h,d + 1] = converter_preferencia[pref]
                         # Professor tem reducao de carga para a pos?
-                        p.pos = next(tokens) == 'S'
+                        p.pos = (next(tokens).strip() == u'S')
+                        
                         # Tudo o que vier depois daqui eh considerado comentario.
                         for obs in tokens:
                                 p.observacoes += obs

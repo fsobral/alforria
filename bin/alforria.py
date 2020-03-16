@@ -11,7 +11,7 @@ _ALFCFG_PATH = u'../config/alforria.cnf'
 _CONST_PATH = u'../config/constantes.cnf'
 
 _alforria_completer = WordCompleter([
-    'attribute', 'set_paths', 'set_config', 'load', 'to_pdf', 'check', 'verbosity', 'show', 'professor'
+    'attribute', 'set_paths', 'set_config', 'load', 'save', 'to_pdf', 'check', 'verbosity', 'show'
     ], ignore_case=True)
 
 _session = None

@@ -192,11 +192,11 @@ class Professor:################################################################
 
     def carga_horaria_s1(self):
 
-        return self._carga_horaria_s(1)
+        return self.chprevia1 + self._carga_horaria_s(1)
 
     def carga_horaria_s2(self):
 
-        return self._carga_horaria_s(2)
+        return self.chprevia2 + self._carga_horaria_s(2)
     
     #----------------------------------------------------------------------------------------------------
     def carga_horaria_total(self):
@@ -293,7 +293,9 @@ class Professor:################################################################
     #----------------------------------------------------------------------------------------------------
     def display(self):
         s = self.nome()
-        s += "(Ch. previa: %d (1S) %d (2S), " % (int(self.chprevia1), int(self.chprevia2))
+        if self.pos:
+            s += " P"
+        s += " (Ch. previa: %d (1S) %d (2S), " % (int(self.chprevia1), int(self.chprevia2))
         s += "Ch. total: %d (1S) %d (2S))\n" % (self.carga_horaria_s1(), self.carga_horaria_s2())
         for t in self.turmas_a_lecionar:
             s += " "

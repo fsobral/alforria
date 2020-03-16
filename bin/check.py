@@ -117,8 +117,8 @@ def check_p_c(p, cs, params):
     logger.debug("%s carga total pre-atribuida com adicao de %s: %d.\n",
                  p.nome(), c.id(), soma)
 
-    if (soma > (chmaxanual - 2) and chgrad > chminanualgrad) or \
-       ((chgrad > chminanualgrad) and
+    if (soma > chmaxanual and chgrad >= chminanualgrad) or \
+       ((chgrad >= chminanualgrad) and
         ((p.licenca1 and soma2 > chmaxsem) or
          (p.licenca2 and soma1 > chmaxsem))) or \
         (not p.licenca1 and soma1 > chmaxsem) or \
@@ -156,6 +156,8 @@ def check_p(p, params):
         chmaxanual = int(params['chmax_efetivo_anual'])
         chminanualgrad = int(params['chmin_graduacao'])
         chminanual = int(params['chmin_efetivo_anual'])
+        if p.pos:
+            chminanualgrad = 8
 
     if p.licenca1 or p.licenca2:
         chminanualgrad /= 2
@@ -228,8 +230,21 @@ def check_p(p, params):
     logger.debug("\t%s carga total pre-atribuida: %d.\n",
                  p.nome(), soma)
 
-    if (soma > (chmaxanual - 2) and chgrad > chminanualgrad) or \
-       ((chgrad > chminanualgrad) and
+    if chgrad < chminanualgrad:
+
+        logger.error("Professor %s - carga horaria insuficiente para graduacao." %
+                     p.nome())
+
+        ok = False
+
+    if soma < chminanual:
+
+        logger.error("Professor %s - carga horaria insuficiente." % p.nome())
+
+        ok = False
+
+    if (soma > chmaxanual and chgrad >= chminanualgrad) or \
+       ((chgrad >= chminanualgrad) and
         ((p.licenca1 and soma2 > chmaxsem) or
          (p.licenca2 and soma1 > chmaxsem))) or \
         (not p.licenca1 and soma1 > chmaxsem) or \
