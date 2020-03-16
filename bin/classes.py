@@ -179,6 +179,25 @@ class Professor:################################################################
 
         return ch
 
+    def _carga_horaria_s(self, semestre):
+
+        ch = 0
+
+        for t in [turma for turma in self.turmas_a_lecionar
+                  if turma.semestralidade is semestre]:
+
+            ch += t.carga_horaria()
+
+        return ch
+
+    def carga_horaria_s1(self):
+
+        return self._carga_horaria_s(1)
+
+    def carga_horaria_s2(self):
+
+        return self._carga_horaria_s(2)
+    
     #----------------------------------------------------------------------------------------------------
     def carga_horaria_total(self):
 
@@ -271,6 +290,16 @@ class Professor:################################################################
             self.peso_disciplinas = self.peso_disciplinas_bruto
             for g in self.pref_grupos_bruto.keys():
                 self.pref_grupos[g] = - 10 * (self.pref_grupos_bruto[g] - maximo) / (maximo - minimo)
+    #----------------------------------------------------------------------------------------------------
+    def display(self):
+        s = self.nome()
+        s += "(Ch. previa: %d (1S) %d (2S), " % (int(self.chprevia1), int(self.chprevia2))
+        s += "Ch. total: %d (1S) %d (2S))\n" % (self.carga_horaria_s1(), self.carga_horaria_s2())
+        for t in self.turmas_a_lecionar:
+            s += " "
+            s += str(t)
+            s += "\n"
+        return s
     #----------------------------------------------------------------------------------------------------
     def totex(self,arquivo=None):
         """

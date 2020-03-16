@@ -211,13 +211,11 @@ def _attribute_(*args):
 
 def _show_(*args):
 
-    global professores
-    global turmas
+    global professores, turmas, _professor_search_name, _course_search_id
     
-    if len(args) != 2 and len(args) != 3:
+    if len(args) != 1:
 
-        print("Usage: show professor <name>")
-        print("Usage: show turma <codigo> <turma>")
+        print("Usage: show <professor ou turma>")
 
         return
 
@@ -227,44 +225,21 @@ def _show_(*args):
 
         return
 
-    if args[0] == u'professor':
+    name = args[0]
 
-        name = args[1]
+    if name not in _professor_search_name:
 
-        if name not in _professor_search_name:
-        
+        if name not in _course_search_id:
+
             logger.error("Nao encontrado: %s.", name)
 
         else:
             
-            print(_professor_search_name[name])
-
-    elif args[0] == u'turma':
-
-        cod = args[1]
-
-        tur = None
-        
-        if len(args) == 3:
-
-            tur = args[2]
-
-        for t in turmas:
-
-            if t.codigo == cod:
-
-                if tur is None:
-
-                    print(t)
-
-                elif t.turma == tur:
-
-                    print(t)
+            print(_course_search_id[name])
 
     else:
 
-        print("Usage: show professor <name>")
-        print("Usage: show turma <codigo> <turma>")
+        print(_professor_search_name[name].display())
 
 
 def _to_pdf_():
