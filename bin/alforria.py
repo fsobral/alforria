@@ -132,15 +132,60 @@ def _set_log_level_(level):
         logger.setLevel(logging.DEBUG)
 
     print('Changed logger level')
+
+
+def _attribute_t_to_p(t, p):
+    """Utility function to add course to professor, checking previous
+    attribuitions. Also, handles annual courses.
+
+    """
+
+    global _course_search_id
     
+    if t.professor is not None:
+
+        if t.professor != p:
+
+            logger.error("Turma %s ja atribuida a %s." % (t.id(), t.professor.nome()))
+
+        return
+
+    p.add_course(t)
+
+    t.add_professor(p)
+
+    # Se a disciplina anual, sabemos S1 e S2 estao
+    # vinculados. Desta forma, procuramos S2 na lista de
+    # turmas
+
+    if t.vinculada and t.semestralidade == 1:
+
+        cvinc = (t.id()).replace("S1", "S2")
+
+        if cvinc not in _course_search_id:
+
+            logger.error("Nao encontrada turma vinculada: %s", cvinc)
+
+            return
+
+        tvinc = _course_search_id[cvinc]
+
+        p.add_course(tvinc)
+
+        # Se, por alguma razao, uma parte da disciplina foi atribuida
+        # a um professor, ignora o acontecimento e realiza a
+        # atribuicao atual
+        tvinc.add_professor(p)
     
+
 def _attribute_(*args):
+
     """This function attributes courses to professors and professors to
     courses, according to the specified files or according to the arguments.
 
     """
 
-    global pre_atribuidas, professores, turmas
+    global pre_atribuidas, professores, turmas, _professor_search_name, _course_search_id
 
     if pre_atribuidas is None or professores is None or turmas is None:
 
@@ -152,9 +197,7 @@ def _attribute_(*args):
 
         for (p, t) in pre_atribuidas:
 
-            p.turmas_a_lecionar.append(t)
-
-            t.professor = p
+            _attribute_t_to_p(t, p)
             
     elif nargs >= 2:
 
@@ -180,29 +223,7 @@ def _attribute_(*args):
 
             t = _course_search_id[c]
 
-            p.add_course(t)
-
-            t.add_professor(p)
-
-            # Se a disciplina anual, sabemos S1 e S2 estao
-            # vinculados. Desta forma, procuramos S2 na lista de
-            # turmas
-            
-            if t.vinculada and t.semestralidade == 1:
-
-                cvinc = c.replace("S1", "S2")
-                
-                if cvinc not in _course_search_id:
-
-                    logger.error("Nao encontrada turma vinculada: %s", cvinc)
-
-                    continue
-
-                tvinc = _course_search_id[cvinc]
-
-                p.add_course(tvinc)
-
-                tvinc.add_professor(p)
+            _attribute_t_to_p(t, p)
 
     else:
 
