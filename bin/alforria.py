@@ -242,6 +242,29 @@ def _show_(*args):
         print(_professor_search_name[name].display())
 
 
+def _save_csv_(*args):
+    """
+    This function saves the relations professors and classes.
+    """
+
+    global _ALFCFG_PATH
+    global professores, turmas
+
+    configuracoes = leitura.ler_conf(_ALFCFG_PATH)
+
+    fname = configuracoes["RELDIR"] + "/atribuicoes.csv"
+
+    if len(args) > 1:
+
+        logger.error("Usage: save [fname]")
+
+    elif len(args) == 1:
+
+        fname = configuracoes["RELDIR"] + "/" + args[0]
+    
+    escrita.escreve_atribuicoes(professores, turmas, fname)
+
+
 def _to_pdf_():
 
     global _ALFCFG_PATH
@@ -376,6 +399,10 @@ def parse_command(command):
         elif cmds[0] == u'check':
 
             _check_(*cmds[1:])
+
+        elif cmds[0] == u'save':
+
+            _save_csv_(*cmds[1:])
 
         else:
 

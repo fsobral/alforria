@@ -248,6 +248,11 @@ def escreve_dat(professores,turmas,grupos,pre_atribuidas,arquivo):
 ####################################################################################################################
 
 def escreve_atribuicoes(professores, turmas, arquivo):
+    """This function writes in a CSV file 'arquivo' the relation of
+    courses attributed to each professor.
+
+    """
+    
     with open(arquivo,"w") as f:
         for p in professores:
             for t in p.turmas_a_lecionar:
