@@ -141,6 +141,12 @@ def _attribute_t_to_p(t, p):
     """
 
     global _course_search_id
+
+    if t.vinculada and t.semestralidade == 2:
+
+        logger.error("Nao permitido atribuir parte de disciplina anual.")
+
+        return
     
     if t.professor is not None:
 
@@ -172,9 +178,9 @@ def _attribute_t_to_p(t, p):
 
         p.add_course(tvinc)
 
-        # Se, por alguma razao, uma parte da disciplina foi atribuida
-        # a um professor, ignora o acontecimento e realiza a
-        # atribuicao atual
+        # Isso pode dar um problema se apenas o segundo semestre de
+        # uma disciplina anual foi atribuido. Por enquanto isso eh
+        # proibido.        
         tvinc.add_professor(p)
     
 

@@ -257,14 +257,19 @@ def escreve_atribuicoes(professores, turmas, arquivo):
         for p in professores:
             for t in p.turmas_a_lecionar:
                 # TODO: trocar p.matricula por p.id()
+                sem = "S" + str(t.semestralidade)
+                if t.vinculada and t.semestralidade == 1:
+                    sem = 'A'
+                if t.vinculada and t.semestralidade == 2:
+                    continue
                 f.write(str(p.matricula) + '\t' + p.nome() + '\t' + str(t.codigo) + '\t' + \
                         str(t.turma) + '\t' + t.nome + '\t' + str(t.carga_horaria()) + \
-                        '\tS' + str(t.semestralidade) + '\n')
+                        '\t' + sem + '\n')
                 # TODO: trocar p.matricula por p.id()
-                for fant in t.turmas_clientes:
-                    f.write(str(p.matricula) + '\t' + p.nome() + '\t' + str(fant.codigo) + '\t' + \
-                            str(fant.turma) + '\t' + fant.nome + '\t' + str(fant.carga_horaria()) + \
-                            '\tS' + str(t.semestralidade) + '\n')
+                # for fant in t.turmas_clientes:
+                #     f.write(str(p.matricula) + '\t' + p.nome() + '\t' + str(fant.codigo) + '\t' + \
+                #             str(fant.turma) + '\t' + fant.nome + '\t' + str(fant.carga_horaria()) + \
+                #             '\tS' + str(t.semestralidade) + '\n')
 
 
 ####################################################################################################################
