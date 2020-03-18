@@ -37,6 +37,102 @@ _professor_search_name = dict()
 _course_search_id = dict()
 
 
+def __gen_stats__(params):
+
+    # Classes
+    num_t = 0
+    
+    ch = [0, 0, 0]
+
+    # Professors
+    num_p_co = 0
+    num_p_ef = 0
+    num_p_ef_pos = 0
+
+    ch_previa = [0, 0, 0]
+
+    chminpe = [0, 0, 0]
+    chmaxpe = [0, 0, 0]
+    chminpc = [0, 0, 0]
+    chmaxpc = [0, 0, 0]
+
+    for t in turmas:
+
+        # Conta as anuais como 2
+        num_t += 1
+
+        ch[2] += t.carga_horaria()
+
+        if t.semestralidade == 1:
+            ch[0] += t.carga_horaria()
+        else:
+            ch[1] += t.carga_horaria()
+
+    for p in professores:
+
+        ch_previa[0] += p.chprevia1
+        ch_previa[1] += p.chprevia2
+        ch_previa[2] += p.chprevia1 + p.chprevia2
+        
+        if p.temporario:
+            num_p_co += 1
+            chmaxsem = int(params['chmax_temporario_semestral'])
+            chmaxanual = int(params['chmax_temporario_anual'])
+            chminanual = int(params['chmin_temporario_anual'])
+        else:
+            num_p_ef += 1
+            if p.pos:
+                num_p_ef_pos += 1
+            chmaxsem = int(params['chmax_efetivo_semestral'])
+            chmaxanual = int(params['chmax_efetivo_anual'])
+            chminanualgrad = int(params['chmin_graduacao'])
+            chminanual = int(params['chmin_efetivo_anual'])
+
+        if p.licenca1 and p.licenca2:
+
+            continue
+
+        if p.licenca1:
+            if p.temporario:
+                chminpc[1] += chminanual / 2
+                chmaxpc[1] += chmaxsem
+                chminpc[2] += chminanual / 2
+                chmaxpc[2] += chmaxsem
+            else:
+                chminpe[1] += chminanual / 2
+                chmaxpe[1] += chmaxsem
+                chminpe[2] += chminanual / 2
+                chmaxpe[2] += chmaxsem
+        elif p.licenca2:
+            if p.temporario:
+                chminpc[0] += chminanual / 2
+                chmaxpc[0] += chmaxsem
+                chminpc[2] += chminanual / 2
+                chmaxpc[2] += chmaxsem
+            else:
+                chminpe[0] += chminanual / 2
+                chmaxpe[0] += chmaxsem
+                chminpe[2] += chminanual / 2
+                chmaxpe[2] += chmaxsem
+        else:
+            if p.temporario:
+                chminpc[0] += chminanual / 2
+                chmaxpc[0] += chmaxsem
+                chminpc[1] += chminanual / 2
+                chmaxpc[1] += chmaxsem
+                chminpc[2] += chminanual
+                chmaxpc[2] += chmaxanual
+            else:
+                chminpe[0] += chminanual / 2
+                chmaxpe[0] += chmaxsem
+                chminpe[1] += chminanual / 2
+                chmaxpe[1] += chmaxsem
+                chminpe[2] += chminanual
+                chmaxpe[2] += chmaxanual
+
+    return [num_t], [num_p_ef], [num_p_ef_pos], [num_p_co], \
+        ch, ch_previa, chminpe, chmaxpe, chminpc, chmaxpc
+
 def _report_(*args):
 
     import matplotlib.pyplot as plt
@@ -102,55 +198,36 @@ def _report_(*args):
 
     elif rtype == u'ch':
 
-        nd = 0
-        ch1 = 0
-        ch2 = 0
+        nd, npe, npep, npc, ch, ch_previa, chminpe, chmaxpe, chminpc, chmaxpc = __gen_stats__(params)
 
-        chminpe = 0
-        chmaxpe = 0
-        chminpc = 0
-        chmaxpc = 0
+        width = 0.25
 
-        for t in turmas:
+        x = np.arange(0, 3)
 
-            # Conta as anuais como 2
-            nd += 1
+        fig, axes = plt.subplots(ncols=2, nrows=1)
+        
+        axes[0].bar(x, ch, width, color="lightcoral", label="Demanda")
+        axes[0].bar(x, ch_previa, width, color="indianred", label="Ch. Previa", bottom=ch)
+        axes[0].bar(x + width, chminpe, width, color="cornflowerblue", label="Min. Efetivo")
+        axes[0].bar(x + width, chminpc, width, color="lightsteelblue", label="Min. Colaborador", bottom=chminpe)
+        axes[0].bar(x + 2 * width, chmaxpe, width, color="darkblue", label="Max. Efetivo")
+        axes[0].bar(x + 2 * width, chmaxpc, width, color="mediumblue", label="Max. Colaborador", bottom=chmaxpe)
+        axes[0].set_xticks(x + 1.25 * width)
+        axes[0].set_xticklabels(["1S", "2S", "Total"])
+        axes[0].set_title("Demanda e oferta")
+        axes[0].legend()
 
-            if t.semestralidade == 1:
-
-                ch1 += t.carga_horaria()
-
-            else:
-
-                ch2 += t.carga_horaria()
-
-        for p in professores:
-
-            if p.temporario:
-                chmaxpc += int(params['chmax_temporario_anual'])
-                chminpc += int(params['chmin_temporario_anual'])
-            else:
-                chmaxanual = int(params['chmax_efetivo_anual'])
-                chminanualgrad = int(params['chmin_graduacao'])
-                chminanual = int(params['chmin_efetivo_anual'])
-
-                if p.licenca1 or p.licenca2:
-                    chminanualgrad /= 2
-                    chminanual /= 2
-                    chmaxanual /=2
-
-                if p.licenca1 and p.licenca2:
-
-                    continue
-
-                chminpe += chminanual
-                chmaxpe += chmaxanual
-
-        plt.bar(["1S", "2S"], [ch1, ch2], color="red", label="Demanda")
-        plt.bar(["CHMIN", "CHMAX"], [chminpe, chmaxpe], label="Efetivos")
-        plt.bar(["CHMIN", "CHMAX"], [chminpc, chmaxpc], label="Colaboradores", bottom=[chminpe, chmaxpe])
-        plt.title("Relacao demanda x oferta")
-        plt.legend()
+        x = np.arange(0, 2)
+        
+        axes[1].bar(x[0], nd)
+        axes[1].bar(x[1:], npe, label="Efetivos")
+        axes[1].bar(x[1:], npep, label="Efetivos Pos", bottom=npe)
+        axes[1].bar(x[1:], npc, label="Colaboradores", bottom=[npe[0] + npep[0]])
+        axes[1].set_xticks(x)
+        axes[1].set_xticklabels(["Turmas", "Professores"])
+        axes[1].set_title("Turmas e professores")
+        axes[1].legend()
+        
         plt.show()
             
     else:
