@@ -42,17 +42,20 @@ def _report_(*args):
     import matplotlib.pyplot as plt
     import numpy as np
 
-    global professores
+    global _CONST_PATH
+    global professores, grupos, turmas
+
+    params = leitura.ler_conf(_CONST_PATH)
 
     if len(args) == 0:
 
-        logger.error("Uso: report [impedimentos]")
+        logger.error("Uso: report [imp|t|g|ch]")
 
         return
     
     rtype = args[0]
 
-    if rtype == u'impedimentos':
+    if rtype == u'imp':
 
         h = np.zeros((17, 8))
 
@@ -60,15 +63,99 @@ def _report_(*args):
 
             np.add(h, p.impedimentos, out=h)
 
-        plt.matshow(h[2:17, 1:7], cmap=plt.cm.Reds)
+        plt.matshow(h[1:18, 2:8], cmap=plt.cm.Reds)
         plt.colorbar()
-        plt.xticks([])
-        plt.yticks([])
+        #plt.xticks([])
+        #plt.yticks([])
+        plt.title("Impedimentos dos professores")
         plt.show()
 
+    elif rtype == u't':
+
+        hc = np.zeros((17,8))
+
+        for t in turmas:
+
+            for (d, h) in t.horarios:
+
+                hc[h, d] += 1.0
+
+        plt.matshow(hc[1:18, 2:8], cmap=plt.cm.Reds)
+        plt.colorbar()
+        plt.title("Horarios das disciplinas ofertadas")
+        plt.show()
+
+    elif rtype == u'g':
+
+        hg = dict([(g.id, 0) for g in grupos])
+
+        for p in professores:
+
+            for gid in p.inapto:
+
+                hg[gid] += 1
+
+        plt.bar(hg.keys(), hg.values())
+        plt.title("Impedimentos em grupos")
+        plt.xticks(rotation=45)
+        plt.show()
+
+    elif rtype == u'ch':
+
+        nd = 0
+        ch1 = 0
+        ch2 = 0
+
+        chminpe = 0
+        chmaxpe = 0
+        chminpc = 0
+        chmaxpc = 0
+
+        for t in turmas:
+
+            # Conta as anuais como 2
+            nd += 1
+
+            if t.semestralidade == 1:
+
+                ch1 += t.carga_horaria()
+
+            else:
+
+                ch2 += t.carga_horaria()
+
+        for p in professores:
+
+            if p.temporario:
+                chmaxpc += int(params['chmax_temporario_anual'])
+                chminpc += int(params['chmin_temporario_anual'])
+            else:
+                chmaxanual = int(params['chmax_efetivo_anual'])
+                chminanualgrad = int(params['chmin_graduacao'])
+                chminanual = int(params['chmin_efetivo_anual'])
+
+                if p.licenca1 or p.licenca2:
+                    chminanualgrad /= 2
+                    chminanual /= 2
+                    chmaxanual /=2
+
+                if p.licenca1 and p.licenca2:
+
+                    continue
+
+                chminpe += chminanual
+                chmaxpe += chmaxanual
+
+        plt.bar(["1S", "2S"], [ch1, ch2], color="red", label="Demanda")
+        plt.bar(["CHMIN", "CHMAX"], [chminpe, chmaxpe], label="Efetivos")
+        plt.bar(["CHMIN", "CHMAX"], [chminpc, chmaxpc], label="Colaboradores", bottom=[chminpe, chmaxpe])
+        plt.title("Relacao demanda x oferta")
+        plt.legend()
+        plt.show()
+            
     else:
 
-        logger.error("Uso: report [impedimentos]")
+        logger.error("Uso: report [imp|t|g|ch]")
 
 
 def _load_() :
