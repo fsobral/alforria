@@ -37,9 +37,16 @@ _professor_search_name = dict()
 
 _course_search_id = dict()
 
+_hd_course_search = dict()
+
+_hd_professor_search = dict()
+
 
 def __gen_stats__(params):
-
+    """
+    Utility function to calculate stats for courses and professors.
+    """
+    
     # Classes
     num_t = 0
     
@@ -134,7 +141,11 @@ def __gen_stats__(params):
     return [num_t], [num_p_ef], [num_p_ef_pos], [num_p_co], \
         ch, ch_previa, chminpe, chmaxpe, chminpc, chmaxpc
 
+
 def _report_(*args):
+    """
+    Create graphical and text reports, for data visualization.
+    """
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -160,10 +171,9 @@ def _report_(*args):
 
             np.add(h, p.impedimentos, out=h)
 
-        plt.matshow(h[1:18, 2:8], cmap=plt.cm.Reds)
+        plt.matshow(h[1:17, 2:8], cmap=plt.cm.Reds)
         plt.colorbar()
-        #plt.xticks([])
-        #plt.yticks([])
+        plt.xticks(np.arange(0, 6), ['S', 'T', 'Q', 'Q', 'S', 'S'])
         plt.title("Impedimentos dos professores")
         plt.show()
 
@@ -258,7 +268,15 @@ def _load_() :
     professores = leitura.ler_pref(paths["PREFPATH"], grupos,
                                    int(configuracoes["MAXIMPEDIMENTOS"]))
 
-    # Updates the names of professors to the autocompleter
+    for h in range(1, 17):
+
+        for d in range(2, 8):
+
+            _hd_professor_search[(d, h)] = professores.copy()
+
+    # Updates the names of professors to the autocompleter. Also,
+    # initializes the fast search for professors for a given time of
+    # the week.
     names = []
     
     for p in professores:
@@ -266,6 +284,14 @@ def _load_() :
         p.ajustar()
 
         names.append(p.nome())
+
+        for h in range(1, 17):
+
+            for d in range(2, 8):
+
+                if p.impedimentos[h, d] == 1:
+                    
+                    _hd_professor_search[(d, h)].remove(p)
 
     # Cria uma lista de busca dos professores por nome, para agilizar
     # a busca
@@ -295,6 +321,18 @@ def _load_() :
 
         _session.completer = merge_completers([_session.completer, WordCompleter(names)])
 
+    for t in turmas:
+
+        for (d, h) in t.horarios:
+
+            if (d, h, t.semestralidade) in _hd_course_search:
+                
+                _hd_course_search[(d, h, t.semestralidade)].add(t)
+
+            else:
+
+                _hd_course_search[(d, h, t.semestralidade)] = {t}
+    
     # Cria uma lista de busca de turmas por id
     # (NOME_TURMA_SEMESTRALIDADE) para agilizar as buscas
 
@@ -696,6 +734,40 @@ def parse_command(command):
         elif cmds[0] == u'report':
 
             _report_(*cmds[1:])
+
+        elif cmds[0] == u'find':
+
+            # TODO: check annual courses
+            # TODO: check 'impedimentos'
+            # TODO: sort
+            # TODO: update when assigning courses to professors
+            name = cmds[1]
+
+            t = _course_search_id[name]
+
+            if t.horarios[0] not in _hd_professor_search:
+
+                logger.error("Horario nao encontrado (%d, %d)." % t.horarios[0])
+
+                return
+
+            pl = set(_hd_professor_search[t.horarios[0]])
+
+            for (d, h) in t.horarios[1:]:
+
+                if (d, h) in _hd_professor_search:
+
+                    pl.intersection(_hd_professor_search[(d, h)])
+
+                else:
+
+                    logger.error("Horario nao encontrado (%d, %d)." % (d, h))
+
+                    break
+
+            for p in pl:
+                
+                print(p.nome())
 
         else:
 
