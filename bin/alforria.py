@@ -1,6 +1,7 @@
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter, merge_completers
 import logging
+import sys
 
 import funcoes_leitura as leitura
 import funcoes_escrita as escrita
@@ -723,7 +724,13 @@ def mainfunc():
 
         else:
 
-            parse_command(command)
+            try:
+                
+                parse_command(command)
+
+            except Exception as e:
+
+                logger.error("Unexpected error: " + str(e))
 
     print("Exiting.")
 
