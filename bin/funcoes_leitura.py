@@ -413,6 +413,13 @@ def ler_pref(form,grupos,max_impedimentos):
                         w = funcoes_gerais.uniformize(next(tokens))# Temporario
                         if w == 'TEMPORARIO':
                                 p.temporario = True
+                        # Le qual o programa de pos
+                        p.programa_pos = funcoes_gerais.uniformize(next(tokens))
+                        # Professor tem reducao de carga para a pos?
+                        p.pos = ('PMA' in p.programa_pos or
+                                 'PCM' in p.programa_pos or
+                                 'ENGENHARIA QUIMICA' in p.programa_pos)
+                        # Pesos das disciplinas
                         p.peso_disciplinas_bruto = float(next(tokens))
                         p.peso_horario_bruto = float(next(tokens))
                         p.peso_cargahor = float(next(tokens))
@@ -427,15 +434,15 @@ def ler_pref(form,grupos,max_impedimentos):
                         # Preferencia por grupos
                         for g in grupos:
                                 if g.canonico:
-                                        s = next(tokens)
+                                        s = funcoes_gerais.uniformize(next(tokens))
                                         if len(s) > 0:	#se a preferencia foi preenchida
-                                                p.pref_grupos_bruto[g.id] = int(s)
+                                                p.pref_grupos_bruto[g.id] = converter_preferencia[s]
                                         else: #se não, atribuir default 5
-                                                p.pref_grupos_bruto[g.id] = 5
+                                                p.pref_grupos_bruto[g.id] = converter_preferencia['INDIFERENTE']
                         # Reuniao departamento
                         w = funcoes_gerais.uniformize(next(tokens))
                         if 'SIM' in w:
-                                                p.pref_reuniao = True
+                                p.pref_reuniao = True
                         # Preferencia compacto/esparso (define o respectivo peso como zero se nao especificado)
                         w = funcoes_gerais.uniformize(next(tokens))
                         p.peso_janelas=p.peso_janelas_bruto
@@ -486,8 +493,6 @@ def ler_pref(form,grupos,max_impedimentos):
                                                 if len(pref) == 0:
                                                         pref = 'INDIFERENTE'
                                                 p.pref_horarios_bruto[h,d + 1] = converter_preferencia[pref]
-                        # Professor tem reducao de carga para a pos?
-                        p.pos = next(tokens) == 'S'
                         # Tudo o que vier depois daqui eh considerado comentario.
                         for obs in tokens:
                                 p.observacoes += obs
