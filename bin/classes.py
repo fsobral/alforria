@@ -168,6 +168,13 @@ class Professor:################################################################
         self.insat_manha_noite = 0.0;
         self.insat_janelas = 0.0;
 
+    def can_teach(self, t):
+        """ Return true if professor is able and available to teach class 't'.
+        """
+
+        return not (any(self.impedimentos[h, d] for (d, h) in t.horarios) or
+                    (t.grupo and t.grupo.id in self.inapto))
+
     #----------------------------------------------------------------------------------------------------
     def add_course(self, t):
 

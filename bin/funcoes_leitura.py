@@ -242,6 +242,11 @@ def sar_primaria(linha): #Uma linha primaria e aquela que comeca uma nova turma,
                 return True
 
         return False
+
+#----------------------------------------------------------------------------------------------------------------------      
+def horario_valido(d, h):
+
+        return d >= 1 and d <= 7 and h >= 1 and h <= 16
 #----------------------------------------------------------------------------------------------------------------------      
 def copia_turmas(origem):
         destino = classes.Turma()
@@ -259,11 +264,18 @@ def copia_turmas(origem):
 def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos grupos
         turmas = []
         anual=False
+        invalida = False
+        t = None
         with open(arquivo, "r") as fonte:
                 for linha in fonte:
                         tok=linha.split()
                         if sar_primaria(linha):
-                                if anual: #se a ultima disciplina lida foi anual, sua correspondente no segundo semestre sera criada
+                                # Se a ultima linha era valida, guarde-a
+                                if t is not None and not invalida:
+                                        turmas.append(t)
+
+                                #se a ultima disciplina lida foi anual, sua correspondente no segundo semestre sera criada
+                                if anual and not invalida:
                                         t = copia_turmas(turmas[-1])
                                         t.semestralidade = 2
                                         temp = str(t.codigo) + "_S2"
@@ -272,10 +284,11 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                                         t.grupo=g
                                                         break
                                         turmas.append(t)
+
+                                invalida = False
                                 anual=False
                                 semestres=[]
                                 t=classes.Turma()
-                                turmas.append(t)
                                 t.codigo=tok[0]
                                 t.turma=tok[1]
                                 if tok[-4]=="A":
@@ -295,9 +308,15 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                 if '.' in tok[-6] or ',' in tok[-6]:
                                         ntok = -12
 
-                                t.horarios.append(
-                                        (int(tok[ntok]),int(tok[ntok + 1]))
-                                )
+                                d, h = (int(tok[ntok]),int(tok[ntok + 1]))
+
+                                if not horario_valido(d, h):
+                                        print("AVISO: Ignorando turma %s: horario invalido (%d, %d)." % (t.codigo, d, h))
+                                        invalida = True                                                    
+                                        continue
+                                                    
+                                t.horarios.append((d, h))
+
                                 t.nome=""
                                 for i in tok[2:ntok]:
                                         t.nome=t.nome+" "+i
@@ -323,18 +342,26 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                         t.ch = int(tok[-6].split(".")[0])
 
                         else:
-                                if sar_vale(linha):
+                                if sar_vale(linha) and not invalida:
                                         # Novo SAR, agora tem um T ou T-P ou P em cada linha.
                                         if tok[0].isdigit():
-                                                turmas[-1].horarios.append(
-                                                        (int(tok[0]),int(tok[1]))
-                                                )
+                                                d, h = (int(tok[0]),int(tok[1]))
                                         else:
-                                                turmas[-1].horarios.append(
-                                                        (int(tok[1]),int(tok[2]))
-                                                )
+                                                d, h = (int(tok[1]),int(tok[2]))
+
+                                        if not horario_valido(d, h):
+                                                print("AVISO: Ignorando turma %s: horario invalido (%d, %d)." % (t.codigo, d, h))
+                                                invalida = True                                                    
+                                                continue
+                                        
+                                        t.horarios.append((d, h))
+
                 #fim do loop grande
-                if anual: #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
+                if t is not None and not invalida:
+                        turmas.append(t)
+                
+                #se a ultima disciplina (de todas) lida foi anual, sua correspondente no segundo semestre sera criada
+                if anual and not invalida:
                         t = copia_turmas(turmas[len(turmas)])
                         t.semestralidade=2
                         temp=str(t.codigo)+"_S2"
@@ -342,6 +369,8 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                 if temp in g.disciplinas:
                                         t.grupo=g
                                         break
+                        turmas.append(t)
+
                 return turmas
 
 ############################################################################################################################

@@ -37,9 +37,9 @@ _professor_search_name = dict()
 
 _course_search_id = dict()
 
-_hd_course_search = dict()
+_course_professor_search = dict()
 
-_hd_professor_search = dict()
+_hd_course_search = dict()
 
 
 def __gen_stats__(params):
@@ -255,7 +255,7 @@ def _load_() :
 
     global _PATHS_PATH, _ALFCFG_PATH
     global professores, grupos, turmas, pre_atribuidas
-    global _professor_search_name, _course_search_id
+    global _professor_search_name, _course_search_id, _course_professor_search
 
     paths = leitura.ler_conf(_PATHS_PATH)
     configuracoes = leitura.ler_conf(_ALFCFG_PATH)
@@ -268,12 +268,6 @@ def _load_() :
     professores = leitura.ler_pref(paths["PREFPATH"], grupos,
                                    int(configuracoes["MAXIMPEDIMENTOS"]))
 
-    for h in range(1, 17):
-
-        for d in range(2, 8):
-
-            _hd_professor_search[(d, h)] = professores.copy()
-
     # Updates the names of professors to the autocompleter. Also,
     # initializes the fast search for professors for a given time of
     # the week.
@@ -281,14 +275,6 @@ def _load_() :
     for p in professores:
         
         p.ajustar()
-
-        for h in range(1, 17):
-
-            for d in range(2, 8):
-
-                if p.impedimentos[h, d] == 1:
-                    
-                    _hd_professor_search[(d, h)].remove(p)
 
     # Cria uma lista de busca dos professores por nome, para agilizar
     # a busca
@@ -331,7 +317,12 @@ def _load_() :
             else:
 
                 _hd_course_search[(d, h, t.semestralidade)] = {t}
-    
+
+    _course_professor_search = {
+        t.id():{p for p in professores if p.can_teach(t)} for t in turmas
+        }
+
+
     # Cria uma lista de busca de turmas por id
     # (NOME_TURMA_SEMESTRALIDADE) para agilizar as buscas
 
@@ -734,35 +725,23 @@ def parse_command(command):
 
         elif cmds[0] == u'find':
 
+            # Finds available professors to teach classes
+            
             # TODO: check annual courses
-            # TODO: check 'impedimentos'
-            # TODO: sort
             # TODO: update when assigning courses to professors
             name = cmds[1]
 
-            t = _course_search_id[name]
+            if name not in _course_professor_search:
 
-            if t.horarios[0] not in _hd_professor_search:
-
-                logger.error("Horario nao encontrado (%d, %d)." % t.horarios[0])
+                logger.error("Turma nao encontrada: %s" % name)
 
                 return
 
-            pl = set(_hd_professor_search[t.horarios[0]])
+            t = _course_search_id[name]
 
-            for (d, h) in t.horarios[1:]:
-
-                if (d, h) in _hd_professor_search:
-
-                    pl.intersection(_hd_professor_search[(d, h)])
-
-                else:
-
-                    logger.error("Horario nao encontrado (%d, %d)." % (d, h))
-
-                    break
-
-            for p in pl:
+            # Sort by group preference
+            for p in sorted(_course_professor_search[name],
+                            key=lambda x: x.nome() if t.grupo is None else 10 - x.pref_grupos[t.grupo.id]):
                 
                 print(p.nome())
 
