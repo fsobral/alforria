@@ -277,13 +277,10 @@ def _load_() :
     # Updates the names of professors to the autocompleter. Also,
     # initializes the fast search for professors for a given time of
     # the week.
-    names = []
     
     for p in professores:
         
         p.ajustar()
-
-        names.append(p.nome())
 
         for h in range(1, 17):
 
@@ -295,15 +292,16 @@ def _load_() :
 
     # Cria uma lista de busca dos professores por nome, para agilizar
     # a busca
-    _professor_search_name = dict(
-        [(p.nome(), p) for p in professores]
-    )
+    _professor_search_name = {p.nome():p for p in professores}
 
     global _session
 
     if _session is not None:
 
-        _session.completer = merge_completers([_session.completer, WordCompleter(names)])
+        _session.completer = merge_completers(
+            [_session.completer,
+             WordCompleter(list(p.nome() for p in professores))]
+        )
         
     # Carrega as turmas de disciplinas do ano e elimina as disciplinas
     # fantasmas (turmas com números diferentes que são, na verdade, a
@@ -315,11 +313,12 @@ def _load_() :
 
     # Updates the names of the courses to the autocompleter
 
-    names = [t.id() for t in turmas]
-
     if _session is not None:
 
-        _session.completer = merge_completers([_session.completer, WordCompleter(names)])
+        _session.completer = merge_completers(
+            [_session.completer,
+             WordCompleter(list(t.id() for t in turmas))]
+        )
 
     for t in turmas:
 
@@ -336,9 +335,7 @@ def _load_() :
     # Cria uma lista de busca de turmas por id
     # (NOME_TURMA_SEMESTRALIDADE) para agilizar as buscas
 
-    _course_search_id = dict(
-        [(t.id(), t) for t in turmas]
-    )
+    _course_search_id = {t.id():t for t in turmas}
         
     # Carrega o arquivo de disciplinas pre-atribuidas
     pre_atribuidas = leitura.ler_pre_atribuidas(paths["ATRIBPATH"], paths["FANTPATH"],
