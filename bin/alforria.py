@@ -739,11 +739,19 @@ def parse_command(command):
 
             t = _course_search_id[name]
 
+            s = _course_professor_search[name]
+
+            if t.vinculada and t.semestralidade == 1:
+
+                name2 = (t.id()).replace("S1", "S2")
+
+                s = s.intersection(_course_professor_search[name2])
+            
             # Sort by group preference
-            for p in sorted(_course_professor_search[name],
-                            key=lambda x: x.nome() if t.grupo is None else 10 - x.pref_grupos[t.grupo.id]):
+            for p in sorted(s, reverse=True,
+                            key=lambda x: x.nome() if t.grupo is None else (10 - x.pref_grupos[t.grupo.id])):
                 
-                print(p.nome())
+                print("%s: %d" % (p.nome(), -1 if t.grupo is None else (10 - p.pref_grupos[t.grupo.id])))
 
         else:
 
