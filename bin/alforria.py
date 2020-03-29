@@ -660,6 +660,47 @@ def _check_(*args):
         logger.error("Uso: check [professor [turma1 turma2 ...]]")
 
         
+def _find_(*args):
+    """ Find available professors to teach a given class.
+    """
+
+    global _CONST_PATH
+    global _course_professor_search, _course_search_id
+
+    if len(args) != 1:
+
+        logger.error("Uso: find turma")
+
+        return
+    
+    name = args[0]
+
+    if name not in _course_professor_search:
+
+        logger.error("Turma nao encontrada: %s" % name)
+
+        return
+
+    constantes = leitura.ler_conf(_CONST_PATH)
+
+    t = _course_search_id[name]
+
+    s = _course_professor_search[name]
+
+    # Deal with annual courses
+    if t.vinculada and t.semestralidade == 1:
+
+        name2 = (t.id()).replace("S1", "S2")
+
+        s = s.intersection(_course_professor_search[name2])
+
+    # Sort by group preference, filtering available professors
+    for p in sorted((pp for pp in s if check.check_p_c(pp, [t], constantes)), reverse=True,
+                    key=lambda x: x.nome() if t.grupo is None else (10 - x.pref_grupos[t.grupo.id])):
+
+        print("%s: %d" % (p.nome(), -1 if t.grupo is None else (10 - p.pref_grupos[t.grupo.id])))
+
+
 def parse_command(command):
 
     """
@@ -725,34 +766,8 @@ def parse_command(command):
 
         elif cmds[0] == u'find':
 
-            # Finds available professors to teach classes
+            _find_(*cmds[1:])
             
-            # TODO: check annual courses
-            # TODO: update when assigning courses to professors
-            name = cmds[1]
-
-            if name not in _course_professor_search:
-
-                logger.error("Turma nao encontrada: %s" % name)
-
-                return
-
-            t = _course_search_id[name]
-
-            s = _course_professor_search[name]
-
-            if t.vinculada and t.semestralidade == 1:
-
-                name2 = (t.id()).replace("S1", "S2")
-
-                s = s.intersection(_course_professor_search[name2])
-            
-            # Sort by group preference
-            for p in sorted(s, reverse=True,
-                            key=lambda x: x.nome() if t.grupo is None else (10 - x.pref_grupos[t.grupo.id])):
-                
-                print("%s: %d" % (p.nome(), -1 if t.grupo is None else (10 - p.pref_grupos[t.grupo.id])))
-
         else:
 
             print("Unknown command %s" % cmds[0])
