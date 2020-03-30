@@ -6,7 +6,7 @@ import funcoes_escrita
 import logging
 
 
-def check_p_c(p, cs, params):
+def check_p_c(p, cs, params, verbosity=True):
     """This function checks if the addition of courses 'cs' creates an
     infeasible situation for professor 'p'. It does not check if the
     already assigned courses are feasible. Use 'check_p' for such
@@ -15,8 +15,11 @@ def check_p_c(p, cs, params):
     Returns True if OK and False otherwise.
 
     """
-   
+
     logger = logging.getLogger('alforria')
+
+    if not verbosity:
+        logger = logging.getLogger()
 
     ok = True
 

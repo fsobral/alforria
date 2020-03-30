@@ -19,6 +19,9 @@ _session = None
 
 # Configura nivel de saida
 
+# Adiciona o vazio, caso necessario
+logging.getLogger().addHandler(logging.NullHandler())
+
 logger = logging.getLogger('alforria')
 
 logger.addHandler(logging.StreamHandler())
@@ -695,10 +698,10 @@ def _find_(*args):
         s = s.intersection(_course_professor_search[name2])
 
     # Sort by group preference, filtering available professors
-    for p in sorted((pp for pp in s if check.check_p_c(pp, [t], constantes)), reverse=True,
+    for p in sorted((pp for pp in s if check.check_p_c(pp, [t], constantes, verbosity=False)), reverse=True,
                     key=lambda x: x.nome() if t.grupo is None else (10 - x.pref_grupos[t.grupo.id])):
 
-        print("%s: %d" % (p.nome(), -1 if t.grupo is None else (10 - p.pref_grupos[t.grupo.id])))
+        print(" %s: %d" % (p.nome(), -1 if t.grupo is None else (10 - p.pref_grupos[t.grupo.id])))
 
 
 def parse_command(command):
