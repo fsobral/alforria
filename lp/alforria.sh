@@ -9,7 +9,7 @@ MIPGAP=0.6
 # Inicializa o arquivo de excluidos
 echo "set P_OUT := ;" > alforria2.dat
 
-python ../bin/antes.py
+python3 ../bin/antes.py
 
 if [ $# -gt 0 ]; then
     if [ $1 -gt "1" ]; then
@@ -28,7 +28,7 @@ if [ $# -gt 0 ]; then
 	time nice -n 19 glpsol -m alforria.mod -d alforria.dat -d alforria2.dat --check --wlp alforria.lp;
 	time nice -n 19 gurobi_cl Threads=${NUM_THREADS} MIPGap=${MIPGAP} ResultFile=alforria.sol alforria.lp;
 
-	python ../bin/depois.py;
+	python3 ../bin/depois.py;
 
     done;
 
@@ -42,4 +42,4 @@ cat alforria_restr.mod fobj2.mod > alforria.mod
 time nice -n 19 glpsol -m alforria.mod -d alforria.dat -d alforria2.dat --check --wlp alforria.lp;
 time nice -n 19 gurobi_cl Threads=${NUM_THREADS} MIPGap=${MIPGAP} ResultFile=alforria.sol alforria.lp;
 
-python ../bin/depois.py;
+python3 ../bin/depois.py;
