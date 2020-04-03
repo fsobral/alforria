@@ -19,7 +19,7 @@ DEPENDENTES SEM EXCESSÕES - Ficam em função de outros parâmetros e não deve
 set P; 	/*professores*/
 set T;	/*turmas*/
 set D := 2..7;	/*dias*/
-set H := 1..14;	/*horários (conforme numeração do horário individual)*/
+set H := 1..16;	/*horários (conforme numeração do horário individual)*/
 set S := 1..2;	/*semestre*/
 set G;		/*grupos de disciplinas*/
 set TURNOS := 1..3; /*resp., manhã, tarde e noite*/
