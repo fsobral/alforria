@@ -233,6 +233,16 @@ class Professor:################################################################
                     n += palavra
         return n
     #----------------------------------------------------------------------------------------------------
+    def __eq__(self, p):
+
+        return True if (self.id() == p.id()) else False
+
+    #----------------------------------------------------------------------------------------------------
+    def __hash__(self):
+
+        return hash(self.id())
+
+    #----------------------------------------------------------------------------------------------------
     def __str__(self):
         s = str(self.nome_completo) + ' ' + str(self.matricula) + ' ' + str(self.email) + '\n'
         s += 'Temporario: ' + str(self.temporario) + ' Pref. Janelas: ' + str(self.pref_janelas) + '\n'
