@@ -373,7 +373,7 @@ def _attribute_t_to_p(t, p):
 
     if t.vinculada and t.semestralidade == 2:
 
-        logger.error("Nao permitido atribuir parte de disciplina anual.")
+        logger.error("Nao permitido atribuir parte de disciplina anual %s -> %s.", (t.id(), p.nome()))
 
         return
     
@@ -490,7 +490,9 @@ def _attribute_(*args):
 
         for (p, t) in pre_atribuidas:
 
-            _attribute_t_to_p(t, p)
+            if not t.vinculada or t.semestralidade == 1:
+
+                _attribute_t_to_p(t, p)
             
     elif nargs >= 2:
 
