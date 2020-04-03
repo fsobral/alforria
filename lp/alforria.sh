@@ -37,7 +37,8 @@ fi;
 fi
 
 # Prepara para a segunda fase de otimizacao
-cat alforria_restr.mod fobj2.mod > alforria.mod
+cat "Este arquivo foi gerado automaticamente por alforria.sh nao adianta edita-lo." > alforria.mod
+cat alforria_restr.mod fobj2.mod >> alforria.mod
 
 time nice -n 19 glpsol -m alforria.mod -d alforria.dat -d alforria2.dat --check --wlp alforria.lp;
 time nice -n 19 gurobi_cl Threads=${NUM_THREADS} MIPGap=${MIPGAP} ResultFile=alforria.sol alforria.lp;
