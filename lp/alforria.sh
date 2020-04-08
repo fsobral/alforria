@@ -20,8 +20,9 @@ if [ $# -gt 0 ]; then
     NUM_ITERACOES=$1
 
     # Prepara para a primeira fase de otimizacao
+    echo -e "/* Este arquivo foi gerado automaticamente por alforria.sh nao adianta edita-lo. */" > alforria.mod
     #cat alforria_restr.mod fobj1.mod > alforria.mod
-    cat alforria_restr.mod fobj2.mod > alforria.mod
+    cat alforria_restr.mod fobj2.mod >> alforria.mod
 
     for i in `seq 1 ${NUM_ITERACOES}`; do
 
@@ -37,7 +38,7 @@ fi;
 fi
 
 # Prepara para a segunda fase de otimizacao
-cat "Este arquivo foi gerado automaticamente por alforria.sh nao adianta edita-lo." > alforria.mod
+echo -e "/* Este arquivo foi gerado automaticamente por alforria.sh nao adianta edita-lo. */" > alforria.mod
 cat alforria_restr.mod fobj2.mod >> alforria.mod
 
 time nice -n 19 glpsol -m alforria.mod -d alforria.dat -d alforria2.dat --check --wlp alforria.lp;
