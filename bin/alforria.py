@@ -465,12 +465,11 @@ def _remove_(*args):
 
             tvinc = _course_search_id[cvinc]
 
-        p.remove_course(tvinc)
+            p.remove_course(tvinc)
 
-        tvinc.remove_professor(p)
+            tvinc.remove_professor(p)
 
-    
-    
+
 def _attribute_(*args):
 
     """This function attributes courses to professors and professors to
@@ -584,7 +583,7 @@ def _save_csv_(*args):
 def _to_pdf_():
 
     global _ALFCFG_PATH
-    global professores
+    global professores, turmas
 
     if professores is not None:
 
@@ -592,9 +591,15 @@ def _to_pdf_():
 
         prof_ord = sorted(professores, key=lambda x: x.nome())
 
-        escrita.cria_relatorio_geral(prof_ord, configuracoes["RELDIR"])
+        RELDIR = configuracoes['RELDIR']
 
-        print("Report created in directory %s" % configuracoes["RELDIR"])
+        escrita.cria_relatorio_geral(prof_ord, RELDIR)
+
+        escrita.escreve_atribuicoes(professores, turmas, RELDIR + 'atribuicoes.csv')
+
+        escrita.escreve_disciplinas(professores, turmas, RELDIR + 'disciplinas.csv')
+
+        print("Report created in directory %s" % RELDIR)
 
     else:
 
