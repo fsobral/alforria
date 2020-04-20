@@ -494,6 +494,7 @@ def check_ch(professores, turmas, pre_atribuidas, constantes):
 
         if p.licenca1 or p.licenca2:
             chminanualgrad /= 2
+            chminanual /= 2
 
         soma = p.chprevia1 + p.chprevia2
         soma1 = p.chprevia1
@@ -527,7 +528,8 @@ def check_ch(professores, turmas, pre_atribuidas, constantes):
         if (soma >= (chmaxanual - 2) and chgrad >= chminanualgrad) or \
            ((chgrad >= chminanualgrad) and
             ((p.licenca1 and soma2 >= chmaxsem) or
-             (p.licenca2 and soma1 >= chmaxsem))):
+             (p.licenca2 and soma1 >= chmaxsem) or
+             (p.pos and soma >= chminanual))):
 
             logger.info("Pre-atribuição atinge carga horária máxima" +
                     " anual de %s. Professor e disciplinas " +
@@ -679,8 +681,8 @@ def estatisticas(professores,turmas):
         ch_previa_tt2+=p.chprevia2
     print("\nEstatisticas" + \
           "\n------------\n")
-    print("Coeficiente de dobro - 1o sem: {0:4d}".format((chtotal[1]+ch_previa_tt1)/(n_efetivos1+2*n_temporarios1)))
-    print("Coeficiente de dobro - 2o sem: {0:4d}".format((chtotal[2]+ch_previa_tt2)/(n_efetivos2+2*n_temporarios2)))
+    print("Coeficiente de dobro - 1o sem: {0:5.2f}".format((chtotal[1]+ch_previa_tt1)/(n_efetivos1+2*n_temporarios1)))
+    print("Coeficiente de dobro - 2o sem: {0:5.2f}".format((chtotal[2]+ch_previa_tt2)/(n_efetivos2+2*n_temporarios2)))
     print("Carga horaria:")
     print("\t1o sem = " + str(chtotal[1]) + ", professores: " + str(n_efetivos1) + \
         " efetivos e " + str(n_temporarios1) + " temporarios")
