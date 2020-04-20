@@ -404,7 +404,7 @@ s.t. rest4_3{p in P}:
 s.t. rest6{p in P, t in T, s in S, d in D, h in H : impedimento[p,s,d,h] == 1 and c[t,s,d,h] == 1}: x[p,t] = pre_atribuida[p,t];
 
 # Deve haver um intervalo maior ou igual que 11h entre jornadas de trabalho em dias consecutivos
-s.t. rest7{p in P, d in 2..6, s in S, h1 in 12..14, h2 in 1..3 : h1 - h2 >= 11}:
+s.t. rest7{p in P, d in 2..6, s in S, h1 in 14..16, h2 in 1..3 : h1 - h2 >= 13}:
      (sum{t in T diff T_PRE} c[t,s,d,h1] * x[p,t]) + (sum{t in T diff T_PRE} c[t,s,d + 1,h2] * x[p,t]) <= 1;
 
 # Respeita as disciplinas pre-atribuidas
@@ -484,17 +484,17 @@ def_insat_janelas{p in P}:insat_janelas[p]=pref_janelas[p]*customarginal_trn_che
 
 #Escala aproximada de zero a 10
 
-#s.t. insat_def{p in P}: insat[p] = (1-0.2*temporario[p])*peso_total_inv[p]*(1/prop[p])*(
-#peso_disciplinas[p]*insat_disciplinas[p]+
-#peso_cargahor[p]*insat_cargahor[p]+
-#peso_numdisc[p]*insat_numdisc[p]+
-#peso_horario[p]*insat_horario[p]+
-#peso_distintas[p]*insat_distintas[p]+
-#peso_manha_noite[p]*insat_manha_noite[p]+
-#peso_janelas[p]*insat_janelas[p]
-#);
+s.t. insat_def{p in P}: insat[p] = (1-0.2*temporario[p])*peso_total_inv[p]*(1/prop[p])*(
+peso_disciplinas[p]*insat_disciplinas[p]+
+peso_cargahor[p]*insat_cargahor[p]+
+peso_numdisc[p]*insat_numdisc[p]+
+peso_horario[p]*insat_horario[p]+
+peso_distintas[p]*insat_distintas[p]+
+peso_manha_noite[p]*insat_manha_noite[p]+
+peso_janelas[p]*insat_janelas[p]
+);
 
-s.t. insat_def{p in P}: insat[p] = insat_disciplinas[p];
+#s.t. insat_def{p in P}: insat[p] = insat_disciplinas[p];
 
 s.t. max_das_insat_def{p in P diff P_OUT}: max_das_insat>=insat[p];
 
