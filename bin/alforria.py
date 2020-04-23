@@ -2,6 +2,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter, merge_completers
 import logging
 import sys
+import re
 
 import funcoes_leitura as leitura
 import funcoes_escrita as escrita
@@ -12,7 +13,8 @@ _ALFCFG_PATH = u'../config/alforria.cnf'
 _CONST_PATH = u'../config/constantes.cnf'
 
 _alforria_completer = WordCompleter([
-    'attribute', 'set_paths', 'set_config', 'load', 'save', 'to_pdf', 'check', 'verbosity', 'show', 'remove', 'report'
+    'attribute', 'set_paths', 'set_config', 'load', 'save', 'moveto', 'to_pdf',
+    'check', 'verbosity', 'show', 'remove', 'report'
     ], ignore_case=True)
 
 _session = None
@@ -363,7 +365,88 @@ def _set_log_level_(level):
     print('Changed logger level')
 
 
+def _move_to_(*args):
+    """Move a set o courses from a professor to another. Does not check
+    overlapping courses.
+
+    """
+
+    global _professor_search_name, _course_search_id
+
+    # Show correct usage of the function
+    if len(args) < 3:
+
+        logger.error("Uso: moveto <professor origem> <professor destino> turma1 [turma2 turma3...]")
+
+        return
+
+    # Check if both professors exist
+    if args[0] not in _professor_search_name:
+
+        logger.error("Nao encontrado docente: %s" % args[0])
+
+        return
+
+    if args[1] not in _professor_search_name:
+
+        logger.error("Nao encontrado docente: %s" % args[1])
+
+        return
+    
+    p_from = _professor_search_name[args[0]]
+
+    p_to = _professor_search_name[args[1]]
+
+    c = args[2:]
+
+    # Only moves if the origin professor actually teaches all the
+    # courses (that exist)
+
+    tlist = _parse_turmas_(c, _course_search_id)
+
+    for t in tlist:
+
+        if t.professor is not p_from:
+
+            logger.error("Professor %s nao ministra turma %s. Nao ira mover disciplina alguma." % (p_from.nome(), t.id()))
+
+            return
+
+    for t in tlist:
+
+        _remove_from_(t, p_from)
+
+        _attribute_t_to_p(t, p_to)
+
+
+def _parse_turmas_gen_(cstr, course_fast_index):
+    """Cria um gerador, listando apenas as turmas existentes na lista
+    'cstr'self.
+
+    """
+
+    for c in cstr:
+
+        if c not in course_fast_index:
+
+            logger.error("Turma %s nao encontrada. Ignorando." % c)
+
+            continue
+
+        yield course_fast_index[c]
+
+
+def _parse_turmas_(cstr, course_fast_index):
+    """Devolve uma lista de objetos do tipo Turma, criada a partir de uma
+    lista de ids.
+
+    """
+
+    return list(_parse_turmas_gen_(cstr, course_fast_index))
+
+
 def _attribute_t_to_p(t, p):
+
     """Utility function to add course to professor, checking previous
     attribuitions. Also, handles annual courses.
 
@@ -439,35 +522,38 @@ def _remove_(*args):
 
     p = _professor_search_name[name]
 
-    for c in cour:
+    for tc in _parse_turmas_gen_(cour, _course_search_id):
 
-        if c not in _course_search_id:
+        _remove_from_(tc, p)
 
-            logger.error("Nao encontrada turma: %s", c)
 
-            continue
+def _remove_from_(t, p):
+    """Remove turma 't' do professor 'p'. Se a turma eh anual, entao
+    remove o segundo semestre tambem.
 
-        tc = _course_search_id[c]
+    TODO: Tratar o caso de disciplina anual quando o segundo semestre eh enviado.
+    
+    """
 
-        tc.remove_professor(p)
+    t.remove_professor(p)
 
-        p.remove_course(tc)
+    p.remove_course(t)
 
-        if tc.vinculada and tc.semestralidade == 1:
+    if t.vinculada and t.semestralidade == 1:
 
-            cvinc = (tc.id()).replace("S1", "S2")
+        cvinc = (t.id()).replace("S1", "S2")
 
-            if cvinc not in _course_search_id:
+        if cvinc not in _course_search_id:
 
-                logger.error("Nao encontrada turma vinculada: %s", cvinc)
+            logger.error("Nao encontrada turma vinculada: %s", cvinc)
 
-                continue
+            return
 
-            tvinc = _course_search_id[cvinc]
+        tvinc = _course_search_id[cvinc]
 
-            p.remove_course(tvinc)
+        p.remove_course(tvinc)
 
-            tvinc.remove_professor(p)
+        tvinc.remove_professor(p)
 
 
 def _attribute_(*args):
@@ -777,6 +863,10 @@ def parse_command(command):
         elif cmds[0] == u'find':
 
             _find_(*cmds[1:])
+
+        elif cmds[0] == u'moveto':
+
+            _move_to_(*cmds[1:])
             
         else:
 
