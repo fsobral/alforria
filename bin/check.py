@@ -43,13 +43,15 @@ def check_p_c(p, cs, params, verbosity=True):
 
     chgrad = 0
 
-    l_horarios = []
+    l_horarios = {(d, h, c.semestralidade) for (d, h) in c.horarios for c in p.turmas_a_lecionar}
 
     for c in cs:
 
+        sem = c.semestralidade
+                
         for (d, h) in c.horarios:
 
-            if (d, h, c.semestralidade) in l_horarios:
+            if (d, h, sem) in l_horarios:
 
                 logger.error("Professor %s - Disciplinas novas com horarios conflitantes: %s.", p.nome(), c.id())
 
@@ -57,7 +59,20 @@ def check_p_c(p, cs, params, verbosity=True):
 
             else:
 
-                l_horarios.append((d, h, c.semestralidade))
+                l_horarios.add((d, h, sem))
+
+            if d < 7 and \
+               ( ((h is 15 or h is 16) and \
+                  ((d + 1, 1, sem) in l_horarios or \
+                   (d + 1, 2, sem) in l_horarios or \
+                   (d + 1, 3, sem) in l_horarios)) or \
+                 ((h is 13 or h is 14) and \
+                  ((d + 1, 1, sem) in l_horarios or \
+                   (d + 1, 2, sem) in l_horarios)) ):
+
+                logger.warn("Professor %s com menos de 11h entre dias consecutivos: turma %s.", p.nome(), c.id())
+
+                ok = False
 
     for c in cs:
     
@@ -229,6 +244,24 @@ def check_p(p, params):
 
             ok = False
 
+    for t in p.turmas_a_lecionar:
+
+        sem = t.semestralidade
+
+        for (d, h) in t.horarios:
+
+            if d < 7 and \
+               ( ((h is 15 or h is 16) and \
+                  ((d + 1, 1, sem) in l_horarios or \
+                   (d + 1, 2, sem) in l_horarios or \
+                   (d + 1, 3, sem) in l_horarios)) or \
+                 ((h is 13 or h is 14) and \
+                  ((d + 1, 1, sem) in l_horarios or \
+                   (d + 1, 2, sem) in l_horarios)) ):
+
+                logger.error("Professor %s com menos de 11h entre dias consecutivos: turma %s.", p.nome(), t.id())
+
+                ok = False
 
     logger.debug("\t%s carga total pre-atribuida: %d.\n",
                  p.nome(), soma)
