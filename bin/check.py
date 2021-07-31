@@ -669,7 +669,7 @@ def check_inaptidao(pre_atribuidas):
 
         if t.grupo is not None and t.grupo.id in p.inapto:
 
-            logger.info("\tProfessor %s inapto para grupo %s de" +
+            logger.info("\tProfessor %s inapto para grupo %s de " +
                     "disciplina pre-atribuida %s.\n\t\t" +
                     "Inaptidao removida.",
                     p.nome(), t.grupo.id, t.id())
