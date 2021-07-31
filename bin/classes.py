@@ -434,7 +434,7 @@ class Professor:################################################################
 
             for (g,p) in sorted(self.pref_grupos.items(), key=lambda x: x[1]):
                 if g not in self.inapto:
-                    f.write(g + ' & ' + str(10 - p) + '\\\\ \\midrule \n')
+                    f.write(g + ' & ' + str(round(10 - p, 1)) + '\\\\ \\midrule \n')
             for g in self.inapto:
                 f.write(g + '& INAPTO \\\\ \\midrule \n')
 
