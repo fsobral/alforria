@@ -14,7 +14,7 @@ with open("sar.txt") as fp:
 
             continue
 
-        m = re.match("[\d]{3,4}", s[0])
+        m = re.match("[\d]{3,5}", s[0])
 
         if (s[0] != "TOTAL") and (s[1] != "DO") and (m is None):
 
@@ -38,6 +38,10 @@ with open("sar.txt") as fp:
 
             sm = s[-5]
 
+            if (sm == 'A') or (sm == 'S1') or (sm == 'S2'):
+
+                sm = s[-6]
+
             i = 3
 
             while s[i] != "T" and s[i] != "P" and s[i] != "T-P" and s[i] != "TP":
@@ -48,4 +52,4 @@ with open("sar.txt") as fp:
 
         if s[0] == "TOTAL" and s[1] == "DO":
 
-            f = s[7]
+            f = s[6]
