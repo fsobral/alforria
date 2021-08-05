@@ -10,11 +10,11 @@ def cria_relatorio(professor,diretorio):
         os.makedirs(diretorio)
 
     with open("../config/base.tex","r") as padrao:
-        with open(diretorio + 'relatorio.tex','w') as saida:
-            professor.totex(diretorio + 'professor.tex')
+        with open(diretorio + 'relatorio_' + professor.nome() + '.tex','w') as saida:
+            professor.att_totex(diretorio + professor.nome() + '.tex')
             for l in padrao:
                 saida.write(l)
-            saida.write('\\include{professor}')
+            saida.write('\\include{' + professor.nome() + '}')
             saida.write('\\end{document}')
 
 def cria_relatorio_geral(professores,diretorio):

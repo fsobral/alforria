@@ -441,4 +441,51 @@ class Professor:################################################################
             f.write('\\end{tabular} \\end{center}\n \\end{multicols}\n')
             f.write('{\\normalsize \\textbf{OBS}: ' + self.observacoes + '}')
 
+    #----------------------------------------------------------------------------------------------------
+    def att_totex(self,arquivo=None):
+
+        """
+        Criam um arquivo .tex cujo nome eh a matricula, contendo apenas as atribuicoes.
+        O arquivo precisa ser inserido na estrutura de um documento latex, via include, por exemplo.
+        """
+
+        if arquivo is None:
+            arquivo = str(self.matricula).zfill(6) + '.tex'
+
+        with open(arquivo, 'w') as f:
+            f.write('\\section*{' + str(self.nome_completo) + '\\hfill ' + str(self.matricula).zfill(6) + '}\n')
+
+            f.write('\\begin{multicols}{2}\n \\scriptsize')
+            for s in range(1,3):
+                f.write('\\begin{center} \\begin{tabular}{|c|c|c|c|c|c|c|}\\toprule\n')
+                f.write('\\multicolumn{7}{|c|}{' + str(s) + '$^\\circ$ semestre} \\\\ \\midrule\n')
+                f.write('& S & T & Q & Q & S & S \\\\ \\midrule\n')
+                for i in range(1,17):
+                    f.write(str(i) );
+                    for j in range(2,8):
+
+                        f.write('& ')
+
+                        for t in self.turmas_a_lecionar:
+                            if t.semestralidade == s and (j,i) in t.horarios:
+                                f.write(str(t.codigo) + ' ' + str(t.turma))
+
+                    f.write('\\\\ \\midrule \n')
+
+                f.write('\\end{tabular} \\end{center}\n\n')
+
+            f.write('\\end{multicols}\n')
+            f.write('\\begin{multicols}{2}\n')
+            f.write('\\begin{center} \\begin{tabular}{|lm{6cm}|}\n')
+            f.write('\\multicolumn{2}{c}{Disciplinas a lecionar} \\\\ \\midrule \\midrule\n')
+            f.write('\\multicolumn{2}{|c|}{1$^\\circ$ Semestre} \\\\ \\midrule \\midrule\n')
+            for t in [i for i in self.turmas_a_lecionar if i.semestralidade == 1]:
+                f.write(str(t.codigo) + ' & ' + t.nome + '\\\\ \\midrule\n')
+            f.write('\\midrule\n')
+            f.write('\\multicolumn{2}{|c|}{2$^\\circ$ Semestre} \\\\ \\midrule \\midrule\n')
+            for t in [i for i in self.turmas_a_lecionar if i.semestralidade == 2]:
+                f.write(str(t.codigo) + ' & ' + t.nome + '\\\\ \\midrule\n')
+            f.write('\\end{tabular} \\end{center} \\vfill\\columnbreak\n')
+            f.write('\\end{multicols}\n')
+
 ##################################################################################################

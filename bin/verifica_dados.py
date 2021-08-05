@@ -15,6 +15,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-p', help='Gera um arquivo .tex com as preferencias' +
                     'no diretorio RELDIR definido em alforria.cnf',
                     action='store_true')
+parser.add_argument('-s', help='Gera um arquivo .tex apenas com as' +
+                    'atribuicoes no diretorio RELDIR definido em alforria.cnf',
+                    action='store_true')
 parser.add_argument('-d', help='Gera um arquivo CSV com as disciplinas e ' +
                     'professor que ira ministra-la', action='store_true')
 parser.add_argument('-a', help='Gera um arquivo CSV com as atribuicoes de ' +
@@ -141,6 +144,12 @@ if args.p:
 
     escrita.cria_relatorio_geral(prof_ord, RELDIR)
 
+if args.s:
+
+    for p in prof_ord:
+    
+        escrita.cria_relatorio(p, RELDIR)
+    
 if args.d:
 
     set_t = set(turmas)
