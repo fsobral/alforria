@@ -217,6 +217,28 @@ def ler_grupos(arquivo): #Le os grupos do arquivo de grupos
 ####################################################################################################################
 ####################    Funcao                 ler_sar                   e auxiliares      #########################
 ####################################################################################################################
+def get_sar_version(sarfile):
+
+        """
+        Devolve um inteiro associado com a versao do SAR `sarfile` enviado.
+        """
+
+        with open(sarfile, "r") as fp:
+
+                for linha in fp:
+
+                        if "DISC" in linha:
+
+                                if "TIPO" in linha:
+
+                                        if "VAGAS" in linha:
+
+                                                return 3
+
+                                        return 2
+
+                                return 1
+
 def sar_vale(linha): #Define se a linha lida do SAR possui informacoes relevantes
         if len(linha) < 10:
                 return False
@@ -228,7 +250,7 @@ def sar_vale(linha): #Define se a linha lida do SAR possui informacoes relevante
         if tok[-9] in ['MARINGA', 'CIANORTE']:
                 return True
         # Caso com horario indisponivel
-        if tok[- 7] in ['MARINGA', 'CIANORTE']:
+        if tok[-7] in ['MARINGA', 'CIANORTE']:
                 return True
 #----------------------------------------------------------------------------------------------------------------------
 def sar_primaria(linha): #Uma linha primaria e aquela que comeca uma nova turma, essa funcao as identifica
@@ -236,11 +258,11 @@ def sar_primaria(linha): #Uma linha primaria e aquela que comeca uma nova turma,
                 return False
         tok=linha.split()
 
-        # Compatibilidade entre duas versões de SAR
-        if len(tok[0]) > 2 and \
-           tok[0] not in ['T', 'T-P', 'P']:
+        # Elimina o caso que a linha comeca com o dia e o caso em que
+        # comeca com T,P,T-P
+        if len(tok[0]) > 2 and tok[0].isdigit():
                 return True
-
+        
         return False
 
 #----------------------------------------------------------------------------------------------------------------------      
@@ -266,6 +288,9 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
         anual=False
         invalida = False
         t = None
+
+        sar_version = get_sar_version(arquivo)
+
         with open(arquivo, "r") as fonte:
                 for linha in fonte:
                         tok=linha.split()
@@ -317,6 +342,12 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                                     
                                 t.horarios.append((d, h))
 
+                                # Ajusta nome de acordo com versao do SAR
+                                if sar_version == 2:
+                                        ntok -= 1
+                                elif sar_version == 3:
+                                        ntok -= 3
+
                                 t.nome=""
                                 for i in tok[2:ntok]:
                                         t.nome=t.nome+" "+i
@@ -343,11 +374,14 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
 
                         else:
                                 if sar_vale(linha) and not invalida:
-                                        # Novo SAR, agora tem um T ou T-P ou P em cada linha.
-                                        if tok[0].isdigit():
+                                        # Novo SAR, agora tem um T ou T-P ou P em cada linha ou,
+                                        # pior, com vagas e matriculados.
+                                        if sar_version == 1:
                                                 d, h = (int(tok[0]),int(tok[1]))
-                                        else:
+                                        elif sar_version == 2:
                                                 d, h = (int(tok[1]),int(tok[2]))
+                                        elif sar_version == 3:
+                                                d, h = (int(tok[3]),int(tok[4]))
 
                                         if not horario_valido(d, h):
                                                 print("AVISO: Ignorando turma %s: horario invalido (%d, %d)." % (t.codigo, d, h))
