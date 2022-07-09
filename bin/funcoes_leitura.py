@@ -322,7 +322,7 @@ def ler_sar(arquivo,grupos): #arquivo: arquivo do SAR, grupos: lista dos objetos
                                         t.vinculada=True
                                 else:
                                         anual=False
-                                        if tok[-4]=="S1":
+                                        if tok[-4] == "S1" or tok[-4] == "M1":
                                                 t.semestralidade=1
                                         else:
                                                 t.semestralidade=2
@@ -480,7 +480,8 @@ def ler_pref(form,grupos,max_impedimentos):
                         # Professor tem reducao de carga para a pos?
                         p.pos = ('PMA' in p.programa_pos or
                                  'PCM' in p.programa_pos or
-                                 'ENGENHARIA QUIMICA' in p.programa_pos)
+                                 'PEQ' in p.programa_pos or
+                                 'OUTRO' in p.programa_pos)
                         # Pesos das disciplinas
                         p.peso_disciplinas_bruto = float(next(tokens))
                         p.peso_horario_bruto = float(next(tokens))
