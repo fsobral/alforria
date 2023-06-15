@@ -1,6 +1,21 @@
 import os
 import funcoes_leitura as leitura
 
+def write_ch_table(professor, diretorio, csv_name="ch_table.csv"):
+    """
+    Create a .csv file with the teaching hours in each semester for each professor.
+    """
+
+    if not os.path.exists(diretorio):
+        os.makedirs(diretorio)
+
+    with open(diretorio + csv_name, "w") as fp:
+
+        for p in professor:
+
+            fp.write("{0:s},{1:d},{2:d}\n".format(p.nome(), p._carga_horaria_s(1),
+                                                  p._carga_horaria_s(2)))
+
 def cria_relatorio(professor,diretorio):
     """
     Recebe um professor e cria um arquivo .tex com o seu relatorio.

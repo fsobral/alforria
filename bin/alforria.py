@@ -685,6 +685,8 @@ def _to_pdf_():
 
         escrita.escreve_disciplinas(professores, turmas, RELDIR + 'disciplinas.csv')
 
+        escrita.write_ch_table(professores, RELDIR)
+
         print("Report created in directory %s" % RELDIR)
 
     else:
