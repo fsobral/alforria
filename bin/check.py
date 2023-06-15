@@ -6,6 +6,23 @@ import funcoes_escrita
 import logging
 
 
+def check_g(cs, verbosity=True):
+    """Warn all the courses in `cs` that do not have groups."""
+
+    logger = logging.getLogger('alforria')
+
+    if not verbosity:
+        logger = logging.getLogger()
+
+    logger.info("\nVerificando grupos.\n")
+        
+    for c in cs:
+
+        if c.grupo is None:
+
+            logger.info("Turma %s sem grupo.", c.id())
+
+
 def check_p_c(p, cs, params, verbosity=True):
     """This function checks if the addition of courses 'cs' creates an
     infeasible situation for professor 'p'. It does not check if the

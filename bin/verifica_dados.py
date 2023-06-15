@@ -25,6 +25,8 @@ parser.add_argument('-a', help='Gera um arquivo CSV com as atribuicoes de ' +
 parser.add_argument('-v', help='Nivel de saida desejado. Quanto mais v\'s ' +
                     'maior a quantidade de informacao.', action='count')
 parser.add_argument('-f', help='Versao final', action='store_true')
+parser.add_argument('-g', help='Verifica grupos (necessita -v)',
+                    action='store_true')
 
 args = parser.parse_args()
 
@@ -133,6 +135,10 @@ if args.f:
 
     check.check_nao_atribuidas(turmas)
 
+if args.g:
+
+    check.check_g(turmas)
+    
 logger.info("\nCarga horaria total graduacao (sem fantasmas): " + str(chtotal))
 logger.info("\t1Sem: " + str(ch_1))
 logger.info("\t2Sem: " + str(ch_2))
