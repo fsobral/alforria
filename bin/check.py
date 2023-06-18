@@ -542,6 +542,8 @@ def check_ch(professores, turmas, pre_atribuidas, constantes):
             chminanualgrad = int(constantes['chmin_graduacao'])
             chminanual = int(constantes['chmin_efetivo_anual'])
 
+        chminanualgrad = p.chmin
+            
         if p.licenca1 or p.licenca2:
             chminanualgrad /= 2
             chminanual /= 2

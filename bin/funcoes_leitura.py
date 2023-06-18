@@ -465,6 +465,8 @@ def ler_pref(form,grupos,max_impedimentos):
                         p.chprevia1 = int(chp1)
                         p.chprevia2 = int(chp2)                        
                         p.discriminacao_chprevia = next(tokens)
+                        # Carga horaria minima em caso de cargos
+                        p.chmin = int(next(tokens))
                         w = funcoes_gerais.uniformize(next(tokens))# Licença
                         if "PRIMEIRO" in w:
                                 p.licenca1 = True
@@ -481,6 +483,7 @@ def ler_pref(form,grupos,max_impedimentos):
                         p.pos = ('PMA' in p.programa_pos or
                                  'PCM' in p.programa_pos or
                                  'PEQ' in p.programa_pos or
+                                 'PROFMAT' in p.programa_pos or
                                  'OUTRO' in p.programa_pos)
                         # Pesos das disciplinas
                         p.peso_disciplinas_bruto = float(next(tokens))
