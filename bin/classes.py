@@ -126,7 +126,7 @@ class Professor:################################################################
         self.tel = None
         self.chprevia1 = 0.0
         self.chprevia2 = 0.0
-        self.chmin = 0
+        self.chminfrancisco = 0
         self.licenca1 = False
         self.licenca2 = False
         self.discriminacao_chprevia = None

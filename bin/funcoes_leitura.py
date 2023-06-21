@@ -466,7 +466,7 @@ def ler_pref(form,grupos,max_impedimentos):
                         p.chprevia2 = int(chp2)                        
                         p.discriminacao_chprevia = next(tokens)
                         # Carga horaria minima em caso de cargos
-                        p.chmin = int(next(tokens))
+                        p.chminfrancisco = int(next(tokens))
                         w = funcoes_gerais.uniformize(next(tokens))# Licença
                         if "PRIMEIRO" in w:
                                 p.licenca1 = True

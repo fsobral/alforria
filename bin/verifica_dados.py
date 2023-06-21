@@ -41,7 +41,7 @@ if args.v is None or args.v == 0:
 
     logger.setLevel(logging.ERROR)
 
-elif args.v is 1:
+elif args.v == 1:
 
     logger.setLevel(logging.INFO)
 
@@ -86,6 +86,10 @@ for p in professores:
 
 turmas = leitura.ler_sar(SARPATH, grupos)
 
+if args.g:
+
+    check.check_g(turmas)
+    
 turmas = leitura.caca_fantasmas(FANTPATH, turmas)
 
 # Carrega o arquivo de disciplinas pre-atribuidas
@@ -135,10 +139,6 @@ if args.f:
 
     check.check_nao_atribuidas(turmas)
 
-if args.g:
-
-    check.check_g(turmas)
-    
 logger.info("\nCarga horaria total graduacao (sem fantasmas): " + str(chtotal))
 logger.info("\t1Sem: " + str(ch_1))
 logger.info("\t2Sem: " + str(ch_2))
