@@ -273,10 +273,11 @@ def escreve_atribuicoes(professores, turmas, arquivo):
             for t in p.turmas_a_lecionar:
                 # TODO: trocar p.matricula por p.id()
                 sem = "S" + str(t.semestralidade)
-                if t.vinculada and t.semestralidade == 1:
-                    sem = 'A'
-                if t.vinculada and t.semestralidade == 2:
-                    continue
+                # Agora permitimos disciplinas anuais desvinculadas
+                # if t.vinculada and t.semestralidade == 1:
+                #     sem = 'A'
+                # if t.vinculada and t.semestralidade == 2:
+                #     continue
                 f.write(str(p.matricula) + '\t' + p.nome() + '\t' + str(t.codigo) + '\t' + \
                         str(t.turma) + '\t' + t.nome + '\t' + str(t.carga_horaria()) + \
                         '\t' + sem + '\n')

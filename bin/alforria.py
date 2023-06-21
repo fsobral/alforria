@@ -454,11 +454,11 @@ def _attribute_t_to_p(t, p):
 
     global _course_search_id
 
-    if t.vinculada and t.semestralidade == 2:
+    # if t.vinculada and t.semestralidade == 2:
 
-        logger.error("Nao permitido atribuir parte de disciplina anual %s -> %s.", (t.id(), p.nome()))
+    #     logger.error("Nao permitido atribuir parte de disciplina anual %s -> %s.", (t.id(), p.nome()))
 
-        return
+    #     return
     
     if t.professor is not None:
 
@@ -472,28 +472,28 @@ def _attribute_t_to_p(t, p):
 
     t.add_professor(p)
 
-    # Se a disciplina anual, sabemos S1 e S2 estao
-    # vinculados. Desta forma, procuramos S2 na lista de
-    # turmas
+    # # Se a disciplina anual, sabemos S1 e S2 estao
+    # # vinculados. Desta forma, procuramos S2 na lista de
+    # # turmas
 
-    if t.vinculada and t.semestralidade == 1:
+    # if t.vinculada and t.semestralidade == 1:
 
-        cvinc = (t.id()).replace("S1", "S2")
+    #     cvinc = (t.id()).replace("S1", "S2")
 
-        if cvinc not in _course_search_id:
+    #     if cvinc not in _course_search_id:
 
-            logger.error("Nao encontrada turma vinculada: %s", cvinc)
+    #         logger.error("Nao encontrada turma vinculada: %s", cvinc)
 
-            return
+    #         return
 
-        tvinc = _course_search_id[cvinc]
+    #     tvinc = _course_search_id[cvinc]
 
-        p.add_course(tvinc)
+    #     p.add_course(tvinc)
 
-        # Isso pode dar um problema se apenas o segundo semestre de
-        # uma disciplina anual foi atribuido. Por enquanto isso eh
-        # proibido.        
-        tvinc.add_professor(p)
+    #     # Isso pode dar um problema se apenas o segundo semestre de
+    #     # uma disciplina anual foi atribuido. Por enquanto isso eh
+    #     # proibido.        
+    #     tvinc.add_professor(p)
     
 
 def _remove_(*args):
@@ -543,17 +543,19 @@ def _remove_from_(t, p):
 
         cvinc = (t.id()).replace("S1", "S2")
 
-        if cvinc not in _course_search_id:
+        logger.warn("Atencao. Verifique se professor ministra %s.", cvinc)
 
-            logger.error("Nao encontrada turma vinculada: %s", cvinc)
+        # if cvinc not in _course_search_id:
 
-            return
+        #     logger.error("Nao encontrada turma vinculada: %s", cvinc)
 
-        tvinc = _course_search_id[cvinc]
+        #     return
 
-        p.remove_course(tvinc)
+        # tvinc = _course_search_id[cvinc]
 
-        tvinc.remove_professor(p)
+        # p.remove_course(tvinc)
+
+        # tvinc.remove_professor(p)
 
 
 def _attribute_(*args):
@@ -575,9 +577,12 @@ def _attribute_(*args):
 
         for (p, t) in pre_atribuidas:
 
-            if not t.vinculada or t.semestralidade == 1:
+            _attribute_t_to_p(t, p)
 
-                _attribute_t_to_p(t, p)
+            # # Nao adiciona o segundo semestre quando vinculada
+            # if not t.vinculada or t.semestralidade == 1:
+
+            #     _attribute_t_to_p(t, p)
             
     elif nargs >= 2:
 
