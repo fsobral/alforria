@@ -614,6 +614,10 @@ def ler_pre_atribuidas(arquivo, arquivo_de_fantasmas, professores, turmas):
 
                                 nome_disciplina = next(tokens).rstrip()
 
+                                next(tokens)
+                                
+                                semestralidade = int(next(tokens).rstrip()[1])
+
                         except Exception:
 
                                 s = 'AVISO: Ignorando linha ' + str(linha) + \
@@ -633,7 +637,7 @@ def ler_pre_atribuidas(arquivo, arquivo_de_fantasmas, professores, turmas):
                                                 # o codigo e a turma vao bater duas vezes, em caso de
                                                 # disciplina anual
                                                 if t.codigo == cod_disciplina and \
-                                                   t.turma == turma:
+                                                   t.turma == turma and t.semestralidade == semestralidade:
                                                         encontrada = True
                                                         if not (cod_disciplina, turma) in fantasma:       
                                                                pre_atribuidas.append((p, t))
