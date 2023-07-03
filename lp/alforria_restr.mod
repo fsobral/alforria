@@ -46,7 +46,7 @@ param chmin_efetivo_anual, default 16;
 param chmin_temporario_anual, default 24;
 
 param chmin_graduacao, default 8;
-param numdiscmax_temporario, default 8;
+param numdiscmax_temporario, default 10;
 
 /* 0: efetivo, 1: temporario */
 param paraiso_cargahor{k in 0..1}, default 9*k +8 ;  /* 8 , 16 */
@@ -110,7 +110,7 @@ param inapto{p in P,g in G}, default
     if g in G_CANONICOS then 0
     else(
 	if (sum{t in T: turma_grupo[t,g]==1} pre_atribuida[p,t]) >=1 then 0
-	else 1);
+	else 0);
 /* Parametro de preferencia de um professor por lecionar em um grupo */
 param pref_grupo{P,G}, default 0;
 /* Parametro de preferencia de um professor por lecionar em um horario*/
@@ -398,7 +398,9 @@ s.t. rest4_3{p in P}:
      
 # Limita inferiormente a carga horaria anual de um professor 
 #s.t. rest5{p in P}: chprevia_tt[p] + sum{t in T} ch[t]*x[p,t]>= chmin[p];
-#s.t. rest5{p in P}: sum{t in T} ch[t]*x[p,t]>= chmin_graduacao;
+s.t. rest5{p in P}: sum{t in T} ch[t]*x[p,t]>= chmin_graduacao;
+s.t. rest5_1{p in P: temporario[p] == 1}: sum{t in T} ch1[t]*x[p,t]>= 18;
+s.t. rest5_2{p in P: temporario[p] == 1}: sum{t in T} ch2[t]*x[p,t]>= 18;
 
 # Professor nao pode dar aulas em horarios conflitantes com outras atividades
 s.t. rest6{p in P, t in T, s in S, d in D, h in H : impedimento[p,s,d,h] == 1 and c[t,s,d,h] == 1}: x[p,t] = pre_atribuida[p,t];
@@ -414,13 +416,13 @@ s.t. rest8{p in P, t in T : pre_atribuida[p,t] == 1}:     x[p,t] = 1;
 s.t. rest9{p in P, s in S, d in D}: sum{t in T, h in H} x[p,t] * c[t,s,d,h] <= chmax_diaria;
      
 # Vincula as duas metades de uma disciplina anual
-s.t. rest10{p in P, t1 in T, t2 in T: vinculadas[t1,t2]==1}: x[p,t1]=x[p,t2];
+#s.t. rest10{p in P, t1 in T, t2 in T: vinculadas[t1,t2]==1}: x[p,t1]=x[p,t2];
 
 # Maximo de numero de disciplinas para temporarios
 s.t. rest11{p in P: temporario[p] == 1}: sum{t in T} x[p,t] <= numdiscmax_temporario;
 
 # Maximo de numero de grupos para temporarios
-s.t. rest12{p in P, s in S: temporario[p] == 1}: sum{g in G} lec_grp[p,g,s] <= 2;
+s.t. rest12{p in P, s in S: temporario[p] == 1}: sum{g in G} lec_grp[p,g,s] <= 3;
 
 #################################       RESTRIÇÕES   VARIÁVEIS        ##################################
 
