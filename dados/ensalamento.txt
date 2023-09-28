@@ -872,22 +872,22 @@ DISC    TURM NOME DA DISCIPLINA                  TIPO CH VAGAS       MATR DIA   
                                                     T         42      20       4    14    1   MARINGA        G56   114    6.00     102.0        S2   01/11/2023   a   16/03/2024
                                                     T         42      20       6    13    1   MARINGA        G56   114    6.00     102.0        S2   01/11/2023   a   16/03/2024
                                                     T         42      20       6    14    1   MARINGA        G56   114    6.00     102.0        S2   01/11/2023   a   16/03/2024
-10479    31   GEOMETRIA ANALITICA                   T         42      47       2    15    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
-                                                    T         42      47       2    16    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
+10479    31   GEOMETRIA ANALITICA                   T         42      47       3    15    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
+                                                    T         42      47       3    16    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
               Universidade Estadual de Maringá                                                                               Emitido em 12/06/2023 10:07:11
               Pró-Reitoria de Ensino                                                                                         Página: 18
               Diretoria de Assuntos Acadêmicos                                                                               ANO LETIVO: 2023
               SAR023A - TURMAS POR DEPARTAMENTO                                                    Depto:10 -      DMA MATEMATICA
                             Legenda TIPO CH:   M=Ministrada        P=Prática        T=Teórica       TP=Teórico-Prática    E=Extensão
 DISC    TURM NOME DA DISCIPLINA                  TIPO CH VAGAS       MATR DIA      AULA   CAMPUS             BL    SALA   CH SEM   CH TOTAL           OFERTA
-                                                    T         42      47       4    13    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
-                                                    T         42      47       4    14    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
+                                                    T         42      47       5    13    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
+                                                    T         42      47       5    14    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
                                                     T         42      47       6    13    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
                                                     T         42      47       6    14    1   MARINGA        G56   116    6.00     102.0        S2   01/11/2023   a   16/03/2024
-10479    32   GEOMETRIA ANALITICA                   T         42      15       2    13    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
-                                                    T         42      15       2    14    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
-                                                    T         42      15       4    15    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
-                                                    T         42      15       4    16    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
+10479    32   GEOMETRIA ANALITICA                   T         42      15       3    13    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
+                                                    T         42      15       3    14    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
+                                                    T         42      15       5    15    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
+                                                    T         42      15       5    16    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
                                                     T         42      15       6    15    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
                                                     T         42      15       6    16    1   MARINGA        G56   111    6.00     102.0        S2   01/11/2023   a   16/03/2024
 10480     1   CALCULO III                           T         42      11       2     8    1   MARINGA        E90    1     6.00     102.0        S1   26/06/2023   a   24/10/2023
